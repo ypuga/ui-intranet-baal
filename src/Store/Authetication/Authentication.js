@@ -21,13 +21,13 @@ export const authenticationSlice = createSlice({
         setIsCheking: (state, action) =>{
             state.isCheckingAuth = action.payload;
         },
-        setLogIn: (state, action)=>{
-            console.log(action.payload);
-            state.user = action.payload.sub;
-            state.zona = action.payload.zona;
-            state.sucursal = action.payload.sucursal;
-            state.profile = action.payload.profile;
-            state.titleName = action.payload["title-name"];
+        setLogIn: (state, action) => {
+            const { sub, zona, sucursal, profile, titleName } = action.payload;
+            state.user = sub || ''; 
+            state.zona = zona || '';
+            state.sucursal = sucursal || '';
+            state.profile = profile || '';
+            state.titleName = action.payload['title-name'] || '';
             state.isAuth = true;
             state.isCheckingAuth = false;
         },

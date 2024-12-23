@@ -120,13 +120,32 @@ function DemoPageContent() {
 function DashboardLayoutBasic({ window, children }) {
   const [pathname, setPathname] = React.useState('/Home');
   const dispatch = useDispatch();
-  const {titleName, profile} = useSelector(state=>state.sistema);
+  const { titleName, profile } = useSelector(state => state.sistema); // Aquí obtienes los datos de Redux
   const navigate = useNavigate();
   const location = useLocation();
 
   React.useEffect(() => {
     setPathname(location.pathname);
   }, [location]);
+
+  // Sincroniza el estado de session con el store de Redux
+  const [session, setSession] = React.useState({
+    user: {
+      name: titleName,
+      email: profile,
+    },
+  });
+
+  React.useEffect(() => {
+    if (titleName && profile) {
+      setSession({
+        user: {
+          name: titleName,
+          email: profile,
+        },
+      });
+    }
+  }, [titleName, profile]);
 
   const router = React.useMemo(() => {
     return {
@@ -138,14 +157,6 @@ function DashboardLayoutBasic({ window, children }) {
 
   const demoWindow = window !== undefined ? window() : undefined;
 
-  const [session, setSession] = React.useState({
-    user: {
-      name: titleName,
-      email: profile,
-      image: <Avatar>M</Avatar>,
-    },
-  });
-
   const authentication = React.useMemo(() => {
     return {
       signIn: () => {
@@ -153,7 +164,6 @@ function DashboardLayoutBasic({ window, children }) {
           user: {
             name: titleName,
             email: profile,
-            image: <Avatar>M</Avatar>,
           },
         });
       },
@@ -162,7 +172,7 @@ function DashboardLayoutBasic({ window, children }) {
         setSession(null);
       },
     };
-  }, []);
+  }, [dispatch, profile, titleName]);
 
   return (
     <AppProvider
@@ -174,7 +184,7 @@ function DashboardLayoutBasic({ window, children }) {
       window={demoWindow}
       branding={{
         logo: <img src={logoBow} alt="Logo" />,
-        title: ''
+        title: '',
       }}
     >
       <DashboardLayout>
