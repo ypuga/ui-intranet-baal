@@ -13,17 +13,12 @@ import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import UserInfo from './UserInfo';
 import { useNavigate, useLocation } from 'react-router-dom'; // Importar useLocation
 import { AccountBalanceWallet, ChecklistRtl, CreditCard, ExitToApp, History, LocalMall, Money, ShoppingBasket } from '@mui/icons-material';
-import { Button } from '@mui/material';
+import { Avatar, Button } from '@mui/material';
 import LogOutComponent from './LogOutComponent';
+import { useDispatch, useSelector } from 'react-redux';
+import { logOutApp } from '../../../Store/Authetication/Thunks';
 
 const NAVIGATION = [
-  {
-    kind: 'user-info',
-    icon: <UserInfo />,
-  },
-  {
-    kind: 'divider',
-  },
   {
     segment: 'home',
     title: 'INICIO',
@@ -89,12 +84,6 @@ const NAVIGATION = [
     title: 'Cartera de Clientes',
     icon: <AccountBalanceWallet />,
   },
-  {
-    kind: 'divider',
-  },
-  {
-    icon: <LogOutComponent/>,
-  },
 ];
 
 const demoTheme = createTheme({
@@ -130,6 +119,8 @@ function DemoPageContent() {
 
 function DashboardLayoutBasic({ window, children }) {
   const [pathname, setPathname] = React.useState('/Home');
+  const dispatch = useDispatch();
+  const {titleName, profile} = useSelector(state=>state.sistema);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -149,23 +140,42 @@ function DashboardLayoutBasic({ window, children }) {
 
   const [session, setSession] = React.useState({
     user: {
-      name: 'Bharat Kashyap',
-      email: 'bharatkashyap@outlook.com',
-      image: 'https://avatars.githubusercontent.com/u/19550456',
+      name: titleName,
+      email: profile,
+      image: <Avatar>M</Avatar>,
     },
   });
+
+  const authentication = React.useMemo(() => {
+    return {
+      signIn: () => {
+        setSession({
+          user: {
+            name: titleName,
+            email: profile,
+            image: <Avatar>M</Avatar>,
+          },
+        });
+      },
+      signOut: () => {
+        dispatch(logOutApp());
+        setSession(null);
+      },
+    };
+  }, []);
 
   return (
     <AppProvider
       session={session}
+      authentication={authentication}
       navigation={NAVIGATION}
       router={router}
+      theme={demoTheme}
+      window={demoWindow}
       branding={{
         logo: <img src={logoBow} alt="Logo" />,
         title: ''
       }}
-      theme={demoTheme}
-      window={demoWindow}
     >
       <DashboardLayout>
         {children ? children : <DemoPageContent pathname={pathname} />}
