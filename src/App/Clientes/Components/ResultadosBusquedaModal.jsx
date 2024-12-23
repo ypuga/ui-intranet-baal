@@ -116,7 +116,7 @@ const ResultadosBusquedaModal = ({ open, handleClose, handleContinue }) => {
                 padding: '10px',
                 height: '100%',
             }}>
-                <Typography textAlign={'end'}>¿Favor de confirmar si la identificación oficial sigue vigente y es la misma?</Typography>
+                <Typography textAlign='end'>¿Favor de confirmar si la identificación oficial sigue vigente y es la misma?</Typography>
                 <Box sx={{ marginTop: 'auto', display: 'flex', marginTop: '10px', justifyContent: 'flex-end' }}>
                     <Button onClick={handleContinue()} variant="outlined" color="error" sx={{ marginLeft: '10px' }}>No es la misma o no esta vigente</Button>
                     <Button onClick={handleContinue()} variant="outlined" sx={{ marginLeft: '10px' }} color="primary">Si es la misma y esta vigente</Button>

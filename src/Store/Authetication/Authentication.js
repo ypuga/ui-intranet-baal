@@ -5,6 +5,7 @@ const initialState = {
     user: '',
     zona: '',
     profile: '',
+    titleName: '',
     sucursal: '',
     isAuth: false,
     isCheckingAuth: true,
@@ -26,6 +27,7 @@ export const authenticationSlice = createSlice({
             state.zona = action.payload.zona;
             state.sucursal = action.payload.sucursal;
             state.profile = action.payload.profile;
+            state.titleName = action.payload["title-name"];
             state.isAuth = true;
             state.isCheckingAuth = false;
         },

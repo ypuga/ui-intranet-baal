@@ -23,6 +23,7 @@ const LogOutComponent = () => {
         alignItems: 'center',
         marginLeft:'-18px',
         width: '100vh',
+        height: '8vh',
         p: 2,
         cursor: 'pointer',
         '&:hover': {

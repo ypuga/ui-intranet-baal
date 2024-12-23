@@ -27,7 +27,6 @@ const LoginPage = () => {
             padding: '50px',
             width: '50vh',
             marginTop: '50px',
-            height: '500px',
             marginLeft: '15px',
             borderRadius: '10px',
             backgroundColor: 'white',

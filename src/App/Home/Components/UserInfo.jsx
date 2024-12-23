@@ -1,36 +1,45 @@
-import { Avatar, Box, Typography } from '@mui/material'
-import React from 'react'
-import { useSelector } from 'react-redux'
+import { Avatar, Box, Typography, CircularProgress } from '@mui/material';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 const UserInfo = () => {
-    
-    const {user, profile} = useSelector(state=>state.sistema)
+  const { titleName, profile } = useSelector(state => state.sistema);
+
+  const dataLoaded = titleName && profile;
+
+  if (dataLoaded == null) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Box>
-        <Box 
+      <Box
         sx={{
-            display: 'flex',
-            alignContent: 'center',
-            justifyContent: 'center',
+          display: 'flex',
+          alignContent: 'center',
+          justifyContent: 'center',
         }}
-        >
-            <Box>
-                <Avatar>Y</Avatar>
-            </Box>
-            <Box
-            sx={{
-                display: 'inline-block',
-                marginLeft: '10px'
-            }}
-            >
-                <Typography variant='h7'>{user}</Typography>
-                <br/>
-                <Typography fontSize={"12px"}>{profile}</Typography>
-            </Box>
+      >
+        <Box>
+          <Avatar>{titleName?.charAt(0)}</Avatar>
         </Box>
+        <Box
+          sx={{
+            display: 'inline-block',
+            marginLeft: '10px',
+          }}
+        >
+          <Typography variant="h7">{titleName}</Typography>
+          <br />
+          <Typography fontSize={'12px'}>{profile}</Typography>
+        </Box>
+      </Box>
     </Box>
-  )
-}
+  );
+};
 
-export default UserInfo
+export default UserInfo;

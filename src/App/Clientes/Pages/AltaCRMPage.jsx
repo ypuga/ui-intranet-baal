@@ -47,7 +47,7 @@ const AltaCRMPage = () => {
           sx={{ overflow: 'auto' }}
         >
           {activeStep === 0 && (
-            <AltaReferenciasCliente onNext={handleNext} />
+            <BusquedaCliente onNext={handleNext} />
           )}
           {activeStep === 1 && (
             <BiometriaCliente onNext={handleNext} />

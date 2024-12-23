@@ -3,18 +3,22 @@ import AuthApi from "../../Api/AuthApi"
 import { setIsCheking, setLogIn, setLogOut } from "./Authentication";
 
 export const loginApp = (data) => {
-    return async(dispatch)=>{
-        try{
-            const resp = await AuthApi.login(data);
-            if(resp.status==200) {
-                localStorage.setItem('Bearer', resp.data.token);
-                dispatch(setLogIn(resp.data.token));
-            }
-        }catch(error){
-            throw (error.data);
-        }
-    }
-}
+  return async (dispatch) => {
+      dispatch({ type: 'LOADING_USER' });
+      
+      try {
+          const resp = await AuthApi.login(data); 
+          if (resp.status === 200) {
+              localStorage.setItem('Bearer', resp.data.token);
+              dispatch(setLogIn(resp.data.token));
+              dispatch({ type: 'LOADING_USER_SUCCESS' });
+          }
+      } catch (error) {
+          dispatch({ type: 'LOADING_USER_FAILURE', error: error.message || 'Error en el login' });
+      }
+  };
+};
+
 
 export const logOutApp = () => {
   return async(dispatch)=>{

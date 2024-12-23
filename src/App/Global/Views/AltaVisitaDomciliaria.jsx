@@ -48,7 +48,6 @@ const AltaVisitaDomciliaria = ({ onNext, onBack }) => {
         numeroExterior: Yup.string().required('Requerido'),
         colonia: Yup.string().required('Requerido'),
         referenciaDomicilio: Yup.string().required('Requerido'),
-        numeroExterior: Yup.string().required('Requerido'),
     });
 
     const handleSubmit = (values) => {
