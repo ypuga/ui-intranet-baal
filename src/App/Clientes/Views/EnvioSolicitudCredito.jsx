@@ -8,7 +8,7 @@ const EnvioSolicitudCredito = ({ onNext }) => {
     const { isLoading, startLoading, stopLoading } = useLoading();
     const [show, setShow] = useState(true);
     const [statusSolicitud, setstatusSolicitud] = useState({
-        status: 'AUTORIZADO',
+        status: 'EN_TRAMITE',
         folio: '4999203'
     })
     const { showToast } = useToast();
@@ -54,7 +54,7 @@ const EnvioSolicitudCredito = ({ onNext }) => {
                     </Box>
                     :
                     <Box>
-                        {(statusSolicitud.status == 'EN_PROCESO') ?
+                        {(statusSolicitud.status == 'EN_TRAMITE') ?
                             <Box>
                                 <Alert severity="info" variant="filled">
                                     <AlertTitle>

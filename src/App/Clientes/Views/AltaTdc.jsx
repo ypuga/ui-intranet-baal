@@ -10,7 +10,7 @@ const AltaTdc = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setShow(false);
-            showToast('La tarjeta de credito terminacion 4033 se asigno a la cuenta correctamente.', 'success', 'top-center');
+            showToast('La sucursal no cuenta con tarjetas disponibles. Comuniquese con Atencion a empleados.', 'error', 'top-center');
         }, 10000);
         return () => {
             clearTimeout(timer);
@@ -92,10 +92,10 @@ const AltaTdc = () => {
                                     </TableRow>
                                     <TableRow>
                                         <TableCell>
-                                            <Typography fontSize={"15px"}><strong>Tarjeta Debito Asignada a la cuenta:</strong></Typography>
+                                            <Typography fontSize={"15px"}><strong>Tarjeta Credito Asignada a la cuenta:</strong></Typography>
                                         </TableCell>
                                         <TableCell>
-                                            <Typography>*** - **** - ***9 - 4033</Typography>
+                                            <Typography></Typography>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow>

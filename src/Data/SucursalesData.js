@@ -1,6 +1,9 @@
 import TDCMC from '../assets/TDC_MC.png'
 import TDCGODL from '../assets/TDC_GLD.png'
 import TDCPLATINUM from '../assets/TDC_PLN.png'
+import ALAMEDAEXPRESS from '../assets/alamedaExpress.jpg'
+import CUENTALAMEDA from '../assets/cuentaAlameda.jpg'
+import INVERSION from '../assets/inversionAlameda.jpg'
 
 export const sucursales = [
     '914 - CENTRO SAN MIGUEL EL ALTO',
@@ -128,4 +131,45 @@ export const cardsData = [
     "disabled": true,
     "product": 'TDC PLATINUM'
   },
+]
+
+export const accountData = [
+  {
+    "title": "ALAMEDA EXPRESS",
+    "id": '125',
+    "benefits": [
+      "Depositos mensuales limitados a 30,000 UDIS",
+      "Sin monto minimo de apertura",
+      "Sin comision mensual por manejo de cuenta",
+      "Retira en efectivo en comercios afiliados",
+    ],
+    "image": ALAMEDAEXPRESS,
+    "altText": "Imagen cuenta alameda express",
+    "disabled": false,
+  },
+  {
+    "title": "CUENTA ALAMEDA",
+    "id": '125',
+    "benefits": [
+      "Depositos mensuales ilimitados",
+      "Sin monto minimo de apertura",
+      "Trae tu nomina y evita el manejo de cuenta",
+      "Paquete unico de beneficios",
+    ],
+    "image": CUENTALAMEDA,
+    "altText": "Imagen cuenta alameda express",
+    "disabled": false,
+  },
+  {
+    "title": "INVERSION ALAMEDA",
+    "id": '125',
+    "benefits": [
+      "Tasa anual de 12.5%",
+      "Apertura tu cuenta con minimo $ 10,000 MXN",
+      "GAT REAL de 7.30 %",
+    ],
+    "image": INVERSION,
+    "altText": "Imagen cuenta alameda express",
+    "disabled": false,
+  }
 ]

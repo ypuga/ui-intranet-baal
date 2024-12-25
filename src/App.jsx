@@ -4,6 +4,7 @@ import { theme } from "./App/Layout/Theme";
 import { LoadingProvider } from "./Hooks/LoadingContext";
 import { ToastContainer } from "react-toastify";
 import TimerController from "./Hooks/TimerController";
+import ErrorBoundary from "./ErrorBoundary";
 
 
 function App() {
@@ -13,7 +14,9 @@ function App() {
       <TimerController>
         <LoadingProvider>
           <ToastContainer />
-          <AppRouter />
+          <ErrorBoundary>
+            <AppRouter />
+          </ErrorBoundary>
         </LoadingProvider>
       </TimerController>
     </ThemeProvider>

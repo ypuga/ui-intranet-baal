@@ -52,3 +52,14 @@ export const crmSteps = [
     { label: 'Firma de Pagare', description: 'Descarga y firma de pagare del cliente' },
     { label: 'Finalizar', description: 'Finalizacion de credito moto' },
 ];
+
+export const cuentaClientesSteps = [
+    { label: 'Busqueda', description: 'Busqueda del cliente' },
+    { label: 'Biometria', description: 'Captura de biometria del cliente' },
+    { label: 'Seleccion', description: 'Seleccionar producto a contratar' },
+    { label: 'BANQUERO PERSONAL', description: 'Información del banquero' },
+    { label: 'CONOCIMIENTO DEL CLIENTE', description: 'Conocimiento del cliente' },
+    { label: 'BENEFICIARIOS', description: 'Datos de los beneficiarios de la cuenta' },
+    { label: 'DOCUMENTACION DEL CLIENTE', description: 'Impresión y digitalización de los documentos del cliente' },
+    { label: 'ALTA CUENTA', description: 'Alta de la cuenta del cliente' }
+];

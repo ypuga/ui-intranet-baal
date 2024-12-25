@@ -21,7 +21,7 @@ const SeleccionTDC = ({onNext}) => {
             </Typography>
             <Box sx={{ flexGrow: 1 }}>
                 <br />
-                <Typography variant='h6'>Seleccione la tarjeta de credito a contratar</Typography>
+                <Typography variant='h7'>Seleccione la tarjeta de credito a contratar</Typography>
                 <Grid2 container spacing={2} justifyContent="center">
                     {cardsData.map((card, index) => (
                         <Grid2 item xs={12} sm={6} md={4} key={index}>

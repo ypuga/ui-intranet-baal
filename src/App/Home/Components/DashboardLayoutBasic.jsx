@@ -11,6 +11,7 @@ import LayersIcon from '@mui/icons-material/Layers';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import UserInfo from './UserInfo';
+import SavingsIcon from '@mui/icons-material/Savings';
 import { useNavigate, useLocation } from 'react-router-dom'; // Importar useLocation
 import { AccountBalanceWallet, ChecklistRtl, CreditCard, ExitToApp, History, LocalMall, Money, ShoppingBasket } from '@mui/icons-material';
 import { Avatar, Button } from '@mui/material';
@@ -50,6 +51,11 @@ const NAVIGATION = [
     title: 'Nueva Solicitud',
     icon: <ChecklistRtl />,
     children: [
+      {
+        segment: 'cuenta-clientes',
+        title: 'Cuenta',
+        icon: <SavingsIcon />,
+      },
       {
         segment: 'tdc',
         title: 'Tarjeta de Credito',
@@ -120,7 +126,7 @@ function DemoPageContent() {
 function DashboardLayoutBasic({ window, children }) {
   const [pathname, setPathname] = React.useState('/Home');
   const dispatch = useDispatch();
-  const { titleName, profile } = useSelector(state => state.sistema); // Aquí obtienes los datos de Redux
+  const { titleName, profile } = useSelector(state => state.sistema);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -128,7 +134,7 @@ function DashboardLayoutBasic({ window, children }) {
     setPathname(location.pathname);
   }, [location]);
 
-  // Sincroniza el estado de session con el store de Redux
+
   const [session, setSession] = React.useState({
     user: {
       name: titleName,

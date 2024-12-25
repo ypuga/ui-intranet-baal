@@ -9,6 +9,7 @@ const AppLayout = ({ children }) => {
   const { isLoading } = useLoading();
 
   return (
+    <>
     <DashboardLayoutBasic>
       <CustomBackdrop isLoading={isLoading}/>
         <Box
@@ -22,6 +23,7 @@ const AppLayout = ({ children }) => {
             {children}
         </Box>
     </DashboardLayoutBasic>
+    </>
   );
 };
 

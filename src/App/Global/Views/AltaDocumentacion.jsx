@@ -84,7 +84,7 @@ const DocumentsProgress = ({onNext, documents}) => {
                                 <Typography textAlign={"center"} fontSize={"10px"}>{doc.title}</Typography>
                             </Box>
                             {doc.print?
-                            <Button disabled={currentStep != index} fullWidth variant="outlined">
+                            <Button fullWidth variant="outlined">
                                 <DownloadIcon style={{ marginRight: 8 }} /> DESCARGAR
                             </Button>
                             :null
