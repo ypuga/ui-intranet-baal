@@ -8,7 +8,7 @@ const EnvioSolicitudCredito = ({ onNext }) => {
     const { isLoading, startLoading, stopLoading } = useLoading();
     const [show, setShow] = useState(true);
     const [statusSolicitud, setstatusSolicitud] = useState({
-        status: 'EN_TRAMITE',
+        status: 'AUTORIZADO',
         folio: '4999203'
     })
     const { showToast } = useToast();

@@ -56,13 +56,13 @@ const AltaCuentaClientesPage = () => {
             <AltaBanqueroPersonal onNext={handleNext} />
           )}
           {activeStep === 4 && (
-            <AltaKyC onNext={handleNext} />
+            <AltaKyC onNext={handleNext} onBack={handleBack} />
           )}
           {activeStep === 5 && (
-            <AltaBeneficiarios onNext={handleNext} />
+            <AltaBeneficiarios onNext={handleNext} onBack={handleBack}/>
           )}
           {activeStep === 6 && (
-            <DocumentsProgress onNext={handleNext} documents={altaCuentaDocumentos} />
+            <DocumentsProgress onNext={handleNext} documents={altaCuentaDocumentos} onBack={handleBack}/>
           )}
           {activeStep === 7 && (
             <AltaCuenta onNext={handleNext}/>

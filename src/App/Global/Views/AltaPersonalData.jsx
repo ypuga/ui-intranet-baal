@@ -1,5 +1,4 @@
 import { Box, Button, Grid2, TextField, Typography } from '@mui/material'
-import MultipleSelect from '../Components/MultipleSelect';
 import { generos } from '../../../Data/SucursalesData';
 import { estadosMexico } from '../../../Data/SucursalesData';
 import { productos } from '../../../Data/SucursalesData';
@@ -12,6 +11,7 @@ import useToast from '../../../Hooks/useToast';
 import { useDispatch } from 'react-redux';
 import { startGetCurpInfo } from '../../../Store/Datos/Thunks';
 import { startSaveProspectoPersonalData } from '../../../Store/Prospectos/Thunks';
+import SingleSelect from '../Components/MultipleSelect';
 
 const AltaPersonalData = ({ onNext }) => {
     const { isLoading, startLoading, stopLoading } = useLoading();
@@ -127,7 +127,7 @@ const AltaPersonalData = ({ onNext }) => {
                                         />
                                     </Grid2>
                                     <Grid2 size={6}>
-                                        <MultipleSelect placeholder="Producto" values={productos} disabled={isCurpValidate} onChange={handleChange('producto')} />
+                                        <SingleSelect placeholder="Producto" values={productos} disabled={isCurpValidate} onChange={handleChange('producto')} />
                                     </Grid2>
                                 </Grid2>
                                 <Box width="100%" display="flex" justifyContent="flex-end" alignItems="flex-end">
@@ -224,12 +224,12 @@ const AltaPersonalData = ({ onNext }) => {
                                                 />
                                             </Grid2>
                                             <Grid2 size={6}>
-                                                <MultipleSelect disabled value={personalInfoCurp.isValid ? values.genero : ''} values={generos} placeholder="Genero" onChange={handleChange('genero')} />
+                                                <SingleSelect disabled value={personalInfoCurp.isValid ? values.genero : ''} values={generos} placeholder="Genero" onChange={handleChange('genero')} />
                                             </Grid2>
                                         </Grid2>
                                         <Grid2 container rowSpacing={1} mt={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                             <Grid2 size={6}>
-                                                <MultipleSelect disabled value={personalInfoCurp.isValid ? values.estadoNacimiento : ''} values={estadosMexico} placeholder="Estado de Nacimiento" />
+                                                <SingleSelect disabled value={personalInfoCurp.isValid ? values.estadoNacimiento : ''} values={estadosMexico} placeholder="Estado de Nacimiento" />
                                             </Grid2>
                                             <Grid2 size={6}>
                                                 <TextField

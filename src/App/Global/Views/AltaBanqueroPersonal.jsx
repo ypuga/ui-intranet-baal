@@ -1,11 +1,11 @@
 import React from 'react';
 import { Box, Button, Grid2, TextField, Typography } from '@mui/material';
-import MultipleSelect from '../Components/MultipleSelect';
 import { ejecutivos } from '../../../Data/ExecutivesData';
 import { sucursales } from '../../../Data/SucursalesData';
 import { useLoading } from '../../../Hooks/LoadingContext';
+import SingleSelect from '../Components/MultipleSelect';
 
-const AltaBanqueroPersonal = ({ onNext, onBack }) => {
+const AltaBanqueroPersonal = ({ onNext }) => {
 
   const {isLoading, startLoading, stopLoading} = useLoading();
 
@@ -51,10 +51,10 @@ const AltaBanqueroPersonal = ({ onNext, onBack }) => {
           </Grid2>
         </Grid2>
         <Grid2 size={6}>
-          <MultipleSelect values={ejecutivos} placeholder={"Banquero personal"}/>
+          <SingleSelect values={ejecutivos} placeholder={"Banquero personal"}/>
         </Grid2>
         <Grid2 size={6}>
-          <MultipleSelect values={sucursales} placeholder={"Sucursal"}/>
+          <SingleSelect values={sucursales} placeholder={"Sucursal"}/>
         </Grid2>
         <Box display="flex" justifyContent="flex-end" gap={2}>
         <Button 

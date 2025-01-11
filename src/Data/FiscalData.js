@@ -25,7 +25,6 @@ export const ocupaciones = [
     "Maestro",
     "Ingeniero",
     "Médico",
-    "Abogado",
     "Contador",
     "Arquitecto",
     "Diseñador gráfico",

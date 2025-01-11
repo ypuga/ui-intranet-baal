@@ -21,9 +21,19 @@ const DomicilioModal = ({ open, handleClose, onSelect }) => {
     const { domicilioData } = useSelector((state) => state.data);
 
     const handleDomicilioSelect = (domicilio) => {
+        const domicilioMayusculas = {
+                ...domicilio,
+                cp: domicilio.cp,
+                estado: domicilio.estado?.toUpperCase(),
+                tipo_asentamiento: domicilio.tipo_asentamiento?.toUpperCase(),
+                municipio: domicilio.municipio?.toUpperCase(),
+                ciudad: domicilio.ciudad?.toUpperCase(),
+                pais: domicilio.pais?.toUpperCase(),
+            }
         if (onSelect) {
-            onSelect(domicilio);
+            onSelect(domicilioMayusculas);
         }
+
         handleClose();
     };
 
@@ -33,7 +43,6 @@ const DomicilioModal = ({ open, handleClose, onSelect }) => {
             aria-labelledby="customized-dialog-title"
             open={open}
             maxWidth="lg"
-            disableBackdropClick={false}
             fullWidth
         >
             <DialogTitle>Consulta de codigo postales</DialogTitle>

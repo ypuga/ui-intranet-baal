@@ -78,7 +78,7 @@ const AltaVisitaDomciliaria = ({ onNext, onBack }) => {
             sx={{ '& .MuiTextField-root': { m: 1 } }}
         >
             <Typography variant="h5" gutterBottom>
-                DOMICILIO DEL CLIENTE
+                PROGRAMAR VISITA DOMICILIARIA
             </Typography>
             <Typography fontSize={"10px"}>
                 ID De Evaluacion: 29921

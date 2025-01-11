@@ -50,7 +50,9 @@ const DocumentsProgress = ({onNext, documents}) => {
                 mb={4}
             >
                 {documents.map((doc, index) => (
-                    <Box sx={{
+                    <Box
+                    key={doc.id || index}
+                     sx={{
                         width: '150px',
                         height: '220px',
                         border: '1px solid',
@@ -66,6 +68,7 @@ const DocumentsProgress = ({onNext, documents}) => {
                                 alignItems: 'center',
                                 justifyContent: 'center',
                             }}
+                            key={doc.id || index}   
                         >
                             {currentStep <= index?
                             <>
@@ -97,10 +100,18 @@ const DocumentsProgress = ({onNext, documents}) => {
                             :null
                             }
                         </Box>
-
-
                     </Box>
                 ))}
+            </Box>
+            <Box
+            sx={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                margin:'20px'
+            }}
+            >
+                <Button color='info' size='large'>Descargar todos los documentos</Button>
             </Box>
             <Button
                 variant="contained"

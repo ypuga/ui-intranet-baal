@@ -67,7 +67,7 @@ const BusquedaCliente = ({ onNext }) => {
                                 <Grid2 size={6}>
                                     <SingleSelect
                                         value={values.criterioBusqueda}
-                                        onChange={(event) => setFieldValue('criterioBusqueda', event.target.value)}
+                                        onChange={(value) => setFieldValue('criterioBusqueda', value)}
                                         values={criteriosBusqueda}
                                         placeholder={'Criterio de Búsqueda'}
                                     />
