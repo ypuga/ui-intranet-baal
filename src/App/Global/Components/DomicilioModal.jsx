@@ -21,9 +21,11 @@ const DomicilioModal = ({ open, handleClose, onSelect }) => {
     const { domicilioData } = useSelector((state) => state.data);
 
     const handleDomicilioSelect = (domicilio) => {
+        console.log(domicilio);
         const domicilioMayusculas = {
                 ...domicilio,
                 cp: domicilio.cp,
+                colonia: domicilio.asentamiento.toUpperCase(),
                 estado: domicilio.estado?.toUpperCase(),
                 tipo_asentamiento: domicilio.tipo_asentamiento?.toUpperCase(),
                 municipio: domicilio.municipio?.toUpperCase(),

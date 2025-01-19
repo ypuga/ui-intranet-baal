@@ -6,11 +6,13 @@ import { criteriosBusqueda } from '../../../Data/SucursalesData';
 import { Formik } from 'formik';
 import { useLoading } from '../../../Hooks/LoadingContext';
 import ResultadosBusquedaModal from '../../Clientes/Components/ResultadosBusquedaModal';
+import { RetomarSolicitudModal } from '../Components/RetomarSolicitudModal';
 
-const BusquedaCliente = ({ onNext }) => {
+const BusquedaCliente = ({ onNext, handleStep }) => {
 
     const {isLoading, startLoading, stopLoading} = useLoading();
     const [open, setOpen] = useState(false);
+    const [retomarSolicitud, setretomarSolicitud] = useState(false)
 
     const initialValues = {
         criterioBusqueda: '',
@@ -23,12 +25,16 @@ const BusquedaCliente = ({ onNext }) => {
     });
 
     const handleSubmit = (values) => {
-        setOpen(true);
+        setretomarSolicitud(true);
     };
 
     const handleClose = () => {
         setOpen(false);
     };
+
+    const handleCloseRetomar = () => { 
+        setretomarSolicitud(false);
+    }
 
     const handleContinue = () => {
         onNext();
@@ -42,6 +48,7 @@ const BusquedaCliente = ({ onNext }) => {
             flexDirection="column"
             sx={{ '& .MuiTextField-root': { m: 1 } }}
         >
+            <RetomarSolicitudModal open={retomarSolicitud} handleClose={handleCloseRetomar} handleStepOne={handleStep}/>
             <Typography variant="h5" gutterBottom>
                 BUSQUEDA DE CLIENTE
             </Typography>

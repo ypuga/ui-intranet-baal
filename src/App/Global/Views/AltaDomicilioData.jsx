@@ -98,7 +98,7 @@ const AltaDomicilioData = ({ onNext, onBack }) => {
                                     values.asentamiento = domicilio.tipo_asentamiento,
                                         values.localidad = domicilio.ciudad,
                                         values.municipio = domicilio.municipio,
-                                        values.colonia = domicilio.asentamiento,
+                                        values.colonia = domicilio.colonia,
                                         values.estado = domicilio.estado
                                     setisDisabled(true);
                                 }

@@ -27,6 +27,10 @@ const AltaCRMPage = () => {
     setActiveStep((prevStep) => Math.max(prevStep - 1, 0));
   };
 
+  const handleStep = (step) => {
+    setActiveStep(step);
+  }
+
   return (
     <AppLayout>
       <Box
@@ -47,7 +51,7 @@ const AltaCRMPage = () => {
           sx={{ overflow: 'auto' }}
         >
           {activeStep === 0 && (
-            <BusquedaCliente onNext={handleNext} />
+            <BusquedaCliente onNext={handleNext}  handleStep={handleStep} />
           )}
           {activeStep === 1 && (
             <BiometriaCliente onNext={handleNext} />

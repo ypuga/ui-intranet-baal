@@ -12,7 +12,7 @@ export const loginApp = (data) => {
               dispatch(setLogIn(decodedToken));
           }
       } catch (error) {
-          dispatch({ type: 'LOADING_USER_FAILURE', error: error.message || 'Error en el login' });
+              throw({ type: 'LOADING_USER_FAILURE', error: error.data || 'Error en el login' });
       }
   };
 };

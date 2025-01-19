@@ -256,7 +256,7 @@ const AltaPersonalData = ({ onNext }) => {
                                 )}
                                 {isCurpValidate ?
                                     <Box display="flex" justifyContent="flex-end" gap={2}>
-                                        <Button type="submit" variant="contained" size="large" onClick={handleSubmit}>
+                                        <Button type="submit" disabled={!isValid} variant="contained" size="large" onClick={handleSubmit}>
                                             Siguiente
                                         </Button>
                                     </Box>

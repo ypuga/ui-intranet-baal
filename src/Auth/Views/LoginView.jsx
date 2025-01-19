@@ -44,7 +44,7 @@ const LoginView = () => {
     try {
       await dispatch(loginApp(values));
     } catch (error) {
-      seterrorMessage(error);
+      seterrorMessage(error.error);
     } finally {
       setSubmitting(false);
     }
@@ -133,7 +133,7 @@ const LoginView = () => {
                 }}
               >
                 <Stack spacing={2}>
-                  <Button color='success' size='large' type="submit" disabled={isSubmitting}>
+                  <Button color='success' size='large' type="submit" disabled={isSubmitting} variant='outlined'>
                     INGRESAR
                   </Button>
                   {isSubmitting && (

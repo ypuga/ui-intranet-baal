@@ -9,7 +9,7 @@ const LoginPage = () => {
       sx={{
         width: '99%',
         height: '100vh',
-        maxHeight: '95vh',
+        maxHeight: '97vh',
         padding: '10px',
         backgroundImage: `url(https://www.beaware360.com/wp-content/uploads/2023/12/gestion-de-relaciones-con-el-cliente.webp)`,
         backgroundSize: 'cover',

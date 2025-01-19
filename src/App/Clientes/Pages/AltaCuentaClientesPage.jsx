@@ -6,12 +6,12 @@ import { Box } from '@mui/material';
 import BusquedaCliente from '../../Global/Views/BusquedaCliente';
 import BiometriaCliente from '../../Global/Views/BiometriaCliente';
 import { SeleccionCuentaClienteView } from '../Views/SeleccionCuentaClienteView';
-import AltaBanqueroPersonal from '../../Global/Views/AltaBanqueroPersonal';
 import AltaKyC from '../../Global/Views/AltaKyC';
 import AltaBeneficiarios from '../../Global/Views/AltaBeneficiarios';
 import DocumentsProgress from '../../Global/Views/AltaDocumentacion';
 import { altaCuentaDocumentos } from '../../../Data/MocksDocumentos';
 import AltaCuenta from '../Views/AltaCuenta';
+import AltaBanqueroPersonal from '../../Global/VIews/AltaBanqueroPersonal';
 
 const AltaCuentaClientesPage = () => {
 
@@ -24,6 +24,10 @@ const AltaCuentaClientesPage = () => {
   const handleBack = () => {
     setActiveStep((prevStep) => Math.max(prevStep - 1, 0));
   };
+
+  const handleStep = (step) => {
+    setActiveStep(step);
+  }
 
   return (
     <AppLayout>
@@ -44,7 +48,7 @@ const AltaCuentaClientesPage = () => {
           sx={{ overflow: 'auto' }}
         >
           {activeStep === 0 && (
-            <BusquedaCliente onNext={handleNext} />
+            <BusquedaCliente onNext={handleNext}  handleStep={handleStep} />
           )}
           {activeStep === 1 && (
             <BiometriaCliente onNext={handleNext} />

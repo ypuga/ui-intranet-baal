@@ -81,7 +81,8 @@ export const ocupaciones = [
     "Banca",
     "Inmobiliario",
     "Farmacéutico",
-    "Cultura y arte"
+    "Cultura y arte",
+    "Alimentos"
   ];
   
   
