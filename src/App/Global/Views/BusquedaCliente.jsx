@@ -25,7 +25,7 @@ const BusquedaCliente = ({ onNext, handleStep }) => {
     });
 
     const handleSubmit = (values) => {
-        setretomarSolicitud(true);
+        setOpen(true);
     };
 
     const handleClose = () => {

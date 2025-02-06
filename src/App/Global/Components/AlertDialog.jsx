@@ -10,12 +10,22 @@ import OTPInput from './OTPInput';
 
 export default function AlertDialog({ otpDialog, setotpDialog, onNext }) {
   const [otp, setOtp] = React.useState('');
+  const [reSent, setResend] = React.useState(true);
 
   const handleClose = () => {
     console.log('OTP entered:', otp);
     setotpDialog(false);
     onNext();
   };
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setResend(false)
+    }, 30000);
+    return () => {
+        clearTimeout(timer);
+    };
+}, []);
 
   return (
     <React.Fragment>
@@ -43,13 +53,16 @@ export default function AlertDialog({ otpDialog, setotpDialog, onNext }) {
               alignContent={"center"}
               justifyContent={"center"}
               mt={5}
-              mb={5}
+              
             >
               <OTPInput
                 placeholder="Ingresa el código de verificación"
                 value={otp}
                 onChange={setOtp}
               />
+            </Box>
+            <Box width={"100%"} display={"flex"} alignContent={"center"} alignItems={"center"} justifyContent={"center"}>
+              <Button disabled={reSent}>Reenviar Codigo</Button>
             </Box>
           </DialogContent>
           <DialogActions>

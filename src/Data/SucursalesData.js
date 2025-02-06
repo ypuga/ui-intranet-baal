@@ -173,3 +173,10 @@ export const accountData = [
     "disabled": false,
   }
 ]
+
+export const criteriosBusquedaClientes = [
+  { "value": "CURP", "label": 'CURP', "maxLength": 18 },
+  { "value": "NOMBRE_CLIENTE", "label": 'Nombre del Cliente:', "maxLength": 99 },
+  { "value": "RFC", "label": 'RFC', "maxLength": 13 },
+  { "value": "ID_CLIENTE_UNICO", "label": 'Id Cliente Unico:', "maxLength": 10 }
+];
