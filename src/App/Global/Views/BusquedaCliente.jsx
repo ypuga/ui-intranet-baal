@@ -7,12 +7,14 @@ import { Formik } from 'formik';
 import { useLoading } from '../../../Hooks/LoadingContext';
 import ResultadosBusquedaModal from '../../Clientes/Components/ResultadosBusquedaModal';
 import { RetomarSolicitudModal } from '../Components/RetomarSolicitudModal';
+import { CertificacionContactoModal } from '../../Clientes/Components/CertificacionContactoModal';
 
 const BusquedaCliente = ({ onNext, handleStep }) => {
 
     const {isLoading, startLoading, stopLoading} = useLoading();
     const [open, setOpen] = useState(false);
     const [retomarSolicitud, setretomarSolicitud] = useState(false)
+    const [certificarContacto, setcertificarContacto] = useState(false)
 
     const initialValues = {
         criterioBusqueda: '',
@@ -36,6 +38,10 @@ const BusquedaCliente = ({ onNext, handleStep }) => {
         setretomarSolicitud(false);
     }
 
+    const handleCloseCertificar = () => { 
+        setcertificarContacto(false);
+    }
+
     const handleContinue = () => {
         onNext();
     }
@@ -49,10 +55,11 @@ const BusquedaCliente = ({ onNext, handleStep }) => {
             sx={{ '& .MuiTextField-root': { m: 1 } }}
         >
             <RetomarSolicitudModal open={retomarSolicitud} handleClose={handleCloseRetomar} handleStepOne={handleStep}/>
+            <ResultadosBusquedaModal open={open} handleClose={handleClose} handleContinue={()=>handleContinue}/>
+            <CertificacionContactoModal open={certificarContacto} handleClose={handleCloseCertificar} handleContinue={()=>handleContinue}/>
             <Typography variant="h5" gutterBottom>
                 BUSQUEDA DE CLIENTE
             </Typography>
-            <ResultadosBusquedaModal open={open} handleClose={handleClose} handleContinue={()=>handleContinue}/>
             <Box flex={1} my={4}>
                 <Formik
                     initialValues={initialValues}
