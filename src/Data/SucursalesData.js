@@ -58,7 +58,8 @@ export const estadosMexico = [
 export const productos = [
   'CLIENTE UNICO',
   'ALAMEDA EXPRESS',
-  'CUENTA ALAMEDA',
+  'CUENTA ALAMEDA N2',
+  'CUENTA ALAMEDA N4',
   'INVERSION ALAMEDA'
 ];
 

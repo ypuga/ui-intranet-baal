@@ -10,7 +10,7 @@ import CuentaModal from '../Components/CuentaModal';
 import useToast from '../../../Hooks/useToast';
 import { useDispatch } from 'react-redux';
 import { startGetCurpInfo } from '../../../Store/Datos/Thunks';
-import { startSaveProspectoPersonalData } from '../../../Store/Prospectos/Thunks';
+import { startCreateNewSolicitud, startNextStep, startSaveProspectoPersonalData } from '../../../Store/Prospectos/Thunks';
 import SingleSelect from '../Components/MultipleSelect';
 
 const AltaPersonalData = ({ onNext }) => {
@@ -37,8 +37,9 @@ const AltaPersonalData = ({ onNext }) => {
 
     const handleSubmit = async (values) => {
         await dispatch(startSaveProspectoPersonalData(values));
+        await dispatch(startCreateNewSolicitud(values.producto));
         onNext();
-      };
+    };
 
     const validationSchema = Yup.object({
         curp: Yup.string().required('Requerido'),
@@ -58,17 +59,30 @@ const AltaPersonalData = ({ onNext }) => {
         getCurpInfo();
     };
 
-    const getCurpInfo = async () => {
+    const getCurpInfo = async (setValues) => {
         startLoading();
         try {
             const resp = await dispatch(startGetCurpInfo('PUJY990424HJCGMR00'));
             setpersonalInfoCurp(resp);
+    
+            if (resp?.isValid) {
+                setValues((prev) => ({
+                    ...prev,
+                    primerNombre: resp.primerNombre || '',
+                    segundoNombre: resp.segundoNombre || '',
+                    apellidoPaterno: resp.apellidoPaterno || '',
+                    apellidoMaterno: resp.apellidoMaterno || '',
+                    estadoNacimiento: resp.estadoNacimiento || '',
+                    fechaNacimiento: resp.fechaNacimiento || '',
+                    genero: resp.genero || '',
+                }));
+            }
         } catch (error) {
             showToast(error, 'error', 'top-center');
         } finally {
             stopLoading();
         }
-    }
+    };
 
     return (
         <Box
@@ -94,19 +108,24 @@ const AltaPersonalData = ({ onNext }) => {
                     validationSchema={validationSchema}
                     onSubmit={handleSubmit}
                 >
-                    {({ values, handleChange, handleSubmit, isValid, dirty }) => (
+                    {({ values, handleChange, handleSubmit, isValid, dirty, setValues }) => (
                         <>
                             <form onSubmit={handleSubmit}>
                                 {personalInfoCurp.isValid && (
-                                    (() => {
-                                        values.primerNombre = personalInfoCurp.primerNombre;
-                                        values.segundoNombre = personalInfoCurp.segundoNombre;
-                                        values.apellidoPaterno = personalInfoCurp.apellidoPaterno;
-                                        values.apellidoMaterno = personalInfoCurp.apellidoMaterno;
-                                        values.estadoNacimiento = personalInfoCurp.estadoNacimiento;
-                                        values.fechaNacimiento = personalInfoCurp.fechaNacimiento;
-                                        values.genero = personalInfoCurp.genero;
-                                    })()
+                                    <>
+                                        {setTimeout(() => {
+                                            setValues((prevValues) => ({
+                                                ...prevValues,
+                                                primerNombre: personalInfoCurp?.primerNombre || '',
+                                                segundoNombre: personalInfoCurp?.segundoNombre || '',
+                                                apellidoPaterno: personalInfoCurp?.apellidoPaterno || '',
+                                                apellidoMaterno: personalInfoCurp?.apellidoMaterno || '',
+                                                estadoNacimiento: personalInfoCurp?.estadoNacimiento || '',
+                                                fechaNacimiento: personalInfoCurp?.fechaNacimiento || '',
+                                                genero: personalInfoCurp?.genero || '',
+                                            }));
+                                        }, 0)}
+                                    </>
                                 )}
                                 <Grid2 container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                     <Grid2 size={6}>
@@ -127,12 +146,22 @@ const AltaPersonalData = ({ onNext }) => {
                                         />
                                     </Grid2>
                                     <Grid2 size={6}>
-                                        <SingleSelect placeholder="Producto" values={productos} disabled={isCurpValidate} onChange={handleChange('producto')} />
+                                        <SingleSelect
+                                            placeholder="Producto"
+                                            value={values.producto}
+                                            name="producto"
+                                            values={productos}
+                                            disabled={isCurpValidate}
+                                            onChange={handleChange('producto')}
+                                        />
                                     </Grid2>
                                 </Grid2>
                                 <Box width="100%" display="flex" justifyContent="flex-end" alignItems="flex-end">
                                     {(values.curp.length > 6) ?
-                                        <Button disabled={isCurpValidate} onClick={handleCurp}>Continuar</Button>
+                                        <Button disabled={isCurpValidate} onClick={() => {
+                                            setisCurpValidate(true);
+                                            getCurpInfo(setValues);
+                                        }}>Continuar</Button>
                                         :
                                         <Button onClick={() => window.open('https://www.sinube.mx/calcula-tu-rfc-y-curp', '_blank')} >Consultar CURP</Button>
                                     }

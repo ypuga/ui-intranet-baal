@@ -7,7 +7,6 @@ import AltaBeneficiarios from '../../Global/VIews/AltaBeneficiarios';
 import AltaBiometria from '../../Global/VIews/AltaBiometria';
 import AltaCliente from '../../Global/VIews/AltaCliente';
 import ConfirmacionCuenta from '../../Global/VIews/ConfirmacionCuenta';
-import AltaPersonalData from '../../Global/VIews/AltaPersonalData';
 import AltaDomicilioData from '../../Global/VIews/AltaDomicilioData'
 import StepperComponent from '../../Global/Components/StepperAltaClienteComponent';
 import { altaClienteSteps } from '../../../Data/Steps';
@@ -15,12 +14,26 @@ import AltaBanqueroPersonal from '../../Global/VIews/AltaBanqueroPersonal';
 import AltaKyC from '../../Global/Views/AltaKyC';
 import DocumentsProgress from '../../Global/Views/AltaDocumentacion';
 import { altaCuentaDocumentos } from '../../../Data/MocksDocumentos';
+import AltaPersonalData from '../../Global/Views/AltaPersonalData';
+import { useLoading } from '../../../Hooks/LoadingContext';
+import { useDispatch } from 'react-redux';
+import { startNextStep } from '../../../Store/Prospectos/Thunks';
 
 const AltaClientePage = () => {
   const [activeStep, setActiveStep] = useState(0);
+  const { isLoading, startLoading, stopLoading } = useLoading();
+  const dispatch = useDispatch();
 
-  const handleNext = () => {
-    setActiveStep((prevStep) => Math.min(prevStep + 1, 10));
+  const handleNext = async () => {
+    startLoading();
+    try {
+      await dispatch(startNextStep());
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setActiveStep((prevStep) => Math.min(prevStep + 1, 10));
+      stopLoading();
+    }
   };
 
   const handleBack = () => {

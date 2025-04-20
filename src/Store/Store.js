@@ -8,7 +8,7 @@ const store = configureStore({
     reducer: {
       sistema: authenticationSlice.reducer,
       data: dataSlice.reducer,
-      prospectos: prospectosSlice.reducer
+      prospectos: prospectosSlice.reducer,
     },
   });
   
