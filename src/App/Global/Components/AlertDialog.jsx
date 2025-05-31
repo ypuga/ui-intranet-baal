@@ -7,15 +7,22 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Box, Divider, Typography } from '@mui/material';
 import OTPInput from './OTPInput';
+import { useDispatch } from 'react-redux';
+import { startCertificaMedioContacto } from '../../../Store/Prospectos/Thunks';
 
 export default function AlertDialog({ otpDialog, setotpDialog, onNext }) {
   const [otp, setOtp] = React.useState('');
   const [reSent, setResend] = React.useState(true);
+  const dispatch = useDispatch();
 
-  const handleClose = () => {
-    console.log('OTP entered:', otp);
-    setotpDialog(false);
-    onNext();
+  const handleClose = async () => {
+    const resp = await dispatch(startCertificaMedioContacto());
+      if (resp.status == 'OK') {
+        setotpDialog(false);
+        onNext();
+    } else {
+        showToast(resp.message, 'error', 'top-center');
+    }
   };
 
   React.useEffect(() => {

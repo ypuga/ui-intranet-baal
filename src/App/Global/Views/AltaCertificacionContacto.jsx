@@ -4,11 +4,17 @@ import React, { useState } from 'react'
 import * as Yup from 'yup';
 import { useLoading } from '../../../Hooks/LoadingContext';
 import AlertDialog from '../Components/AlertDialog';
+import { useDispatch, useSelector } from 'react-redux';
+import { startSaveContactInfo } from '../../../Store/Prospectos/Thunks';
+import useToast from '../../../Hooks/useToast';
 
 const AltaCertificacionContacto = ({ onNext, onBack }) => {
 
     const { isLoading, startLoading, stopLoading } = useLoading();
     const [otpDialog, setotpDialog] = useState(false);
+    const dispatch = useDispatch();
+    const { showToast } = useToast();
+    const {solicitud} = useSelector(state=>state.prospectos);
 
     const initialValues = {
         telefono: '',
@@ -28,8 +34,17 @@ const AltaCertificacionContacto = ({ onNext, onBack }) => {
             .required('Requerido'),
     });
 
-    const handleSubmit = (values) => {
-        setotpDialog(true);
+    const handleSubmit = async (values) => {
+        const dataContacto = {
+            noTelefono: values?.confirmacionTelefono,
+            email: values.email
+        }
+        const resp = await dispatch(startSaveContactInfo(dataContacto));
+        if (resp.status == 'OK') {
+            setotpDialog(true);
+        } else {
+            showToast(resp.message, 'error', 'top-center');
+        }
     };
 
     return (
@@ -45,7 +60,7 @@ const AltaCertificacionContacto = ({ onNext, onBack }) => {
                 MEDIOS DE CONTACTO
             </Typography>
             <Typography fontSize={"10px"}>
-                ID De Evaluacion: 29921
+                ID De Evaluacion: {solicitud.idSolicitud}
             </Typography>
             <Box flex={1} my={4}>
                 <Formik

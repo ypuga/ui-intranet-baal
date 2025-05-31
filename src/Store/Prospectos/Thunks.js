@@ -5,7 +5,64 @@ import { setPersonalData, setSolicitud } from "./Prospectos";
 export const startSaveProspectoPersonalData = (data) => {
     return async (dispatch, getState) => {
         try {
-           await dispatch(setPersonalData(data));
+           const resp = await SolicitudesApi.savePersonalData(getState().prospectos.solicitud.idSolicitud, data);
+           if (resp.status == 200) {
+            await dispatch(setPersonalData(data));
+            return resp;
+           } else {
+            return resp;
+           }
+        } catch (error) {
+            throw error;
+        }
+    }
+}
+
+export const startSavePersonalBanking = (personalBankingData) => {
+    return async (dispatch, getState) => {
+        const data = {
+            bpLogin: getState().sistema.user,
+            sucLogin: getState().sistema.sucursal,
+            bpSolicitud: personalBankingData.bp,
+            sucSolicitud: personalBankingData.sucursal
+        }
+        try {
+            const resp = await SolicitudesApi.savePersonalBanking(getState().prospectos.solicitud.idSolicitud, personalBankingData)
+            if (resp.status == 'OK') {
+                return resp;
+               } else {
+                return resp;
+               }
+        } catch (error) {
+            throw error;
+        }
+    }
+}
+
+export const startSaveContactInfo = (data) => {
+    return async (dispatch, getState) => {
+        try {
+            const resp = await SolicitudesApi.saveContactInfo(getState().prospectos.solicitud.idSolicitud, data)
+            if (resp.status == 'OK') {
+                return resp;
+               } else {
+                return resp;
+               }
+        } catch (error) {
+            throw error;
+        }
+    }
+}
+
+export const startCertificaMedioContacto = () => {
+    return async (dispatch, getState) => {
+        try {
+            const resp = await SolicitudesApi.certificaContacto(getState().prospectos.solicitud.idSolicitud)
+            if (resp.status == 'OK') {
+                return resp;
+               } else {
+                return resp;
+               }
         } catch (error) {
             throw error;
         }

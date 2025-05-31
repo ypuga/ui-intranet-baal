@@ -36,9 +36,13 @@ const AltaPersonalData = ({ onNext }) => {
     };
 
     const handleSubmit = async (values) => {
-        await dispatch(startSaveProspectoPersonalData(values));
         await dispatch(startCreateNewSolicitud(values.producto));
-        onNext();
+        const resp = await dispatch(startSaveProspectoPersonalData(values));
+        if (resp.status == 200) {
+            onNext();
+        } else {
+            showToast(resp.message, 'error', 'top-center');
+        }
     };
 
     const validationSchema = Yup.object({
@@ -98,7 +102,7 @@ const AltaPersonalData = ({ onNext }) => {
             </Typography>
             {isCurpValidate ?
                 <Typography fontSize={"10px"}>
-                    ID De Evaluacion: 29921
+                    ID De Evaluacion: 
                 </Typography>
                 : null
             }
@@ -111,22 +115,6 @@ const AltaPersonalData = ({ onNext }) => {
                     {({ values, handleChange, handleSubmit, isValid, dirty, setValues }) => (
                         <>
                             <form onSubmit={handleSubmit}>
-                                {personalInfoCurp.isValid && (
-                                    <>
-                                        {setTimeout(() => {
-                                            setValues((prevValues) => ({
-                                                ...prevValues,
-                                                primerNombre: personalInfoCurp?.primerNombre || '',
-                                                segundoNombre: personalInfoCurp?.segundoNombre || '',
-                                                apellidoPaterno: personalInfoCurp?.apellidoPaterno || '',
-                                                apellidoMaterno: personalInfoCurp?.apellidoMaterno || '',
-                                                estadoNacimiento: personalInfoCurp?.estadoNacimiento || '',
-                                                fechaNacimiento: personalInfoCurp?.fechaNacimiento || '',
-                                                genero: personalInfoCurp?.genero || '',
-                                            }));
-                                        }, 0)}
-                                    </>
-                                )}
                                 <Grid2 container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                     <Grid2 size={6}>
                                         <TextField
