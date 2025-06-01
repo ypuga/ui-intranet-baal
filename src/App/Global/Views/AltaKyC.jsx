@@ -5,9 +5,17 @@ import * as Yup from 'yup';
 import React, { useState } from 'react'
 import { afore, aforesMexico, cargosPublicos, conocimientoFinanciero, depositosMensuales, destinoRecursos, ingresosMensuales, origenRecursos, politicamenteExpuesta } from '../../../Data/CuestionarioCdC';
 import DynamicRadioButtons from '../Components/RowRadioButtonsGroup';
+import { useLoading } from '../../../Hooks/LoadingContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { startAltaKyc } from '../../../Store/Prospectos/Thunks';
+import useToast from '../../../Hooks/useToast';
 
 const AltaKyC = ({ onNext, onBack }) => {
     const [selectedValues, setSelectedValues] = useState([]);
+    const { isLoading, startLoading, stopLoading } = useLoading();
+    const dispatch = useDispatch();
+    const { showToast } = useToast();
+    const {solicitud} = useSelector(state=>state.prospectos);
 
     const initialValues = {
         q1: '',
@@ -36,8 +44,14 @@ const AltaKyC = ({ onNext, onBack }) => {
         q8: Yup.string().required('Requerido'),
     });
 
-    const handleSubmit = (values) => {
-        onNext();
+    const handleSubmit = async (values) => {
+        const resp = await dispatch(startAltaKyc({data:{...values}}));
+        if (resp.status == 'OK' || resp.status == 200) {
+            onNext();
+        } else {
+            showToast(resp.message, 'error', 'top-center');
+        }
+        stopLoading();
     };
 
     const handleChange = (event) => {
@@ -60,7 +74,7 @@ const AltaKyC = ({ onNext, onBack }) => {
                 CONOCIMIENTO DEL CLIENTE
             </Typography>
             <Typography fontSize={"10px"}>
-                ID De Evaluacion: 29921
+                ID De Evaluacion: {solicitud.idSolicitud}
             </Typography>
             <Box flex={1} my={4}>
                 <Formik

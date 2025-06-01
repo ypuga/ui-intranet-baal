@@ -16,13 +16,14 @@ import DocumentsProgress from '../../Global/Views/AltaDocumentacion';
 import { altaCuentaDocumentos } from '../../../Data/MocksDocumentos';
 import AltaPersonalData from '../../Global/Views/AltaPersonalData';
 import { useLoading } from '../../../Hooks/LoadingContext';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { startNextStep } from '../../../Store/Prospectos/Thunks';
 
 const AltaClientePage = () => {
   const [activeStep, setActiveStep] = useState(0);
   const { isLoading, startLoading, stopLoading } = useLoading();
   const dispatch = useDispatch();
+  const {solicitud} = useSelector(state=>state.prospectos);
 
   const handleNext = async () => {
     startLoading();

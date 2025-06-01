@@ -9,7 +9,10 @@ export class ApiEndpoints  {
         POST_PERSONAL_DATA: this.BASE_URL+'/prospecto/personalData/save/',
         POST_PERSONAL_BANKING: this.BASE_URL+'/prospecto/bp/save/',
         SAVE_CONTACT_INFO: this.BASE_URL+'/prospecto/contacto/save/',
-        CERTIFY_CONTACTO_INFO: this.BASE_URL+'/prospecto/contacto/certifica/'
+        CERTIFY_CONTACTO_INFO: this.BASE_URL+'/prospecto/contacto/certifica/',
+        SAVE_ADRESS_DATA: this.BASE_URL+'/prospecto/domicilio/save/',
+        SAVE_KYC_DATA: this.BASE_URL+'/prospecto/kyc/save/',
+        SAVE_FISCAL_DATA: this.BASE_URL+'/prospecto/fiscalData/save/'
     }   
 
 }

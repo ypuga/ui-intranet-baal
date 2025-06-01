@@ -4,12 +4,13 @@ import MultipleSelect from '../Components/MultipleSelect';
 import * as Yup from 'yup';
 import React, { useState } from 'react'
 import { estadosMexico, mismoDomicilio } from '../../../Data/SucursalesData';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLoading } from '../../../Hooks/LoadingContext';
 import { startGetCodigoPostalData } from '../../../Store/Datos/Thunks';
 import useToast from '../../../Hooks/useToast';
 import DomicilioModal from '../Components/DomicilioModal';
 import DynamicRadioButtons from '../Components/RowRadioButtonsGroup';
+import { startSaveDomicilio } from '../../../Store/Prospectos/Thunks';
 
 const AltaDomicilioData = ({ onNext, onBack }) => {
 
@@ -18,18 +19,19 @@ const AltaDomicilioData = ({ onNext, onBack }) => {
     const [open, setOpen] = useState(false);
     const [isDisabled, setisDisabled] = useState(false);
     const { isLoading, startLoading, stopLoading } = useLoading();
+    const {solicitud} = useSelector(state=>state.prospectos);
 
     const initialValues = {
         estado: '',
         codigoPostal: '',
         localidad: '',
-        municipio: '',
+        ciudad: '',
         asentamiento: '',
         calle: '',
         numeroExterior: '',
         numeroInterior: '',
         colonia: '',
-        sameAddress: true,
+        sameAddress: 'Si',
     };
 
     const handleClose = () => {
@@ -46,8 +48,19 @@ const AltaDomicilioData = ({ onNext, onBack }) => {
         colonia: Yup.string().required('Requerido'),
     });
 
-    const handleSubmit = (values) => {
-        onNext();
+    const handleSubmit = async (values) => {
+        startLoading();
+        const domicilioData = {
+            ...values,
+            sameAddress: values.sameAddress === 'Si'
+        };
+        const resp = await dispatch(startSaveDomicilio(domicilioData));
+        if (resp?.status == 'OK' || resp?.status == 200) {
+            onNext();
+        } else {
+            showToast(resp.message, 'error', 'top-center');
+        }
+        stopLoading();
     };
 
     const handleConsultaCp = async (cp) => {
@@ -77,7 +90,7 @@ const AltaDomicilioData = ({ onNext, onBack }) => {
                 DOMICILIO DEL CLIENTE
             </Typography>
             <Typography fontSize={"10px"}>
-                ID De Evaluacion: 29921
+                ID De Evaluacion: {solicitud?.idSolicitud}
             </Typography>
             <Box flex={1} my={4}>
                 <Formik
@@ -87,9 +100,9 @@ const AltaDomicilioData = ({ onNext, onBack }) => {
                 >
                     {({ values, handleChange, handleSubmit, touched, errors, isValid, dirty }) => (
                         <form onSubmit={handleSubmit}>
-                            {(values.sameAddress == 'No') ? 
-                            <Alert variant="filled" sx={{marginBottom:'20px'}} severity='info'>Se le solicitara al cliente el comprobante de domicilio dentro del paso de documentación del cliente.</Alert>
-                            :null
+                            {(values.sameAddress == 'No') ?
+                                <Alert variant="filled" sx={{ marginBottom: '20px' }} severity='info'>Se le solicitara al cliente el comprobante de domicilio dentro del paso de documentación del cliente.</Alert>
+                                : null
                             }
                             <DomicilioModal
                                 open={open}
@@ -97,7 +110,7 @@ const AltaDomicilioData = ({ onNext, onBack }) => {
                                 onSelect={(domicilio) => {
                                     values.asentamiento = domicilio.tipo_asentamiento,
                                         values.localidad = domicilio.ciudad,
-                                        values.municipio = domicilio.municipio,
+                                        values.ciudad = domicilio.municipio,
                                         values.colonia = domicilio.colonia,
                                         values.estado = domicilio.estado
                                     setisDisabled(true);
@@ -173,7 +186,7 @@ const AltaDomicilioData = ({ onNext, onBack }) => {
                                         label="Municipio"
                                         variant="outlined"
                                         name="municipio"
-                                        value={values.municipio}
+                                        value={values.ciudad}
                                         onChange={handleChange}
                                         InputLabelProps={{
                                             shrink: true,
@@ -270,12 +283,12 @@ const AltaDomicilioData = ({ onNext, onBack }) => {
                             </Grid2>
                             <Grid2 container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                 <Grid2>
-                                <DynamicRadioButtons
-                                    options={mismoDomicilio}
-                                    name="sameAddress"
-                                    onChange={handleChange('sameAddress')}
-                                    label='¿El domicilio ingresado es el mismo que el de su INE?'
-                                />
+                                    <DynamicRadioButtons
+                                        options={mismoDomicilio}
+                                        name="sameAddress"
+                                        onChange={handleChange('sameAddress')}
+                                        label='¿El domicilio ingresado es el mismo que el de su INE?'
+                                    />
                                 </Grid2>
                             </Grid2>
 

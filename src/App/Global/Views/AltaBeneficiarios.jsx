@@ -32,7 +32,8 @@ const AltaBeneficiarios = ({ onNext, onBack }) => {
     });
 
     const handleSubmit = (values) => {
-        onNext();
+        console.log(values);
+        //onNext();
     };
 
     return (

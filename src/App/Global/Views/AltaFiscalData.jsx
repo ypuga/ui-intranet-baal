@@ -6,32 +6,53 @@ import React from 'react'
 import { mismoDomicilioFiscal, regimenFiscal, ocupaciones, sectores } from '../../../Data/FiscalData';
 import { estadosMexico } from '../../../Data/SucursalesData';
 import DynamicRadioButtons from '../Components/RowRadioButtonsGroup';
+import { useDispatch, useSelector } from 'react-redux';
+import useToast from '../../../Hooks/useToast';
+import { startSaveFiscalData } from '../../../Store/Prospectos/Thunks';
+import { useLoading } from '../../../Hooks/LoadingContext';
 
 const AltaFiscalData = ({ onNext, onBack }) => {
+    const dispatch = useDispatch();
+    const { showToast } = useToast();
+    const { solicitud } = useSelector(state => state.prospectos);
+    const { isLoading, startLoading, stopLoading } = useLoading();
 
     const initialValues = {
         regimenFiscal: '',
-        sector: '',
+        sectorEconomico: '',
         ocupacion: '',
         fiel: '',
-        mismoDomicilioFiscal: true,
-        estado: '',
-        codigoPostal: '',
-        calle: '',
-        numeroExterior: '',
+        mismoDomicilioFiscal: 'Si',
+        domicilioFiscalEstado: '',
+        domicilioFiscalCp: '',
+        domicilioFiscalCalle: '',
+        domicilioFiscalNumeroExterior: '',
         numeroInterior: '',
-        colonia: ''
+        domicilioFiscalColonia: ''
     };
 
     const validationSchema = Yup.object({
         regimenFiscal: Yup.string().required('Requerido'),
         mismoDomicilioFiscal: Yup.string().required('Requerido'),
-        sector: Yup.string().required('Requerido'),
+        sectorEconomico: Yup.string().required('Requerido'),
         ocupacion: Yup.string().required('Requerido'),
     });
 
-    const handleSubmit = (values) => {
-        onNext();
+    const handleSubmit = async (values) => {
+        startLoading();
+        const fiscalData = {
+            ...values,
+            mismoDomicilioFiscal: values.mismoDomicilioFiscal === 'Si'
+        };
+
+        const resp = await dispatch(startSaveFiscalData(fiscalData));
+        if (resp?.status == 'OK' || resp?.status == 200) {
+            onNext();
+        } else {
+            showToast(resp.message, 'error', 'top-center');
+            stopLoading();
+        }
+        stopLoading();
     };
 
     return (
@@ -46,7 +67,7 @@ const AltaFiscalData = ({ onNext, onBack }) => {
                 DATOS FISCALES
             </Typography>
             <Typography fontSize={"10px"}>
-                ID De Evaluacion: 29921
+                ID De Evaluacion: {solicitud.idSolicitud}
             </Typography>
             <Box flex={1} my={4}>
                 <Formik
@@ -79,7 +100,7 @@ const AltaFiscalData = ({ onNext, onBack }) => {
                                 <MultipleSelect
                                     values={sectores}
                                     placeholder='¿Sector economico?'
-                                    onChange={handleChange('sector')}
+                                    onChange={handleChange('sectorEconomico')}
                                 />
                             </Grid2>
                             <Grid2>
@@ -113,14 +134,18 @@ const AltaFiscalData = ({ onNext, onBack }) => {
                                     </Divider>
                                     <Grid2 container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                         <Grid2 size={6}>
-                                            <MultipleSelect values={estadosMexico} placeholder='Estado' />
+                                            <MultipleSelect
+                                                values={estadosMexico}
+                                                placeholder='Estado'
+                                                onChange={handleChange('domicilioFiscalEstado')}
+                                            />
                                         </Grid2>
                                         <Grid2 size={6}>
                                             <TextField
                                                 label="Codigo Postal"
                                                 variant="outlined"
-                                                name="codigoPostal"
-                                                value={values.codigoPostal}
+                                                name="domicilioFiscalCp"
+                                                value={values.domicilioFiscalCp}
                                                 onChange={handleChange}
                                                 inputProps={{
                                                     maxLength: '5',
@@ -130,7 +155,7 @@ const AltaFiscalData = ({ onNext, onBack }) => {
                                                 }}
                                                 fullWidth
                                             />
-                                            <ErrorMessage name="codigoPostal" component="div" style={{ color: 'red', fontSize: '12px' }} />
+                                            <ErrorMessage name="domicilioFiscalCp" component="div" style={{ color: 'red', fontSize: '12px' }} />
                                         </Grid2>
                                     </Grid2>
                                     <Grid2 container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -154,8 +179,8 @@ const AltaFiscalData = ({ onNext, onBack }) => {
                                             <TextField
                                                 label="Calle"
                                                 variant="outlined"
-                                                name="calle"
-                                                value={values.calle}
+                                                name="domicilioFiscalCalle"
+                                                value={values.domicilioFiscalCalle}
                                                 onChange={handleChange}
                                                 inputProps={{
                                                     onInput: (e) => {
@@ -172,8 +197,8 @@ const AltaFiscalData = ({ onNext, onBack }) => {
                                             <TextField
                                                 label="Colonia"
                                                 variant="outlined"
-                                                name="colonia"
-                                                value={values.colonia}
+                                                name="domicilioFiscalColonia"
+                                                value={values.domicilioFiscalColonia}
                                                 onChange={handleChange}
                                                 inputProps={{
                                                     onInput: (e) => {
@@ -192,8 +217,8 @@ const AltaFiscalData = ({ onNext, onBack }) => {
                                             <TextField
                                                 label="Número Exterior"
                                                 variant="outlined"
-                                                name="numeroExterior"
-                                                value={values.numeroExterior}
+                                                name="domicilioFiscalNumeroExterior"
+                                                value={values.domicilioFiscalNumeroExterior}
                                                 onChange={handleChange}
                                                 inputProps={{
                                                     onInput: (e) => {
