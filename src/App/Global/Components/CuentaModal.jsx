@@ -7,10 +7,13 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import ErrorIcon from '@mui/icons-material/Error';
 import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { DeleteOutline } from '@mui/icons-material';
+import { useDispatch } from 'react-redux';
+import { startRetomarSolicitud } from '../../../Store/Prospectos/Thunks';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -21,12 +24,13 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-export default function CuentaModal({ open, handleClose, setisCurpValidate }) {
+export default function CuentaModal({ open, handleClose, setisCurpValidate, solicitudExistente }) {
 
-  const handleContinueSolicitud =()=>{
+  const handleContinueSolicitud = () => {
     handleClose();
     setisCurpValidate(true);
   }
+  const dispatch = useDispatch();
 
   return (
     <BootstrapDialog
@@ -41,7 +45,7 @@ export default function CuentaModal({ open, handleClose, setisCurpValidate }) {
           m: 0,
           p: 2,
           display: 'flex',
-          alignItems: 'center', 
+          alignItems: 'center',
           justifyContent: 'center',
           textAlign: 'start',
         }}
@@ -71,56 +75,37 @@ export default function CuentaModal({ open, handleClose, setisCurpValidate }) {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>
-                    ID Evaluación
-                  </TableCell>
-                  <TableCell>
-                    Fecha Evaluacion
-                  </TableCell>
-                  <TableCell>
-                    Producto
-                  </TableCell>
-                  <TableCell>
-                    Sucursal
-                  </TableCell>
-                  <TableCell>
-                    Ejecutivo
-                  </TableCell>
-                  <TableCell>
-                  </TableCell>
+                  <TableCell>ID Evaluación</TableCell>
+                  <TableCell>Fecha Evaluación</TableCell>
+                  <TableCell>CURP</TableCell>
+                  <TableCell>Sucursal</TableCell>
+                  <TableCell>Ejecutivo</TableCell>
+                  <TableCell>Eliminar</TableCell>
+                  <TableCell>Continuar</TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                <TableCell scope="row" align="left">
-                  89898
-                </TableCell>
-                <TableCell scope="row" align="left">
-                  2024-11-24
-                </TableCell>
-                <TableCell scope="row" align="left">
-                  CUENTA ALAMEDA
-                </TableCell>
-                <TableCell scope="row" align="left">
-                  914
-                </TableCell>
-                <TableCell scope="row" align="left">
-                  84540632
-                </TableCell>
-                <TableCell>
-                  <IconButton aria-label="delete" size="large">
-                    <DeleteOutline sx={{color:'red'}} fontSize="inherit" color='red'/>
-                  </IconButton>
-                </TableCell>
+                {solicitudExistente?.map((solicitud) => (
+                  <TableRow key={solicitud.id}>
+                    <TableCell align="left">{solicitud?.id}</TableCell>
+                    <TableCell align="left">{solicitud?.fechaCreacion}</TableCell>
+                    <TableCell align="left">{solicitud.curp}</TableCell>
+                    <TableCell align="left">914</TableCell>
+                    <TableCell align="left">84540632</TableCell>
+                    <TableCell><IconButton color="error"><DeleteIcon /></IconButton></TableCell>
+                    <TableCell>
+                      <Button onClick={()=>dispatch(startRetomarSolicitud(solicitud))} color='info'>
+                      Continuar
+                    </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </TableContainer>
         </Box>
       </DialogContent>
-      <DialogActions>
-        <Button variant='outlined' color='success' autoFocus onClick={handleContinueSolicitud}>
-          Continuar con la evaluación
-        </Button>
-      </DialogActions>
     </BootstrapDialog>
   );
 }

@@ -12,7 +12,15 @@ export class ApiEndpoints  {
         CERTIFY_CONTACTO_INFO: this.BASE_URL+'/prospecto/contacto/certifica/',
         SAVE_ADRESS_DATA: this.BASE_URL+'/prospecto/domicilio/save/',
         SAVE_KYC_DATA: this.BASE_URL+'/prospecto/kyc/save/',
-        SAVE_FISCAL_DATA: this.BASE_URL+'/prospecto/fiscalData/save/'
+        SAVE_FISCAL_DATA: this.BASE_URL+'/prospecto/fiscalData/save/',
+        SAVE_BENEFICIARIES: this.BASE_URL+'/prospecto/beneficiarios/save/',
+        GET_DOCUMENTATION: this.BASE_URL+'/prospecto/documentos/',
     }   
+
+    static CLIENTES = {
+        ALTA_CLIENTE: this.BASE_URL+'/cliente/cliente/alta/',
+        ALTA_CUENTA_CLIENTE: this.BASE_URL+ '/cliente/cuentas/alta/',
+        ASIGNAR_TDD: this.BASE_URL+'/cliente/tarjeta/asignar/debito/'
+    }
 
 }

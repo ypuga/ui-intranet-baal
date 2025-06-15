@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Typography, LinearProgress, IconButton } from '@mui/material';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -6,9 +6,35 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import IneAnverso from '../../../assets/INE_ANVERSO.png'
 import IneReverso from '../../../assets/INE_REVERSO.jpeg'
+import { useDispatch, useSelector } from 'react-redux';
+import { startGetClientDocumentation } from '../../../Store/Prospectos/Thunks';
+import useToast from '../../../Hooks/useToast';
+import { useLoading } from '../../../Hooks/LoadingContext';
 
-const DocumentsProgress = ({onNext, documents}) => {
+const DocumentsProgress = ({onNext}) => {
     const [currentStep, setCurrentStep] = useState(0);
+    const [documents, setdocuments] = useState([]);
+    const dispatch = useDispatch();
+    const {showToast} = useToast();
+    const { isLoading, startLoading, stopLoading } = useLoading();
+    const {solicitud} = useSelector(state=>state.prospectos);
+
+    useEffect(() => {
+        startLoading();
+        getDcoumentosCliente(); 
+    }, [])
+
+    const getDcoumentosCliente = async () => {
+        const resp = await dispatch(startGetClientDocumentation());
+        if (resp.status == 200 || resp.status == 'OK') {
+            setdocuments(resp.data);
+            stopLoading();
+        } else {
+            showToast(resp.message, 'error', 'top-center');
+            stopLoading();
+        }
+    }
+    
 
     const handleNextStep = () => {
         if (currentStep < documents.length - 1) {
@@ -32,7 +58,7 @@ const DocumentsProgress = ({onNext, documents}) => {
                 EXPEDIENTE DIGITAL
             </Typography>
             <Typography fontSize={"10px"}>
-                ID De Evaluacion: 29921
+                ID De Evaluacion: {solicitud.idSolicitud}
             </Typography>
             <Box width="100%" mb={4} mt={5}>
                 <Typography variant="body2" color="textSecondary" gutterBottom>

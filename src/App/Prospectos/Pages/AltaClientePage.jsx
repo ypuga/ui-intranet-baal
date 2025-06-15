@@ -13,7 +13,6 @@ import { altaClienteSteps } from '../../../Data/Steps';
 import AltaBanqueroPersonal from '../../Global/VIews/AltaBanqueroPersonal';
 import AltaKyC from '../../Global/Views/AltaKyC';
 import DocumentsProgress from '../../Global/Views/AltaDocumentacion';
-import { altaCuentaDocumentos } from '../../../Data/MocksDocumentos';
 import AltaPersonalData from '../../Global/Views/AltaPersonalData';
 import { useLoading } from '../../../Hooks/LoadingContext';
 import { useDispatch, useSelector } from 'react-redux';
@@ -84,7 +83,7 @@ const AltaClientePage = () => {
             <AltaBiometria onNext={handleNext} />
           )}
           {activeStep === 8 && (
-            <DocumentsProgress onNext={handleNext} documents={altaCuentaDocumentos}/>
+            <DocumentsProgress onNext={handleNext}/>
           )}
           {activeStep === 9 && (
             <AltaCliente onNext={handleNext} />

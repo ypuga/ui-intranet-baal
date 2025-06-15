@@ -9,16 +9,19 @@ import { Box, Divider, Typography } from '@mui/material';
 import OTPInput from './OTPInput';
 import { useDispatch } from 'react-redux';
 import { startCertificaMedioContacto } from '../../../Store/Prospectos/Thunks';
+import useToast from '../../../Hooks/useToast';
 
 export default function AlertDialog({ otpDialog, setotpDialog, onNext }) {
   const [otp, setOtp] = React.useState('');
   const [reSent, setResend] = React.useState(true);
   const dispatch = useDispatch();
+  const {showToast} = useToast();
 
   const handleClose = async () => {
     const resp = await dispatch(startCertificaMedioContacto());
       if (resp.status == 'OK') {
         setotpDialog(false);
+        showToast(resp.message, 'info', 'top-center');
         onNext();
     } else {
         showToast(resp.message, 'error', 'top-center');

@@ -4,11 +4,18 @@ import MultipleSelect from '../Components/MultipleSelect';
 import * as Yup from 'yup';
 import React, { useState } from 'react'
 import { parentezco } from '../../../Data/SucursalesData';
+import mapBeneficiaries from '../../../Utils/BeneficiariesUtil';
+import { useDispatch, useSelector } from 'react-redux';
+import useToast from '../../../Hooks/useToast';
+import { startAltaBeneficiarios } from '../../../Store/Prospectos/Thunks';
 
 const AltaBeneficiarios = ({ onNext, onBack }) => {
 
     const [segundo, setsegundo] = useState(false);
     const [tercero, settercero] = useState(false);
+    const dispatch = useDispatch();
+    const { showToast } = useToast();
+    const {solicitud} = useSelector(state=>state.prospectos);
 
     const initialValues = {
         beneficiarioNombresUno: '',
@@ -31,9 +38,13 @@ const AltaBeneficiarios = ({ onNext, onBack }) => {
         beneficiarioParentezcoUno: Yup.string().required('Requerido'),
     });
 
-    const handleSubmit = (values) => {
-        console.log(values);
-        //onNext();
+    const handleSubmit = async (values) => {
+        const resp = await dispatch(startAltaBeneficiarios(mapBeneficiaries(values)));
+        if (resp.status == 'OK' || resp.status == 200) {
+            onNext();
+        } else {
+            showToast(resp.message, 'error', 'top-center');
+        }
     };
 
     return (
@@ -48,7 +59,7 @@ const AltaBeneficiarios = ({ onNext, onBack }) => {
                 BENEFICIARIOS
             </Typography>
             <Typography fontSize={"10px"}>
-                ID De Evaluacion: 29921
+                ID De Evaluacion: {solicitud.idSolicitud}
             </Typography>
             <Box flex={1} my={4}>
                 <Formik

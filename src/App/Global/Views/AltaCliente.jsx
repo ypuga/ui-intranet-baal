@@ -1,7 +1,8 @@
 import { Box, Button, CircularProgress, Table, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import useToast from '../../../Hooks/useToast';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { startAlataCuenta, startAltaCliente, startAsignarTarjetaDebito } from '../../../Store/Clientes/Thunks';
 
 
 const AltaCliente = ({ onNext }) => {
@@ -11,34 +12,79 @@ const AltaCliente = ({ onNext }) => {
     const [asingTdd, setAsingTdd] = useState(false);
     const [showCircular, setshowCircular] = useState(false);
     const [altaCuenta, setaltaCuenta] = useState(true);
-    const {showToast} = useToast();
-    const {personalData} = useSelector(state=>state.prospectos)
+    const { showToast } = useToast();
+    const { personalData, solicitud } = useSelector(state => state.prospectos);
+    const { cliente, cuenta } = useSelector(state => state.clientes);
+    const [noTdd, setnoTdd] = useState();
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        if (personalData.producto == 'CLIENTE UNICO') {
+        if (personalData.producto === 'CLIENTE UNICO') {
             setaltaCuenta(false);
         }
-        const timer = setTimeout(() => {
+
+        const timer = setTimeout(async () => {
             setShow(false);
-            showToast('El cliente ha sido dado de alta correctamente.', 'success', 'top-center');
+
+            const cliente = await altaCliente();
+
+            if (cliente.status == 200 || resp.status == 'OK') {
+                await altaCuentaCliente(cliente?.data?.idClienteUnico);
+            }
         }, 10000);
+
         return () => {
             clearTimeout(timer);
         };
     }, []);
 
-    const handleTdd = () => {
+
+    const altaCliente = async () => {
+        const resp = await dispatch(startAltaCliente());
+        if (resp.status == 'OK', resp.status == 200) {
+            showToast('El cliente ha sido dado de alta correctamente.', 'success', 'top-center');
+            return resp;
+        } else if (resp.status == 500) {
+            showToast('Error general', 'error', 'top-center');
+        } else {
+            showToast(resp.message, 'error', 'top-center');
+            return resp;
+        }
+    }
+
+    const altaCuentaCliente = async (idClienteUnico) => {
+        const resp = await dispatch(startAlataCuenta(idClienteUnico));
+    }
+
+    const handleTdd = async () => {
         setAsingTdd(true);
         setshowCircular(true);
-        const timer = setTimeout(() => {
-            setAsingTdd(true);
+        const timer = setTimeout(async () => {
+            await altaDeTarjeta()
             setshowCircular(false);
-            setTdd(true);
-            showToast('La tarjeta de debito terminacion 3128 se asigno a la cuenta correctamente.', 'success', 'top-center');
         }, 10000);
         return () => {
             clearTimeout(timer);
         };
+    }
+
+    const altaDeTarjeta = async () => {
+        const resp = await dispatch(startAsignarTarjetaDebito());
+        if (resp.status == 'OK', resp.status == 200) {
+            console.log(resp);
+            showToast('La tarjeta se asigno a la cuenta correctamente', 'success', 'top-center');
+            setAsingTdd(true);
+            setTdd(true);
+            setnoTdd(resp.data);
+        } else if (resp.status == 500) {
+            showToast('No es posible dar de alta una tarjeta de debito. Comuniquese a atencion a empleados', 'error', 'top-center');
+            setAsingTdd(false);
+            setTdd(false);        
+        } else {
+            showToast(resp.message, 'error', 'top-center');
+            setAsingTdd(false);
+            setTdd(false);
+        }
     }
 
     const handleSubmit = (values) => {
@@ -62,7 +108,7 @@ const AltaCliente = ({ onNext }) => {
                 ALTA CLIENTE
             </Typography>
             <Typography fontSize={"10px"}>
-                ID De Evaluacion: 29921
+                ID De Evaluacion: {solicitud.idSolicitud}
             </Typography>
             <Box p={1} mt={5}>
                 {show ?
@@ -84,25 +130,25 @@ const AltaCliente = ({ onNext }) => {
                                             <Typography fontSize={"15px"}><strong>ID Cliente Unico:</strong></Typography>
                                         </TableCell>
                                         <TableCell>
-                                            <Typography fontSize={"15px"}>390019238</Typography>
+                                            <Typography fontSize={"15px"}>{cliente?.idClienteUnico}</Typography>
                                         </TableCell>
                                     </TableRow>
                                     {(altaCuenta) ?
-                                    <TableRow>
-                                        <TableCell>
-                                            <Typography fontSize={"15px"}><strong>No. Cuenta:</strong></Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography fontSize={"15px"}>834484940</Typography>
-                                        </TableCell>
-                                    </TableRow>
-                                    :null}
+                                        <TableRow>
+                                            <TableCell>
+                                                <Typography fontSize={"15px"}><strong>No. Cuenta:</strong></Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography fontSize={"15px"}>{cuenta?.idCuenta}</Typography>
+                                            </TableCell>
+                                        </TableRow>
+                                        : null}
                                     <TableRow>
                                         <TableCell>
                                             <Typography fontSize={"15px"}><strong>Sucursal:</strong></Typography>
                                         </TableCell>
                                         <TableCell>
-                                            <Typography fontSize={"15px"}>CENTRO SAN MIGUEL EL ALTO</Typography>
+                                            <Typography fontSize={"15px"}>{cliente?.sucLogin}</Typography>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow>
@@ -110,51 +156,51 @@ const AltaCliente = ({ onNext }) => {
                                             <Typography fontSize={"15px"}><strong>Banquero Personal:</strong></Typography>
                                         </TableCell>
                                         <TableCell>
-                                            <Typography fontSize={"15px"}>MARITZA GALLARDO VELEZ</Typography>
+                                            <Typography fontSize={"15px"}>{cliente?.bpLogin}</Typography>
                                         </TableCell>
                                     </TableRow>
-                                    {(altaCuenta) ? 
-                                    <TableRow>
-                                        <TableCell>
-                                            <Typography fontSize={"15px"}><strong>Tarjeta Debito Asignada a la cuenta:</strong></Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Box display={"flex"} width={"100%"}>
-                                                {!tdd ?
-                                                    <Box width={"50%"}>
-                                                        <Typography>Sin Asignar</Typography>
-                                                    </Box>
-                                                    :
-                                                    <Box width={"100%"}>
-                                                        <Typography>*** - **** - ***1 - 3128</Typography>
-                                                    </Box>
-                                                }
-                                                {!asingTdd ?
-                                                    <Box width={"50%"} display={"flex"} alignContent={"flex-end"} justifyContent={"flex-end"}>
-                                                        <Button onClick={handleTdd}>Asignar</Button>
-                                                    </Box>
-                                                    : null
-                                                }
-                                                {(showCircular) ?
-                                                    <Box width={"50%"} display={"flex"} alignContent={"flex-end"} justifyContent={"flex-end"}>
-                                                        <CircularProgress />
-                                                    </Box>
-                                                    : null
-                                                }
-                                            </Box>
-                                        </TableCell>
-                                    </TableRow>
-                                    :null}
-                                    {(altaCuenta) ? 
-                                    <TableRow>
-                                        <TableCell>
-                                            <Typography fontSize={"15px"}><strong>Cuenta:</strong></Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography fontSize={"15px"}>N4 - CUENTA ALAMEDA</Typography>
-                                        </TableCell>
-                                    </TableRow>
-                                    :null}
+                                    {(altaCuenta) ?
+                                        <TableRow>
+                                            <TableCell>
+                                                <Typography fontSize={"15px"}><strong>Tarjeta Debito Asignada a la cuenta:</strong></Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Box display={"flex"} width={"100%"}>
+                                                    {!tdd ?
+                                                        <Box width={"50%"}>
+                                                            <Typography>Sin Asignar</Typography>
+                                                        </Box>
+                                                        :
+                                                        <Box width={"100%"}>
+                                                            <Typography>{noTdd?.noTarjeta}</Typography>
+                                                        </Box>
+                                                    }
+                                                    {!asingTdd ?
+                                                        <Box width={"50%"} display={"flex"} alignContent={"flex-end"} justifyContent={"flex-end"}>
+                                                            <Button onClick={()=>handleTdd()}>Asignar</Button>
+                                                        </Box>
+                                                        : null
+                                                    }
+                                                    {(showCircular) ?
+                                                        <Box width={"50%"} display={"flex"} alignContent={"flex-end"} justifyContent={"flex-end"}>
+                                                            <CircularProgress />
+                                                        </Box>
+                                                        : null
+                                                    }
+                                                </Box>
+                                            </TableCell>
+                                        </TableRow>
+                                        : null}
+                                    {(altaCuenta) ?
+                                        <TableRow>
+                                            <TableCell>
+                                                <Typography fontSize={"15px"}><strong>Cuenta:</strong></Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography fontSize={"15px"}>{cuenta?.producto}</Typography>
+                                            </TableCell>
+                                        </TableRow>
+                                        : null}
                                 </TableHead>
                             </Table>
                         </TableContainer>

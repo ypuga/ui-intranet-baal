@@ -18,6 +18,7 @@ const AltaPersonalData = ({ onNext }) => {
     const [open, setOpen] = useState(false);
     const [isCurpValidate, setisCurpValidate] = useState(false);
     const [personalInfoCurp, setpersonalInfoCurp] = useState({});
+    const [solicitudExistente, setsolicitudExistente] = useState();
 
     const { showToast } = useToast();
     const dispatch = useDispatch();
@@ -41,7 +42,9 @@ const AltaPersonalData = ({ onNext }) => {
         if (resp.status == 200) {
             onNext();
         } else {
-            showToast(resp.message, 'error', 'top-center');
+            showToast(resp.message, 'error', 'top-center')
+            setsolicitudExistente(resp.data.response);
+            handleCurp(resp)
         }
     };
 
@@ -57,7 +60,7 @@ const AltaPersonalData = ({ onNext }) => {
         setOpen(false);
     };
 
-    const handleCurp = () => {
+    const handleCurp = (resp) => {
         //setOpen(true)
         setisCurpValidate(true);
         getCurpInfo();
@@ -82,7 +85,7 @@ const AltaPersonalData = ({ onNext }) => {
                 }));
             }
         } catch (error) {
-            showToast(error, 'error', 'top-center');
+            console.warn(error);
         } finally {
             stopLoading();
         }
@@ -96,7 +99,7 @@ const AltaPersonalData = ({ onNext }) => {
             flexDirection="column"
             sx={{ '& .MuiTextField-root': { m: 1 } }}
         >
-            <CuentaModal open={open} handleClose={handleClose} setisCurpValidate={setisCurpValidate} />
+            <CuentaModal open={open} handleClose={handleClose} setisCurpValidate={setisCurpValidate} solicitudExistente={solicitudExistente} />
             <Typography variant="h5" gutterBottom>
                 INFORMACION PERSONAL DEL CLIENTE
             </Typography>

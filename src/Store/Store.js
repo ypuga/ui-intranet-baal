@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { authenticationSlice } from "./Authetication/Authentication";
 import { dataSlice } from "./Datos/Datos";
 import { prospectosSlice } from "./Prospectos/Prospectos";
+import { clientesSlice } from "./Clientes/Clientes";
 
 
 const store = configureStore({
@@ -9,6 +10,7 @@ const store = configureStore({
       sistema: authenticationSlice.reducer,
       data: dataSlice.reducer,
       prospectos: prospectosSlice.reducer,
+      clientes: clientesSlice.reducer,
     },
   });
   

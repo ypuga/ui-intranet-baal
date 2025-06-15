@@ -5,13 +5,13 @@ import { setPersonalData, setSolicitud } from "./Prospectos";
 export const startSaveProspectoPersonalData = (data) => {
     return async (dispatch, getState) => {
         try {
-           const resp = await SolicitudesApi.savePersonalData(getState().prospectos.solicitud.idSolicitud, data);
-           if (resp.status == 200) {
-            await dispatch(setPersonalData(data));
-            return resp;
-           } else {
-            return resp;
-           }
+            const resp = await SolicitudesApi.savePersonalData(getState().prospectos.solicitud.idSolicitud, data);
+            if (resp.status == 200) {
+                await dispatch(setPersonalData(data));
+                return resp;
+            } else {
+                return resp;
+            }
         } catch (error) {
             throw error;
         }
@@ -30,9 +30,9 @@ export const startSavePersonalBanking = (personalBankingData) => {
             const resp = await SolicitudesApi.savePersonalBanking(getState().prospectos.solicitud.idSolicitud, data)
             if (resp.status == 'OK') {
                 return resp;
-               } else {
+            } else {
                 return resp;
-               }
+            }
         } catch (error) {
             throw error;
         }
@@ -45,9 +45,9 @@ export const startSaveContactInfo = (data) => {
             const resp = await SolicitudesApi.saveContactInfo(getState().prospectos.solicitud.idSolicitud, data)
             if (resp.status == 'OK') {
                 return resp;
-               } else {
+            } else {
                 return resp;
-               }
+            }
         } catch (error) {
             throw error;
         }
@@ -55,14 +55,14 @@ export const startSaveContactInfo = (data) => {
 }
 
 export const startSaveDomicilio = (domicilioData) => {
-    return async(dispatch, getState) => {
+    return async (dispatch, getState) => {
         try {
             const resp = await SolicitudesApi.saveDomicilio(getState().prospectos.solicitud.idSolicitud, domicilioData);
             if (resp.status == 'OK') {
                 return resp;
-               } else {
+            } else {
                 return resp;
-               }
+            }
         } catch (error) {
             throw error;
         }
@@ -70,14 +70,14 @@ export const startSaveDomicilio = (domicilioData) => {
 }
 
 export const startAltaKyc = (kycData) => {
-    return async(dispatch, getState) => {
+    return async (dispatch, getState) => {
         try {
             const resp = await SolicitudesApi.altaKyc(getState().prospectos.solicitud.idSolicitud, kycData);
             if (resp.status == 'OK') {
                 return resp;
-               } else {
+            } else {
                 return resp;
-               }
+            }
         } catch (error) {
             throw error;
         }
@@ -85,14 +85,14 @@ export const startAltaKyc = (kycData) => {
 }
 
 export const startSaveFiscalData = (fiscalData) => {
-    return async(dispatch, getState) => {
+    return async (dispatch, getState) => {
         try {
             const resp = await SolicitudesApi.saveFiscalData(getState().prospectos.solicitud.idSolicitud, fiscalData);
             if (resp.status == 'OK') {
                 return resp;
-               } else {
+            } else {
                 return resp;
-               }
+            }
         } catch (error) {
             throw error;
         }
@@ -105,17 +105,53 @@ export const startCertificaMedioContacto = () => {
             const resp = await SolicitudesApi.certificaContacto(getState().prospectos.solicitud.idSolicitud)
             if (resp.status == 'OK') {
                 return resp;
-               } else {
+            } else {
                 return resp;
-               }
+            }
         } catch (error) {
             throw error;
         }
     }
 }
 
+export const startAltaBeneficiarios = (beneficiariosData) => {
+    return async (dispatch, getState) => {
+        try {
+            const resp = await SolicitudesApi.saveBeneficiarios(getState().prospectos.solicitud.idSolicitud, beneficiariosData)
+            if (resp.status == 'OK') {
+                return resp;
+            } else {
+                return resp;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+}
+
+export const startGetClientDocumentation = () => {
+    return async (dispatch, getState) => {
+        try {
+            const resp = await SolicitudesApi.getDocumentacion(getState().prospectos.solicitud.idSolicitud)
+            if (resp.status == 'OK') {
+                return resp;
+            } else {
+                return resp;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+}
+
+export const startRetomarSolicitud = (data) => {
+    return async (dispatch, getState) => {
+        dispatch(setSolicitud(data));
+    }
+}
+
 export const startCreateNewSolicitud = (producto) => {
-    return async(dispatch, getState) => {
+    return async (dispatch, getState) => {
         const createSolicitudRequest = {
             idProduct: IDProductosUtil.getIdByName(producto),
             sucursal: getState().sistema.sucursal,
@@ -131,7 +167,7 @@ export const startCreateNewSolicitud = (producto) => {
 }
 
 export const startNextStep = () => {
-    return async(dispatch, getState) => {
+    return async (dispatch, getState) => {
         try {
             await SolicitudesApi.next(getState().prospectos.solicitud.idSolicitud);
         } catch (error) {

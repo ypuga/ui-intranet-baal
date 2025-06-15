@@ -175,6 +175,44 @@ const saveFiscalData = async (idSolicitud, fiscalData) => {
     } 
 }
 
+const saveBeneficiarios = async (idSolicitud, beneficiariosData) => {
+       try {
+        const resp = await axios.post(`${ApiEndpoints.SOLICITUDES.SAVE_BENEFICIARIES}${idSolicitud}`,beneficiariosData);
+        return {
+            status: resp.status,
+            message: resp.message,
+            data: resp.data.response
+        };
+    } catch (error) {
+        console.log("error",error);
+        const status = error.response?.status || 500;
+        const message = error.response?.data?.message || error.message || 'Error desconocido al crear la solicitud';
+        return {
+            status,
+            message
+        };
+    } 
+}
+
+const getDocumentacion = async (idSolicitud) => {
+       try {
+        const resp = await axios.get(`${ApiEndpoints.SOLICITUDES.GET_DOCUMENTATION}${idSolicitud}`);
+        return {
+            status: resp.status,
+            message: resp.message,
+            data: resp.data.response
+        };
+    } catch (error) {
+        console.log("error",error);
+        const status = error.response?.status || 500;
+        const message = error.response?.data?.message || error.message || 'Error desconocido al crear la solicitud';
+        return {
+            status,
+            message
+        };
+    } 
+}
+
 export default { createNewSolicitud, next, savePersonalData, savePersonalBanking, saveContactInfo,
-    certificaContacto, saveDomicilio, altaKyc, saveFiscalData
+    certificaContacto, saveDomicilio, altaKyc, saveFiscalData, saveBeneficiarios, getDocumentacion
  };

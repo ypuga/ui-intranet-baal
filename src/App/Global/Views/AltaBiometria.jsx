@@ -2,8 +2,11 @@ import { Box, Button, Divider, LinearProgress, Typography } from '@mui/material'
 import FingerprintIcon from '@mui/icons-material/Fingerprint';
 import React, { useState } from 'react'
 import LinearWithValueLabel from '../../Home/Components/LinearWithValueLabel';
+import { useSelector } from 'react-redux';
 
 const AltaBiometria = ({ onNext }) => {
+
+    const {solicitud} = useSelector(state=>state.prospectos);
 
     const DERECHA = {
         label: 'DERECHA',
@@ -45,7 +48,7 @@ const AltaBiometria = ({ onNext }) => {
                 BIOMETRIA
             </Typography>
             <Typography fontSize={"10px"}>
-                ID De Evaluacion: 29921
+                ID De Evaluacion: {solicitud.idSolicitud}
             </Typography>
             <Box marginTop={"10px"} marginBottom={"10px"}>
                 <LinearWithValueLabel progress={mano.value} />
