@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     personalData: {},
-    solicitud: {}
+    solicitud: {},
+    sameIne: true
 };
 
 export const prospectosSlice = createSlice({
@@ -16,10 +17,16 @@ export const prospectosSlice = createSlice({
         setSolicitud: (state, action) => {
             state.solicitud = action.payload;
         },
+        setSameIne: (state, action) => {
+            state.sameIne = action.payload;
+        },
+        deleteSolicitud: (status, action) => {
+            state.solicitud = {};
+        },
         resetAuthState: () => initialState
     }
 });
 
-export const { setPersonalData, resetAuthState, setSolicitud } = prospectosSlice.actions;
+export const { setPersonalData, resetAuthState, setSolicitud, setSameIne, deleteSolicitud } = prospectosSlice.actions;
 
 export default prospectosSlice.reducer;

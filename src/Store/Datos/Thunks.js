@@ -1,3 +1,4 @@
+import ClientesApi from "../../Api/ClientesApi";
 import ConsultaCurpApi from "../../Api/ConsultaCurpApi";
 import CopomexColoniasApi from "../../Api/CopomexColoniasApi";
 import { setDomicilioData } from "./Datos";
@@ -23,11 +24,11 @@ export const startGetCurpInfo = (curp) => {
                 const primerNombre = nombres[0] || '';
                 const segundoNombre = nombres.slice(1).join(' ') || '';
 
-                const rawFecha = resp.FechaNacimiento; 
+                const rawFecha = resp.FechaNacimiento;
                 const fechaObj = new Date(rawFecha);
                 const year = fechaObj.getFullYear();
-                const month = String(fechaObj.getMonth() + 1).padStart(2, '0'); 
-                const day = String(fechaObj.getDate()).padStart(2, '0'); 
+                const month = String(fechaObj.getMonth() + 1).padStart(2, '0');
+                const day = String(fechaObj.getDate()).padStart(2, '0');
 
                 const info = {
                     primerNombre,
@@ -40,7 +41,7 @@ export const startGetCurpInfo = (curp) => {
                             resp.Sexo === 'Mujer' ? 'FEMENINO' :
                                 'NO BINARIO',
                     estadoNacimiento: resp.EntidadNacimiento.toUpperCase(),
-                    rfc :'',
+                    rfc: '',
                     isValid: true
                 };
 
@@ -54,7 +55,7 @@ export const startGetCurpInfo = (curp) => {
                     fechaNacimiento: '',
                     genero: '',
                     estadoNacimiento: '',
-                    rfc :'',
+                    rfc: '',
                     isValid: false
                 };
                 return info;
@@ -64,3 +65,18 @@ export const startGetCurpInfo = (curp) => {
         }
     };
 };
+
+export const startGetCarteraClientes = (curp) => {
+    return async (dispatch, getState) => {
+        try {
+            const resp = await ClientesApi.obtenerCarteraClientes(getState()?.sistema?.user)
+            if (resp.status == 200 || resp.status == 'OK') {
+                return resp;
+            } else {
+                return resp;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+}

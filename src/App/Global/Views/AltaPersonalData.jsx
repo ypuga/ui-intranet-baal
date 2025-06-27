@@ -10,10 +10,11 @@ import CuentaModal from '../Components/CuentaModal';
 import useToast from '../../../Hooks/useToast';
 import { useDispatch } from 'react-redux';
 import { startGetCurpInfo } from '../../../Store/Datos/Thunks';
-import { startCreateNewSolicitud, startNextStep, startSaveProspectoPersonalData } from '../../../Store/Prospectos/Thunks';
+import { startCreateNewSolicitud, startNextStep, startRetomarSolicitud, startSaveProspectoPersonalData } from '../../../Store/Prospectos/Thunks';
 import SingleSelect from '../Components/MultipleSelect';
+import IDProductosUtil from '../../../Utils/IDProductosUtil';
 
-const AltaPersonalData = ({ onNext }) => {
+const AltaPersonalData = ({ onNext, actualStep }) => {
     const { isLoading, startLoading, stopLoading } = useLoading();
     const [open, setOpen] = useState(false);
     const [isCurpValidate, setisCurpValidate] = useState(false);
@@ -43,8 +44,6 @@ const AltaPersonalData = ({ onNext }) => {
             onNext();
         } else {
             showToast(resp.message, 'error', 'top-center')
-            setsolicitudExistente(resp.data.response);
-            handleCurp(resp)
         }
     };
 
@@ -61,18 +60,28 @@ const AltaPersonalData = ({ onNext }) => {
     };
 
     const handleCurp = (resp) => {
-        //setOpen(true)
-        setisCurpValidate(true);
         getCurpInfo();
     };
 
-    const getCurpInfo = async (setValues) => {
+    const getCurpInfo = async (setValues, values) => {
+        const respRetomar = await dispatch(startRetomarSolicitud(values?.curp, IDProductosUtil.getIdByName(values?.producto)));
+        if (respRetomar?.data != null) {
+            setsolicitudExistente(respRetomar?.data);
+            setOpen(true);
+            setValues((prev) => ({
+            ...prev,
+            curp: '',
+            producto: ''
+        }));
+            return;
+        }
         startLoading();
         try {
-            const resp = await dispatch(startGetCurpInfo('PUJY990424HJCGMR00'));
+            const resp = await dispatch(startGetCurpInfo(values?.curp));
             setpersonalInfoCurp(resp);
-    
+
             if (resp?.isValid) {
+                setisCurpValidate(true);
                 setValues((prev) => ({
                     ...prev,
                     primerNombre: resp.primerNombre || '',
@@ -84,8 +93,9 @@ const AltaPersonalData = ({ onNext }) => {
                     genero: resp.genero || '',
                 }));
             }
+
         } catch (error) {
-            console.warn(error);
+            showToast('La curp ingresada no es valida.', 'error', 'top-center');
         } finally {
             stopLoading();
         }
@@ -99,13 +109,19 @@ const AltaPersonalData = ({ onNext }) => {
             flexDirection="column"
             sx={{ '& .MuiTextField-root': { m: 1 } }}
         >
-            <CuentaModal open={open} handleClose={handleClose} setisCurpValidate={setisCurpValidate} solicitudExistente={solicitudExistente} />
+            <CuentaModal 
+                open={open} 
+                handleClose={handleClose} 
+                setisCurpValidate={setisCurpValidate} 
+                solicitudExistente={solicitudExistente} 
+                actualStep={(step)=>actualStep(step)}
+                />
             <Typography variant="h5" gutterBottom>
                 INFORMACION PERSONAL DEL CLIENTE
             </Typography>
             {isCurpValidate ?
                 <Typography fontSize={"10px"}>
-                    ID De Evaluacion: 
+                    ID De Evaluacion:
                 </Typography>
                 : null
             }
@@ -149,10 +165,8 @@ const AltaPersonalData = ({ onNext }) => {
                                 </Grid2>
                                 <Box width="100%" display="flex" justifyContent="flex-end" alignItems="flex-end">
                                     {(values.curp.length > 6) ?
-                                        <Button disabled={isCurpValidate} onClick={() => {
-                                            setisCurpValidate(true);
-                                            getCurpInfo(setValues);
-                                        }}>Continuar</Button>
+                                        <Button disabled={isCurpValidate} onClick={() =>
+                                            getCurpInfo(setValues, values)}>Continuar</Button>
                                         :
                                         <Button onClick={() => window.open('https://www.sinube.mx/calcula-tu-rfc-y-curp', '_blank')} >Consultar CURP</Button>
                                     }
@@ -244,12 +258,23 @@ const AltaPersonalData = ({ onNext }) => {
                                                 />
                                             </Grid2>
                                             <Grid2 size={6}>
-                                                <SingleSelect disabled value={personalInfoCurp.isValid ? values.genero : ''} values={generos} placeholder="Genero" onChange={handleChange('genero')} />
+                                                <SingleSelect
+                                                    defaultValue={values.genero}
+                                                    disabled={personalInfoCurp.genero != '' ? true : false}
+                                                    value={personalInfoCurp.isValid ? values.genero : ''}
+                                                    values={generos}
+                                                    placeholder="Genero"
+                                                    onChange={handleChange('genero')}
+                                                />
                                             </Grid2>
                                         </Grid2>
                                         <Grid2 container rowSpacing={1} mt={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                             <Grid2 size={6}>
-                                                <SingleSelect disabled value={personalInfoCurp.isValid ? values.estadoNacimiento : ''} values={estadosMexico} placeholder="Estado de Nacimiento" />
+                                                <SingleSelect
+                                                    disabled={values.estadoNacimiento != '' ? true : false}
+                                                    value={personalInfoCurp.isValid ? values.estadoNacimiento : ''}
+                                                    values={estadosMexico}
+                                                    placeholder="Estado de Nacimiento" />
                                             </Grid2>
                                             <Grid2 size={6}>
                                                 <TextField

@@ -8,6 +8,8 @@ import { catalogoMotos, motocicletasAnio, motocicletasMarca, plazosPago } from '
 import TableCotizacion from '../Components/TableCotizacion';
 import InfoMotocicleta from '../Components/InfoMotocicleta';
 import DiscreteSlider from '../Components/DiscreteSlider.JSX';
+import { useDispatch } from 'react-redux';
+import { startCreateNewSolicitudCliente } from '../../../Store/Prospectos/Thunks';
 
 const SeleccionMotocicletaView = ({ onNext }) => {
 
@@ -15,6 +17,7 @@ const SeleccionMotocicletaView = ({ onNext }) => {
     const [modeloSeleccionado, setmodeloSeleccionado] = useState({});
     const [engancheValue, setengancheValue] = useState(20);
     const [showTable, setshowTable] = useState(false);
+    const dispatch = useDispatch();
 
     const initialValues = {
         marca: '',
@@ -36,9 +39,13 @@ const SeleccionMotocicletaView = ({ onNext }) => {
         plazo: Yup.string().required('Requerido'),
     });
 
-    const handleSubmit = (values) => {
-        onNext();
-    };
+    const handleSubmit = async () => {
+        const resp = await dispatch(startCreateNewSolicitudCliente(187));
+        if (resp.status == 200 || resp.status == 'OK') {
+            onNext();
+        }
+    }
+
     return (
         <Box
             p={4}
@@ -49,9 +56,6 @@ const SeleccionMotocicletaView = ({ onNext }) => {
         >
             <Typography variant="h5" gutterBottom>
                 COTIZADOR DE MOTOCICLETA
-            </Typography>
-            <Typography fontSize={"10px"}>
-                ID De Evaluacion: 29921
             </Typography>
             <Box flex={1} my={4}>
                 <Formik
@@ -145,12 +149,12 @@ const SeleccionMotocicletaView = ({ onNext }) => {
                                         </Box>
                                         <Box display={"flex"} justifyContent={"flex-end"} marginBottom={10}>
                                             <Button
-                                                sx={{marginTop:'10px'}}
+                                                sx={{ marginTop: '10px' }}
                                                 variant="contained"
                                                 type="submit"
                                                 size="large"
                                                 disabled={!dirty || !isValid}
-                                                onClick={()=>onNext()}
+                                                onClick={handleSubmit}
                                             >
                                                 SIGUIENTE
                                             </Button>

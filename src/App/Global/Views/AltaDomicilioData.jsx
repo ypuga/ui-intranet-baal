@@ -185,7 +185,7 @@ const AltaDomicilioData = ({ onNext, onBack }) => {
                                     <TextField
                                         label="Municipio"
                                         variant="outlined"
-                                        name="municipio"
+                                        name="ciudad"
                                         value={values.ciudad}
                                         onChange={handleChange}
                                         InputLabelProps={{

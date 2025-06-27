@@ -1,11 +1,22 @@
 import { Box, Card, CardActionArea, CardContent, CardMedia, Grid2, Typography } from '@mui/material'
 import React from 'react'
 import { cardsData } from '../../../Data/SucursalesData';
+import { useDispatch } from 'react-redux';
+import { startCreateNewSolicitudCliente } from '../../../Store/Prospectos/Thunks';
+import useToast from '../../../Hooks/useToast';
 
 const SeleccionTDC = ({onNext}) => {
 
-    const handleSubmit = (value) => {
-        onNext();
+    const dispatch = useDispatch();
+    const {showToast} = useToast();
+
+    const handleSubmit = async (value) => {
+        const resp = await dispatch(startCreateNewSolicitudCliente(value));
+        if (resp.status == 200 || resp.status == 'OK') {
+            onNext();
+        } else {
+            showToast(resp.message, 'error', 'top-center');
+        }
     }
 
     return (
@@ -26,7 +37,7 @@ const SeleccionTDC = ({onNext}) => {
                     {cardsData.map((card, index) => (
                         <Grid2 item xs={12} sm={6} md={4} key={index}>
                             <Card sx={{ maxWidth: 230, height: 500, margin: '0 auto' }}>
-                                <CardActionArea disabled={card.disabled} onClick={()=>handleSubmit(card.product)}>
+                                <CardActionArea disabled={card.disabled} onClick={()=>handleSubmit(card.idProducto)}>
                                     <CardMedia
                                         component="img"
                                         height="140"

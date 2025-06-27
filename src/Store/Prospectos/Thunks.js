@@ -1,6 +1,6 @@
 import SolicitudesApi from "../../Api/SolicitudesApi";
 import IDProductosUtil from "../../Utils/IDProductosUtil";
-import { setPersonalData, setSolicitud } from "./Prospectos";
+import { deleteSolicitud, setPersonalData, setSameIne, setSolicitud } from "./Prospectos";
 
 export const startSaveProspectoPersonalData = (data) => {
     return async (dispatch, getState) => {
@@ -144,10 +144,24 @@ export const startGetClientDocumentation = () => {
     }
 }
 
-export const startRetomarSolicitud = (data) => {
-    return async (dispatch, getState) => {
-        dispatch(setSolicitud(data));
-    }
+export const startRetomarSolicitud = (curp, idClienteUnico) => {
+        return async (dispatch, getState) => {
+        try {
+            const resp = await SolicitudesApi.retomarSolicitud(curp, idClienteUnico);
+            if (resp?.status == 'OK' || resp?.status == 200) {
+                const data = {
+                    ...resp?.data,
+                    idSolicitud: resp.data?.id,
+                };
+                dispatch(setSolicitud(data))
+                return resp;
+            } else {
+                return resp;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }   
 }
 
 export const startCreateNewSolicitud = (producto) => {
@@ -174,4 +188,89 @@ export const startNextStep = () => {
             console.log(error);
         }
     }
+}
+
+export const startCreateNewSolicitudCliente = (idProduct) => {
+    return async (dispatch, getState) => {
+        const createSolicitudRequest = {
+            idProduct: idProduct,
+            sucursal: getState().sistema?.sucursal,
+            sameIne: getState().prospectos?.sameIne,
+            idClienteUnico: getState().clientes?.cliente?.idClienteUnico
+        }
+        try {
+            const resp = await SolicitudesApi.createNewSolicitud(createSolicitudRequest);
+            dispatch(setSolicitud(resp?.data));
+            return resp;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+}
+
+export const startSetSameIne = (sameIne) => {
+    return async (dispatch, getState) => {
+        dispatch(setSameIne(sameIne));
+    }
+}
+
+export const startSaveBuroCredito = (buroData) => {
+        return async (dispatch, getState) => {
+        try {
+            const resp = await SolicitudesApi.saveBuroCredito(getState().prospectos.solicitud.idSolicitud, buroData);
+            if (resp.status == 'OK') {
+                return resp;
+            } else {
+                return resp;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }   
+}
+
+export const startSaveReferencias = (referenciasData) => {
+        return async (dispatch, getState) => {
+        try {
+            const resp = await SolicitudesApi.saveReferencias(getState().prospectos.solicitud.idSolicitud, referenciasData);
+            if (resp.status == 'OK') {
+                return resp;
+            } else {
+                return resp;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }   
+}
+
+export const startEnviarSolicitudCredito = () => {
+        return async (dispatch, getState) => {
+        try {
+            const resp = await SolicitudesApi.altaSolicitudCredito(getState().prospectos.solicitud.idSolicitud);
+            if (resp.status == 'OK') {
+                return resp;
+            } else {
+                return resp;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }   
+}
+
+export const startDeleteSolicitud = () => {
+        return async (dispatch, getState) => {
+        try {
+            const resp = await SolicitudesApi.delteSolicitud(getState().prospectos.solicitud.id);
+            if (resp.status == 'OK') {
+                dispatch(deleteSolicitud());
+                return resp;
+            } else {
+                return resp;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }   
 }

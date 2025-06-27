@@ -40,6 +40,10 @@ const AltaClientePage = () => {
     setActiveStep((prevStep) => Math.max(prevStep - 1, 0));
   };
 
+    const handlePersonalizado = (actualStep) => {
+    setActiveStep(actualStep);
+  };
+
   return (
     <AppLayout>
       <Box
@@ -59,7 +63,7 @@ const AltaClientePage = () => {
           sx={{ overflow: 'auto' }}
         >
           {activeStep === 0 && (
-            <AltaPersonalData onNext={handleNext} />
+            <AltaPersonalData onNext={handleNext} actualStep={(step)=>handlePersonalizado(step)}/>
           )}
           {activeStep === 1 && (
             <AltaBanqueroPersonal onNext={handleNext} />

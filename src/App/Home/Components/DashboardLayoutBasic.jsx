@@ -35,11 +35,6 @@ const NAVIGATION = [
     icon: <AssuredWorkloadIcon />,
   },
   {
-    segment: 'prospectos/historial',
-    title: 'Historial de Solicitudes',
-    icon: <History />,
-  },
-  {
     kind: 'divider',
   },
   {

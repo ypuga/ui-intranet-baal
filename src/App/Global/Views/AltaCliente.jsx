@@ -60,7 +60,7 @@ const AltaCliente = ({ onNext }) => {
         setAsingTdd(true);
         setshowCircular(true);
         const timer = setTimeout(async () => {
-            await altaDeTarjeta()
+            await altaDeTarjeta();
             setshowCircular(false);
         }, 10000);
         return () => {

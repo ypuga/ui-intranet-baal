@@ -5,7 +5,7 @@ const SECRET_TOKEN = '054cc959-12e3-4765-bdca-3264f904a583';
 
 const getCurpInfo = async (curp) => {
     try{
-        const resp = await axios.get(`${BASEPATH}/curp/obtener_datos/?token=pruebas&curp=PXNE660720HMCXTN06`);
+        const resp = await axios.get(`${BASEPATH}/curp/obtener_datos/?token=${SECRET_TOKEN}&curp=${curp}`);
         if (resp.status === 200) {
             return resp.data.response.Solicitante;
         } else {

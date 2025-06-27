@@ -1,12 +1,17 @@
 import { Box, Card, CardActionArea, CardContent, CardMedia, Grid2, Typography } from '@mui/material'
 import React from 'react'
 import { accountData } from '../../../Data/SucursalesData'
+import { useDispatch } from 'react-redux';
+import { startCreateNewSolicitudCliente } from '../../../Store/Prospectos/Thunks';
 
 export const SeleccionCuentaClienteView = ({onNext}) => {
+    const dispatch = useDispatch();
 
-
-    const handleSubmit = (value) => {
-        onNext();
+    const handleSubmit = async (value) => {
+        const resp = await dispatch(startCreateNewSolicitudCliente(value));
+        if (resp.status == 200 || resp.status == 'OK') {
+            onNext();
+        }
     }
 
     return (
@@ -27,7 +32,7 @@ export const SeleccionCuentaClienteView = ({onNext}) => {
                     {accountData.map((account, index) => (
                         <Grid2 item xs={12} sm={6} md={4} key={index}>
                             <Card sx={{ width: 240, height: 420, margin: '0 auto' }}>
-                                <CardActionArea disabled={account.disabled} onClick={() => handleSubmit(account.product)}>
+                                <CardActionArea disabled={account.disabled} onClick={() => handleSubmit(account.id)}>
                                     <CardMedia
                                         component="img"
                                         height="140"

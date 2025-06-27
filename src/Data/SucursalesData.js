@@ -6,13 +6,13 @@ import CUENTALAMEDA from '../assets/cuentaAlameda.jpg'
 import INVERSION from '../assets/inversionAlameda.jpg'
 
 export const sucursales = [
-    '914 - CENTRO SAN MIGUEL EL ALTO',
-    '393 - CENTRO SAN JUAN DE LOS LAGOS',
-    '292 - CENTRO TEPATITLAN DE MORELOS',
-    '994 - CENTRO ARANDAS',
-    '1002 - CENTRO ATOTONILCO',
-    '999 - ONLINE'
-  ]
+  '914 - CENTRO SAN MIGUEL EL ALTO',
+  '393 - CENTRO SAN JUAN DE LOS LAGOS',
+  '292 - CENTRO TEPATITLAN DE MORELOS',
+  '994 - CENTRO ARANDAS',
+  '1002 - CENTRO ATOTONILCO',
+  '999 - ONLINE'
+]
 
 export const generos = [
   'MASCULINO',
@@ -65,6 +65,7 @@ export const productos = [
 
 export const parentezco = [
   'Madre/Padre',
+  'Esposo(a)',
   'Hijo(a)',
   'Hermano(a)',
   'Abuelo(a)',
@@ -79,6 +80,7 @@ export const parentezco = [
   'Yerno/Nuera',
   'Padrino/Madrina',
   'Ahijado(a)',
+  'Amigo(a)'
 ];
 
 export const mismoDomicilio = [
@@ -103,7 +105,8 @@ export const cardsData = [
     "image": TDCMC,
     "altText": "Imagen de tarjeta ALAMEDA MASTER CARD",
     "disabled": false,
-    "product": 'TDC MASTER CARD'
+    "product": 'TDC MASTER CARD',
+    "idProducto": 125
   },
   {
     "title": "BANCO ALAMEDA GOLD",
@@ -116,7 +119,8 @@ export const cardsData = [
     "image": TDCGODL,
     "altText": "Imagen de tarjeta BANCO ALAMEDA GOLD",
     "disabled": false,
-    "product": 'TDC GOLD'
+    "product": 'TDC GOLD',
+    "idProducto": 127
   },
   {
     "title": "BANCO ALAMEDA PLATINUM",
@@ -130,14 +134,15 @@ export const cardsData = [
     "image": TDCPLATINUM,
     "altText": "Imagen de tarjeta BANCO ALAMEDA GOLD",
     "disabled": true,
-    "product": 'TDC PLATINUM'
+    "product": 'TDC PLATINUM',
+    "idProducto": 130
   },
 ]
 
 export const accountData = [
   {
     "title": "ALAMEDA EXPRESS",
-    "id": '125',
+    "id": '101',
     "benefits": [
       "Depositos mensuales limitados a 30,000 UDIS",
       "Sin monto minimo de apertura",
@@ -150,7 +155,7 @@ export const accountData = [
   },
   {
     "title": "CUENTA ALAMEDA",
-    "id": '125',
+    "id": '105',
     "benefits": [
       "Depositos mensuales ilimitados",
       "Sin monto minimo de apertura",
@@ -163,7 +168,7 @@ export const accountData = [
   },
   {
     "title": "INVERSION ALAMEDA",
-    "id": '125',
+    "id": '114',
     "benefits": [
       "Tasa anual de 12.5%",
       "Apertura tu cuenta con minimo $ 10,000 MXN",

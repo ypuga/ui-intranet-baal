@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     cliente: {},
-    cuenta: {}
+    cuenta: {},
+    banqueroPersonal: {}
 };
 
 export const clientesSlice = createSlice({
@@ -15,10 +16,13 @@ export const clientesSlice = createSlice({
         setCuenta: (state, action) => {
             state.cuenta = action.payload;
         },
+        setBp: (state, action) => {
+            state.banqueroPersonal = action.payload
+        },
         resetAuthState: () => initialState
     }
 });
 
-export const {setCliente, setCuenta} = clientesSlice.actions;
+export const {setCliente, setCuenta, setBp, resetAuthState} = clientesSlice.actions;
 
 export default clientesSlice.reducer;

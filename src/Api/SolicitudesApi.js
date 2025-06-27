@@ -108,7 +108,7 @@ const next = async (idSolicitud) => {
             data: resp.data.response
         };
     } catch (error) {
-        console.log("error",error);
+        console.log("error", error);
         const status = error.response?.status || 500;
         const message = error.response?.data?.message || error.message || 'Error desconocido al crear la solicitud';
         return {
@@ -119,83 +119,83 @@ const next = async (idSolicitud) => {
 };
 
 const saveDomicilio = async (idSolicitud, domicilioData) => {
-       try {
-        const resp = await axios.post(`${ApiEndpoints.SOLICITUDES.SAVE_ADRESS_DATA}${idSolicitud}`,domicilioData);
+    try {
+        const resp = await axios.post(`${ApiEndpoints.SOLICITUDES.SAVE_ADRESS_DATA}${idSolicitud}`, domicilioData);
         return {
             status: resp.status,
             message: resp.message,
             data: resp.data.response
         };
     } catch (error) {
-        console.log("error",error);
+        console.log("error", error);
         const status = error.response?.status || 500;
         const message = error.response?.data?.message || error.message || 'Error desconocido al crear la solicitud';
         return {
             status,
             message
         };
-    } 
+    }
 }
 
 const altaKyc = async (idSolicitud, kycData) => {
-       try {
-        const resp = await axios.post(`${ApiEndpoints.SOLICITUDES.SAVE_KYC_DATA}${idSolicitud}`,kycData);
+    try {
+        const resp = await axios.post(`${ApiEndpoints.SOLICITUDES.SAVE_KYC_DATA}${idSolicitud}`, kycData);
         return {
             status: resp.status,
             message: resp.message,
             data: resp.data.response
         };
     } catch (error) {
-        console.log("error",error);
+        console.log("error", error);
         const status = error.response?.status || 500;
         const message = error.response?.data?.message || error.message || 'Error desconocido al crear la solicitud';
         return {
             status,
             message
         };
-    } 
+    }
 }
 
 const saveFiscalData = async (idSolicitud, fiscalData) => {
-       try {
-        const resp = await axios.post(`${ApiEndpoints.SOLICITUDES.SAVE_FISCAL_DATA}${idSolicitud}`,fiscalData);
+    try {
+        const resp = await axios.post(`${ApiEndpoints.SOLICITUDES.SAVE_FISCAL_DATA}${idSolicitud}`, fiscalData);
         return {
             status: resp.status,
             message: resp.message,
             data: resp.data.response
         };
     } catch (error) {
-        console.log("error",error);
+        console.log("error", error);
         const status = error.response?.status || 500;
         const message = error.response?.data?.message || error.message || 'Error desconocido al crear la solicitud';
         return {
             status,
             message
         };
-    } 
+    }
 }
 
 const saveBeneficiarios = async (idSolicitud, beneficiariosData) => {
-       try {
-        const resp = await axios.post(`${ApiEndpoints.SOLICITUDES.SAVE_BENEFICIARIES}${idSolicitud}`,beneficiariosData);
+    try {
+        const resp = await axios.post(`${ApiEndpoints.SOLICITUDES.SAVE_BENEFICIARIES}${idSolicitud}`, beneficiariosData);
         return {
             status: resp.status,
             message: resp.message,
             data: resp.data.response
         };
     } catch (error) {
-        console.log("error",error);
+        console.log("error", error);
         const status = error.response?.status || 500;
         const message = error.response?.data?.message || error.message || 'Error desconocido al crear la solicitud';
         return {
             status,
             message
         };
-    } 
+    }
 }
 
 const getDocumentacion = async (idSolicitud) => {
-       try {
+    try {
         const resp = await axios.get(`${ApiEndpoints.SOLICITUDES.GET_DOCUMENTATION}${idSolicitud}`);
         return {
             status: resp.status,
@@ -203,16 +203,115 @@ const getDocumentacion = async (idSolicitud) => {
             data: resp.data.response
         };
     } catch (error) {
-        console.log("error",error);
+        console.log("error", error);
         const status = error.response?.status || 500;
         const message = error.response?.data?.message || error.message || 'Error desconocido al crear la solicitud';
         return {
             status,
             message
         };
-    } 
+    }
 }
 
-export default { createNewSolicitud, next, savePersonalData, savePersonalBanking, saveContactInfo,
-    certificaContacto, saveDomicilio, altaKyc, saveFiscalData, saveBeneficiarios, getDocumentacion
- };
+const saveBuroCredito = async (idSolicitud, data) => {
+    try {
+        const resp = await axios.post(`${ApiEndpoints.SOLICITUDES.SAVE_BURO_CREDITO}${idSolicitud}`, data);
+        return {
+            status: resp.status,
+            message: resp.message,
+            data: resp.data.response
+        };
+    } catch (error) {
+        console.log("error", error);
+        const status = error.response?.status || 500;
+        const message = error.response?.data?.message || error.message || 'Error desconocido al crear la solicitud';
+        return {
+            status,
+            message
+        };
+    }
+}
+
+const saveReferencias = async (idSolicitud, referencias) => {
+    try {
+        const resp = await axios.post(`${ApiEndpoints.SOLICITUDES.SAVE_REFERENCIAS}${idSolicitud}`, referencias);
+        return {
+            status: resp.status,
+            message: resp.message,
+            data: resp.data.response
+        };
+    } catch (error) {
+        console.log("error", error);
+        const status = error.response?.status || 500;
+        const message = error.response?.data?.message || error.message || 'Error desconocido al crear la solicitud';
+        return {
+            status,
+            message
+        };
+    }
+}
+
+const altaSolicitudCredito = async (idSolicitud) => {
+    try {
+        const resp = await axios.post(`${ApiEndpoints.SOLICITUDES.ALTA_SOLICITUD_CREDITO}${idSolicitud}`);
+        return {
+            status: resp.status,
+            message: resp.message,
+            data: resp.data.response
+        };
+    } catch (error) {
+        console.log("error", error);
+        const status = error.response?.status || 500;
+        const message = error.response?.data?.message || error.message || 'Error desconocido al crear la solicitud';
+        return {
+            status,
+            message
+        };
+    }
+}
+
+const delteSolicitud = async (idSolicitud) => {
+    try {
+        const resp = await axios.delete(`${ApiEndpoints.SOLICITUDES.DELETE_SOLICITUD}${idSolicitud}`);
+        return {
+            status: resp.status,
+            message: resp.message,
+            data: resp.data.response
+        };
+    } catch (error) {
+        console.log("error", error);
+        const status = error.response?.status || 500;
+        const message = error.response?.data?.message || error.message || 'Error desconocido al crear la solicitud';
+        return {
+            status,
+            message
+        };
+    }
+}
+
+const retomarSolicitud = async (curp, idProducto) => {
+    try {
+        const resp = await axios.get(`${ApiEndpoints.SOLICITUDES.RETOMAR_SOLICITUD}${curp}/${idProducto}`);
+        return {
+            status: resp.status,
+            message: resp.message,
+            data: resp.data.response
+        };
+    } catch (error) {
+        console.log("error", error);
+        const status = error.response?.status || 500;
+        const message = error.response?.data?.message || error.message || 'Error desconocido al crear la solicitud';
+        return {
+            status,
+            message
+        };
+    }
+}
+
+
+
+export default {
+    createNewSolicitud, next, savePersonalData, savePersonalBanking, saveContactInfo,
+    certificaContacto, saveDomicilio, altaKyc, saveFiscalData, saveBeneficiarios, getDocumentacion,
+    saveBuroCredito, saveReferencias, altaSolicitudCredito, delteSolicitud, retomarSolicitud
+};

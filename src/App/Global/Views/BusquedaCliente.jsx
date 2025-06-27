@@ -8,13 +8,18 @@ import { useLoading } from '../../../Hooks/LoadingContext';
 import ResultadosBusquedaModal from '../../Clientes/Components/ResultadosBusquedaModal';
 import { RetomarSolicitudModal } from '../Components/RetomarSolicitudModal';
 import { CertificacionContactoModal } from '../../Clientes/Components/CertificacionContactoModal';
+import { useDispatch } from 'react-redux';
+import { startObtenerBpCliente, startObtenerClienteInfo } from '../../../Store/Clientes/Thunks';
+import useToast from '../../../Hooks/useToast';
 
 const BusquedaCliente = ({ onNext, handleStep }) => {
 
     const {isLoading, startLoading, stopLoading} = useLoading();
     const [open, setOpen] = useState(false);
     const [retomarSolicitud, setretomarSolicitud] = useState(false)
-    const [certificarContacto, setcertificarContacto] = useState(false)
+    const [certificarContacto, setcertificarContacto] = useState(false);
+    const dispatch = useDispatch();
+    const { showToast } = useToast();
 
     const initialValues = {
         criterioBusqueda: '',
@@ -26,12 +31,29 @@ const BusquedaCliente = ({ onNext, handleStep }) => {
         busqueda: Yup.string().required('Requerido'),
     });
 
-    const handleSubmit = (values) => {
-        setOpen(true);
+    const handleSubmit = async (values) => {
+        startLoading();
+        const resp = await dispatch(startObtenerClienteInfo(
+            values.criterioBusqueda == 'ID Cliente Unico' ? 'ID_CLIENTE_UNICO' : 'CURP',
+            values.busqueda,
+            'PERSONAL_DATA'
+        ));
+        if (resp.status == 200 || resp.status == 'OK') {
+            await dispatch(startObtenerBpCliente(
+            values.criterioBusqueda == 'ID Cliente Unico' ? 'ID_CLIENTE_UNICO' : 'CURP',
+            values.busqueda,
+            'BP'
+        ));
+            setOpen(true);
+        } else {
+            showToast(resp.message, 'error', 'top-center');
+        }
+        stopLoading();
     };
 
     const handleClose = () => {
         setOpen(false);
+        onNext();
     };
 
     const handleCloseRetomar = () => { 

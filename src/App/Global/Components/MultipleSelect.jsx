@@ -5,8 +5,14 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export default function SingleSelect({ values, placeholder, value, onChange, disabled }) {
+export default function SingleSelect({ values, placeholder, value, onChange, disabled, defaultValue }) {
   const [safed, setSafed] = React.useState(value || '');
+
+  React.useEffect(() => {
+  if (value !== safed) {
+    setSafed(value || '');
+  }
+}, [value]);
 
   const handleChange = (event) => {
     setSafed(event.target.value);
@@ -21,6 +27,7 @@ export default function SingleSelect({ values, placeholder, value, onChange, dis
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={safed}
+          defaultValue={defaultValue}
           label={placeholder}
           onChange={handleChange}
           disabled={disabled}

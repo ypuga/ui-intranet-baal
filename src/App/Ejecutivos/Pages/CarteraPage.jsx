@@ -1,0 +1,91 @@
+import { Box, Divider, Grid2, Typography } from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import AppLayout from '../../Layout/AppLayout'
+import ClienteCarteraComponent from '../Components/ClienteCarteraComponent'
+import { useDispatch } from 'react-redux'
+import { startGetCarteraClientes } from '../../../Store/Datos/Thunks'
+import useToast from '../../../Hooks/useToast'
+import { useLoading } from '../../../Hooks/LoadingContext'
+import FilterCarteraComponents from '../Components/FilterCarteraComponents'
+
+const CarteraPage = () => {
+    const dispatch = useDispatch();
+    const { showToast } = useToast();
+    const [clientesData, setclientesData] = useState([]);
+    const { isLoading, startLoading, stopLoading } = useLoading();
+    const [filtros, setFiltros] = useState({ tipo: 'nombre', valor: '' });
+
+
+    useEffect(() => {
+        startLoading();
+        getCartera();
+    }, []);
+
+    const getCartera = async () => {
+        const resp = await dispatch(startGetCarteraClientes());
+        if (resp.status == 200 || resp.status == 'OK') {
+            setclientesData(resp?.data || []);
+            console.log(resp);
+            stopLoading();
+        } else {
+            showToast(resp.message, 'error', 'top-center');
+            stopLoading();
+        }
+    }
+
+    const clientesFiltrados = clientesData.filter(cliente => {
+        if (!filtros.valor) return true;
+
+        const valor = filtros.valor.toLowerCase();
+
+        switch (filtros.tipo) {
+            case 'nombre':
+                const nombreCompleto = `${cliente.primerNombre || ''} ${cliente.segundoNombre || ''} ${cliente.apellidoPaterno || ''} ${cliente.apellidoMaterno || ''}`.toLowerCase();
+                return nombreCompleto.includes(valor);
+
+            case 'id':
+                return cliente.idClienteUnico?.toString().includes(valor);
+
+            case 'ofertas':
+                return cliente.ofertasFlag === (valor === 'true');
+
+            default:
+                return true;
+        }
+    });
+
+    return (
+        <AppLayout>
+            <Typography component='h1' sx={{ fontSize: 'xx-large' }}>Cartera del ejecutivo</Typography>
+            <Divider />
+            <Box sx={{ width: '100%', marginTop: '10px' }}>
+                <FilterCarteraComponents onFilterChange={setFiltros} />
+            </Box>
+            {clientesFiltrados.length > 0 ? (
+                <Box sx={{ marginTop: '20px' }}>
+                    <Grid2 container spacing={3}>
+                        {clientesFiltrados.map((cliente, index) => (
+                            <Grid2
+                                key={index}
+                                xs={12}
+                                sm={6}
+                                md={4}
+                                lg={2.4}
+                            >
+                                <ClienteCarteraComponent cliente={cliente} />
+                            </Grid2>
+                        ))}
+                    </Grid2>
+                </Box>
+            ) : (
+                <>
+                    <br />
+                    <Typography>No hay información disponible por el momento!!!</Typography>
+                </>
+            )}
+        </AppLayout>
+    );
+};
+
+
+export default CarteraPage

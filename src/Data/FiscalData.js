@@ -54,6 +54,7 @@ export const ocupaciones = [
 
   export const sectores = [
     "Agricultura",
+    "Agropecuario",
     "Ama de casa",
     "Industria manufacturera",
     "Comercio",

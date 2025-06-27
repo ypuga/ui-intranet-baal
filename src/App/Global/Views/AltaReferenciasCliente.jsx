@@ -4,8 +4,15 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { parentezco } from '../../../Data/SucursalesData';
 import SingleSelect from '../Components/MultipleSelect';
+import { useDispatch, useSelector } from 'react-redux';
+import useToast from '../../../Hooks/useToast';
+import { startSaveReferencias } from '../../../Store/Prospectos/Thunks';
 
 const AltaReferenciasCliente = ({ onNext, onBack }) => {
+
+    const dispatch = useDispatch();
+    const { showToast } = useToast();
+    const { solicitud } = useSelector(state => state.prospectos);
 
     const initialValues = {
         referencias: [
@@ -40,9 +47,13 @@ const AltaReferenciasCliente = ({ onNext, onBack }) => {
         ),
     });
 
-    const handleSubmit = (values) => {
-        console.log(values);
-        onNext();
+    const handleSubmit = async (values) => {
+        const resp = await dispatch(startSaveReferencias(values?.referencias));
+        if (resp?.status == 'OK' || resp?.status == 200) {
+            onNext();
+        } else {
+            showToast(resp.message, 'error', 'top-center');
+        }
     };
 
     return (
@@ -57,7 +68,7 @@ const AltaReferenciasCliente = ({ onNext, onBack }) => {
                 REFERENCIAS DEL CLIENTE
             </Typography>
             <Typography fontSize="10px">
-                ID De Evaluacion: 29921
+                ID De Evaluacion: {solicitud?.idSolicitud}
             </Typography>
 
             <Box flex={1} my={4}>
@@ -66,7 +77,7 @@ const AltaReferenciasCliente = ({ onNext, onBack }) => {
                     validationSchema={validationSchema}
                     onSubmit={handleSubmit}
                 >
-                    {({ values, handleChange, errors, touched, setFieldValue, isValid, dirty }) => (
+                    {({ values, handleChange, handleSubmit, errors, touched, setFieldValue, isValid, dirty }) => (
                         <form onSubmit={handleSubmit}>
                             {values.referencias.map((_, index) => (
                                 <Box key={index} mb={4}>

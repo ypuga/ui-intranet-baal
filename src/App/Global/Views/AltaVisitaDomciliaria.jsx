@@ -4,7 +4,7 @@ import MultipleSelect from '../Components/MultipleSelect';
 import * as Yup from 'yup';
 import React, { useState } from 'react'
 import { estadosMexico } from '../../../Data/SucursalesData';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLoading } from '../../../Hooks/LoadingContext';
 import { startGetCodigoPostalData } from '../../../Store/Datos/Thunks';
 import useToast from '../../../Hooks/useToast';
@@ -19,6 +19,7 @@ const AltaVisitaDomciliaria = ({ onNext, onBack }) => {
     const [open, setOpen] = useState(false);
     const [isDisabled, setisDisabled] = useState(false);
     const { isLoading, startLoading, stopLoading } = useLoading();
+    const {solicitud} = useSelector(state=>state.prospectos);
 
     const initialValues = {
         estado: '',
@@ -81,7 +82,7 @@ const AltaVisitaDomciliaria = ({ onNext, onBack }) => {
                 PROGRAMAR VISITA DOMICILIARIA
             </Typography>
             <Typography fontSize={"10px"}>
-                ID De Evaluacion: 29921
+                ID De Evaluacion: {solicitud?.idSolicitud}
             </Typography>
             <Box flex={1} my={4}>
                 <Formik

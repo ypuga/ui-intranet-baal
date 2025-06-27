@@ -5,6 +5,7 @@ import AuthRoutes from './Routes/AuthRoutes'
 import { useSelector } from 'react-redux'
 import ProspectosRoutes from './Routes/ProspectosRoutes'
 import ClientesRoutes from './Routes/ClientesRoutes'
+import EjecutivosRoutes from './Routes/EjecutivosRoutes'
 
 const AppRouter = () => {
 
@@ -20,6 +21,7 @@ const AppRouter = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/prospectos/*" element={<ProspectosRoutes />} />
           <Route path='/clientes/*' element={<ClientesRoutes/>}/>
+          <Route path='/ejecutivo/*' element={<EjecutivosRoutes/>}/>
         </>
       )}
     </Routes>

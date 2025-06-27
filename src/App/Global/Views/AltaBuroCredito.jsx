@@ -4,8 +4,16 @@ import React from 'react'
 import * as Yup from 'yup';
 import DynamicRadioButtons from '../Components/RowRadioButtonsGroup';
 import { creditoAutomotriz, creditoHipotecario, tdcVigente } from '../../../Data/BuroCreditoData';
+import { useDispatch, useSelector } from 'react-redux';
+import { buroCreditoUtil } from '../../../Utils/BuroCreditoUtils';
+import useToast from '../../../Hooks/useToast';
+import { startSaveBuroCredito } from '../../../Store/Prospectos/Thunks';
 
 const AltaBuroCredito = ({onNext, onBack}) => {
+
+    const {solicitud} = useSelector(state=>state.prospectos);
+    const dispatch = useDispatch();
+    const {showToast} = useToast();
 
     const initialValues = {
         tdcVigente: '',
@@ -21,8 +29,13 @@ const AltaBuroCredito = ({onNext, onBack}) => {
         creditoAutomotriz: Yup.string().required('Requerido'),
     });
 
-    const handleSubmit = (values) => {
-        onNext();
+    const handleSubmit = async (values) => {
+        const resp = await dispatch(startSaveBuroCredito(buroCreditoUtil(values)));
+        if (resp?.status == 'OK' || resp?.status == 200) {
+            onNext();
+        } else {
+            showToast(resp.message, 'error', 'top-center');
+        }
     };
 
     return (
@@ -37,7 +50,7 @@ const AltaBuroCredito = ({onNext, onBack}) => {
                 BURO DE CREDITO
             </Typography>
             <Typography fontSize={"10px"}>
-                ID De Evaluacion: 29921
+                ID De Evaluacion: {solicitud?.idSolicitud}
             </Typography>
             <Box flex={1} my={4}>
                 <Formik
