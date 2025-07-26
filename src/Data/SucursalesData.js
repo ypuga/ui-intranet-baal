@@ -7,7 +7,7 @@ import INVERSION from '../assets/inversionAlameda.jpg'
 
 export const sucursales = [
   '914 - CENTRO SAN MIGUEL EL ALTO',
-  '393 - CENTRO SAN JUAN DE LOS LAGOS',
+  '756 - CENTRO SAN JUAN DE LOS LAGOS',
   '292 - CENTRO TEPATITLAN DE MORELOS',
   '994 - CENTRO ARANDAS',
   '1002 - CENTRO ATOTONILCO',

@@ -12,7 +12,7 @@ const altaClienteUnico = async (idSolicitud) => {
         };
     } catch (error) {
         const status = error.response?.status || 500;
-        const message = error.response?.data?.message || error.message || 'Error desconocido al crear la solicitud';
+        const message = error.response?.data?.message || error.message || 'Error al dar de alta al cliente';
         return {
             status,
             message
@@ -30,7 +30,7 @@ const altaCuentaCliente = async (idSolicitud, idClienteUnico) => {
         };
     } catch (error) {
         const status = error.response?.status || 500;
-        const message = error.response?.data?.message || error.message || 'Error desconocido al crear la solicitud';
+        const message = error.response?.data?.message || error.message || 'No se pudo dar de alta la cuenta';
         return {
             status,
             message
@@ -48,7 +48,7 @@ const asignarTarjetaDebito = async (idCuenta, idEmpleado, idSucursal) => {
         };
     } catch (error) {
         const status = error.response?.status || 500;
-        const message = error.response?.data?.message || error.message || 'Error desconocido al crear la solicitud';
+        const message = error.response?.data?.message || error.message || 'Error desconocido al asignar la tarjeta';
         return {
             status,
             message
@@ -66,7 +66,7 @@ const obtenerInformacionCliente = async (parametro, referencia, segmento) => {
         };
     } catch (error) {
         const status = error.response?.status || 500;
-        const message = error.response?.data?.message || error.message || 'Error desconocido al crear la solicitud';
+        const message = error.response?.data?.message || error.message || 'No se pudo obtener informacion del cliente';
         return {
             status,
             message
@@ -84,7 +84,7 @@ const obtenerCarteraClientes = async (idEjecutivo) => {
         };
     } catch (error) {
         const status = error.response?.status || 500;
-        const message = error.response?.data?.message || error.message || 'Error desconocido al crear la solicitud';
+        const message = error.response?.data?.message || error.message || 'Error desconocido';
         return {
             status,
             message
@@ -102,7 +102,7 @@ const altaCredito = async (idSolicitud, idClienteUnico ) => {
         };
     } catch (error) {
         const status = error.response?.status || 500;
-        const message = error.response?.data?.message || error.message || 'Error desconocido al crear la solicitud';
+        const message = error.response?.data?.message || error.message || 'Error desconocido';
         return {
             status,
             message
@@ -120,7 +120,79 @@ const asignarTarjetaCredito = async (idCuenta, idEmpleado, idSucursal) => {
         };
     } catch (error) {
         const status = error.response?.status || 500;
-        const message = error.response?.data?.message || error.message || 'Error desconocido al crear la solicitud';
+        const message = error.response?.data?.message || error.message || 'Error desconocido';
+        return {
+            status,
+            message
+        };
+    }
+}
+
+const obtenerCuentasCliente = async (idClienteUnico) => {
+    try {
+        const resp = await axios.get(`${ApiEndpoints.CLIENTES.OBTENER_CUENTAS_CLIENTE}${idClienteUnico}`);
+        return {
+            status: resp.status,
+            message: resp.message,
+            data: resp.data.response
+        };
+    } catch (error) {
+        const status = error.response?.status || 500;
+        const message = error.response?.data?.message || error.message || 'Error';
+        return {
+            status,
+            message
+        };
+    }
+}
+
+const obtenerCreditosCliente = async (idClienteUnico) => {
+    try {
+        const resp = await axios.get(`${ApiEndpoints.CLIENTES.OBTENER_CREDITOS_CLIENTE}${idClienteUnico}`);
+        return {
+            status: resp.status,
+            message: resp.message,
+            data: resp.data.response
+        };
+    } catch (error) {
+        const status = error.response?.status || 500;
+        const message = error.response?.data?.message || error.message || 'Error';
+        return {
+            status,
+            message
+        };
+    }
+}
+
+const obtenerBeneficiariosCliente = async (idClienteUnico) => {
+    try {
+        const resp = await axios.get(`${ApiEndpoints.CLIENTES.OBTENER_BENEFICIARIOS_CLIENTE}${idClienteUnico}`);
+        return {
+            status: resp.status,
+            message: resp.message,
+            data: resp.data.response
+        };
+    } catch (error) {
+        const status = error.response?.status || 500;
+        const message = error.response?.data?.message || error.message || 'Error';
+        return {
+            status,
+            message
+        };
+    }
+}
+
+const certificarCorreoCliente = async (idClienteUnico, telefono) => {
+    try {
+        const resp = await axios.put(`${ApiEndpoints.CLIENTES.CERTIFICACION_PHONE}${idClienteUnico}?noTelefono=${telefono}`);
+        return {
+            status: resp.status,
+            message: resp.message,
+            data: resp.data.response
+        };
+    } catch (error) {
+        const status = error.response?.status || 500;
+        const message = error.response?.data?.message || error.message || 'Error';
         return {
             status,
             message
@@ -129,5 +201,6 @@ const asignarTarjetaCredito = async (idCuenta, idEmpleado, idSucursal) => {
 }
 
 export default { altaClienteUnico, altaCuentaCliente, asignarTarjetaDebito, obtenerInformacionCliente
-    ,obtenerCarteraClientes, asignarTarjetaCredito, altaCredito
+    ,obtenerCarteraClientes, asignarTarjetaCredito, altaCredito, obtenerCuentasCliente, obtenerCreditosCliente,
+    obtenerBeneficiariosCliente, certificarCorreoCliente
  }

@@ -38,7 +38,7 @@ const TramitesComponents = () => {
                     >
                         <TableHead>
                             <TableRow>
-                                {['Fecha', 'Producto', 'Nombre del Prospecto', 'Teléfono', 'Estatus'].map((headCell) => (
+                                {['Fecha', 'ID Solicitud', 'Producto', 'Nombre del Prospecto', 'Teléfono', 'Estatus'].map((headCell) => (
                                     <TableCell
                                         key={headCell}
                                         sx={{
@@ -71,6 +71,7 @@ const TramitesComponents = () => {
                                         }}
                                     >
                                         <TableCell>{new Date(sol?.fechaSolicitud).toLocaleDateString('es-ES')}</TableCell>
+                                        <TableCell>{sol?.idSolicitud}</TableCell>
                                         <TableCell>{sol?.nombreProducto}</TableCell>
                                         <TableCell>{sol?.nombreCompleto}</TableCell>
                                         <TableCell>{sol?.telefono || 'No proporcionado'}</TableCell>

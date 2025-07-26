@@ -308,10 +308,30 @@ const retomarSolicitud = async (curp, idProducto) => {
     }
 }
 
+const obtenerSolicitud = async (idSolicitud) => {
+    try {
+        const resp = await axios.get(`${ApiEndpoints.SOLICITUDES.OBTENER_SOLICITUD}${idSolicitud}`);
+        return {
+            status: resp.status,
+            message: resp.message,
+            data: resp.data.response
+        };
+    } catch (error) {
+        console.log("error", error);
+        const status = error.response?.status || 500;
+        const message = error.response?.data?.message || error.message || 'Error desconocido al crear la solicitud';
+        return {
+            status,
+            message
+        };
+    }
+}
+
 
 
 export default {
     createNewSolicitud, next, savePersonalData, savePersonalBanking, saveContactInfo,
     certificaContacto, saveDomicilio, altaKyc, saveFiscalData, saveBeneficiarios, getDocumentacion,
-    saveBuroCredito, saveReferencias, altaSolicitudCredito, delteSolicitud, retomarSolicitud
+    saveBuroCredito, saveReferencias, altaSolicitudCredito, delteSolicitud, retomarSolicitud,
+    obtenerSolicitud
 };

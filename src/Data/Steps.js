@@ -53,6 +53,20 @@ export const crmSteps = [
     { label: 'Finalizar', description: 'Finalizacion de credito moto' },
 ];
 
+export const crpSteps = [
+    { label: 'Busqueda', description: 'Busqueda del cliente' },
+    { label: 'Biometria', description: 'Captura de biometria del cliente' },
+    { label: 'Cotizacion Credito Personal', description: 'Cotizacion de credito personal' },
+    { label: 'BANQUERO PERSONAL', description: 'Información del banquero' },
+    { label: 'Buro de Credito', description: 'Captura de formato de consulta de buro de credito' },
+    { label: 'Visita Domiciliaria', description: 'Agendar visita domiciliaria con el cliente' },
+    { label: 'REFERENCIAS PERSONALES', description: 'Referencias del Cliente' },
+    { label: 'DOCUMENTACION DEL CLIENTE', description: 'Impresión y digitalización de los documentos del cliente' },
+    { label: 'Envio de solicitud', description: 'Envio de la solicitud del cliente' },
+    { label: 'Firma de Pagare', description: 'Descarga y firma de pagare del cliente' },
+    { label: 'Finalizar', description: 'Finalizacion de credito moto' },
+];
+
 export const cuentaClientesSteps = [
     { label: 'Busqueda', description: 'Busqueda del cliente' },
     { label: 'Biometria', description: 'Captura de biometria del cliente' },
@@ -62,4 +76,17 @@ export const cuentaClientesSteps = [
     { label: 'BENEFICIARIOS', description: 'Datos de los beneficiarios de la cuenta' },
     { label: 'DOCUMENTACION DEL CLIENTE', description: 'Impresión y digitalización de los documentos del cliente' },
     { label: 'ALTA CUENTA', description: 'Alta de la cuenta del cliente' }
+];
+
+export const finishTramite = [
+    { label: 'Busqueda', description: 'Busqueda de solicitud' },
+    { label: 'Biometria', description: 'Captura de biometria del cliente' },
+    { label: 'Alta Credito', description: 'Alta de producto' },
+];
+
+export const finishTramiteCrm = [
+    { label: 'Busqueda', description: 'Busqueda de solicitud' },
+    { label: 'Biometria', description: 'Captura de biometria del cliente' },
+    { label: 'Firma de Pagare', description: 'Descarga y firma de pagare del cliente' },
+    { label: 'Finalizar', description: 'Finalizacion de credito moto' },
 ];

@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import ProspectosRoutes from './Routes/ProspectosRoutes'
 import ClientesRoutes from './Routes/ClientesRoutes'
 import EjecutivosRoutes from './Routes/EjecutivosRoutes'
+import FinalizarTramitesRoutes from './Routes/FinalizarTramitesRoutes'
 
 const AppRouter = () => {
 
@@ -20,8 +21,9 @@ const AppRouter = () => {
           <Route path="/*" element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/prospectos/*" element={<ProspectosRoutes />} />
-          <Route path='/clientes/*' element={<ClientesRoutes/>}/>
-          <Route path='/ejecutivo/*' element={<EjecutivosRoutes/>}/>
+          <Route path='/clientes/*' element={<ClientesRoutes />} />
+          <Route path='/ejecutivo/*' element={<EjecutivosRoutes />} />
+          <Route path="finalizar/*" element={<FinalizarTramitesRoutes />} />
         </>
       )}
     </Routes>

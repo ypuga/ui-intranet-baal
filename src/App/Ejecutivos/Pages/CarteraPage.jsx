@@ -7,6 +7,8 @@ import { startGetCarteraClientes } from '../../../Store/Datos/Thunks'
 import useToast from '../../../Hooks/useToast'
 import { useLoading } from '../../../Hooks/LoadingContext'
 import FilterCarteraComponents from '../Components/FilterCarteraComponents'
+import ProductosClienteModal from '../Components/ProductosClienteModal'
+import { startObtenerCuentasYCreditosDelCliente } from '../../../Store/Clientes/Thunks'
 
 const CarteraPage = () => {
     const dispatch = useDispatch();
@@ -14,6 +16,7 @@ const CarteraPage = () => {
     const [clientesData, setclientesData] = useState([]);
     const { isLoading, startLoading, stopLoading } = useLoading();
     const [filtros, setFiltros] = useState({ tipo: 'nombre', valor: '' });
+    const [open, setOpen] = useState(false);
 
 
     useEffect(() => {
@@ -25,7 +28,6 @@ const CarteraPage = () => {
         const resp = await dispatch(startGetCarteraClientes());
         if (resp.status == 200 || resp.status == 'OK') {
             setclientesData(resp?.data || []);
-            console.log(resp);
             stopLoading();
         } else {
             showToast(resp.message, 'error', 'top-center');
@@ -54,8 +56,28 @@ const CarteraPage = () => {
         }
     });
 
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleOpen = async (idClienteUnico) => {
+        startLoading();
+        const resp = await dispatch(startObtenerCuentasYCreditosDelCliente(idClienteUnico));
+        if (resp?.status == 'OK' || resp.status == 200) {
+            setOpen(true);
+        } else {
+            showToast(resp?.message, 'error', 'top-center');
+        }
+        stopLoading();
+    };
+
+
     return (
         <AppLayout>
+            <ProductosClienteModal
+                open={open}
+                handleClose={() => handleClose()}
+            />
             <Typography component='h1' sx={{ fontSize: 'xx-large' }}>Cartera del ejecutivo</Typography>
             <Divider />
             <Box sx={{ width: '100%', marginTop: '10px' }}>
@@ -72,7 +94,7 @@ const CarteraPage = () => {
                                 md={4}
                                 lg={2.4}
                             >
-                                <ClienteCarteraComponent cliente={cliente} />
+                                <ClienteCarteraComponent cliente={cliente} handleOpen={(idClienteUnico) => handleOpen(idClienteUnico)} />
                             </Grid2>
                         ))}
                     </Grid2>

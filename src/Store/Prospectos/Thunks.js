@@ -274,3 +274,27 @@ export const startDeleteSolicitud = () => {
         }
     }   
 }
+
+export const startObtenerSolicitud = (idSolicitud) => {
+        return async (dispatch, getState) => {
+        try {
+            const resp = await SolicitudesApi.obtenerSolicitud(idSolicitud);
+            if (resp.status == 'OK') {
+                return resp;
+            } else {
+                return resp;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }   
+}
+
+export const startPutSolicitud = (solicitud) => {
+    return async (dispatch, getState) => {
+        const newSolicitudData = {                 
+            idSolicitud: solicitud?.id
+        };
+        dispatch(setSolicitud(newSolicitudData));
+    };
+};

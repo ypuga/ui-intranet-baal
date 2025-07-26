@@ -2,7 +2,7 @@ import { Email, Phone } from '@mui/icons-material';
 import { Button, Card, CardActions, CardContent, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import React from 'react';
 
-const ClienteCarteraComponent = ({ cliente }) => {
+const ClienteCarteraComponent = ({ cliente, handleOpen }) => {
     const hasOfertas = cliente?.ofertasFlag;
 
     return (
@@ -66,11 +66,12 @@ const ClienteCarteraComponent = ({ cliente }) => {
                 >
                     Ver ofertas
                 </Button>
-                                <Button
+                <Button
                     variant="contained"
                     fullWidth
+                    onClick={()=>handleOpen(cliente?.idClienteUnico)}
                     sx={{
-                        bgcolor:'#b2dfdb',
+                        bgcolor: '#b2dfdb',
                         color: '#666',
                         textTransform: 'none',
                         borderRadius: 2,
@@ -83,7 +84,7 @@ const ClienteCarteraComponent = ({ cliente }) => {
                     }}
                 >
                     Ver productos
-                </Button>  
+                </Button>
             </CardActions>
         </Card>
     );

@@ -8,6 +8,9 @@ import mapBeneficiaries from '../../../Utils/BeneficiariesUtil';
 import { useDispatch, useSelector } from 'react-redux';
 import useToast from '../../../Hooks/useToast';
 import { startAltaBeneficiarios } from '../../../Store/Prospectos/Thunks';
+import { Person } from '@mui/icons-material';
+import BeneficiariosClienteModal from '../../Clientes/Components/BeneficiariosClienteModal';
+import { startObtenerBeneficiariosCliente } from '../../../Store/Clientes/Thunks';
 
 const AltaBeneficiarios = ({ onNext, onBack }) => {
 
@@ -15,7 +18,9 @@ const AltaBeneficiarios = ({ onNext, onBack }) => {
     const [tercero, settercero] = useState(false);
     const dispatch = useDispatch();
     const { showToast } = useToast();
-    const {solicitud} = useSelector(state=>state.prospectos);
+    const { solicitud } = useSelector(state => state.prospectos);
+    const { cliente } = useSelector(state => state.clientes);
+    const [open, setOpen] = useState(false);
 
     const initialValues = {
         beneficiarioNombresUno: '',
@@ -47,6 +52,34 @@ const AltaBeneficiarios = ({ onNext, onBack }) => {
         }
     };
 
+    const handleSubmitPrecondition = async (values) => {
+        const resp = await dispatch(startAltaBeneficiarios(values));
+        if (resp.status == 'OK' || resp.status == 200) {
+            onNext();
+        } else {
+            showToast(resp.message, 'error', 'top-center');
+        }
+    };
+
+    const handleContinue = async (beneficiarios) => {
+        setOpen(false);
+        await handleSubmitPrecondition(beneficiarios);
+    }
+
+    const handleOpen = async () => {
+        const resp = await dispatch(startObtenerBeneficiariosCliente(cliente?.idClienteUnico));
+        if (resp?.status == 200 || resp?.status == 'OK') {
+            setOpen(true);
+        } else {
+            showToast(resp?.message, 'error', 'top-center');
+        }
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+
     return (
         <Box
             p={4}
@@ -55,6 +88,12 @@ const AltaBeneficiarios = ({ onNext, onBack }) => {
             flexDirection="column"
             sx={{ '& .MuiTextField-root': { m: 1 } }}
         >
+            <BeneficiariosClienteModal
+                open={open}
+                handleOpen={handleOpen}
+                handleContinue={(beneficiarios) => handleContinue(beneficiarios)}
+                handleClose={handleClose}
+            />
             <Typography variant="h5" gutterBottom>
                 BENEFICIARIOS
             </Typography>
@@ -70,6 +109,18 @@ const AltaBeneficiarios = ({ onNext, onBack }) => {
                     {({ values, handleChange, handleSubmit, touched, errors, isValid, dirty }) => (
                         <form onSubmit={handleSubmit}>
                             <Box>
+                                {cliente?.idClienteUnico ?
+                                    <Box>
+                                        <Button
+                                            color='inherit'
+                                            startIcon={<Person />}
+                                            variant='outlined'
+                                            onClick={handleOpen}
+                                        >
+                                            Beneficiarios del Cliente
+                                        </Button>
+                                    </Box>
+                                    : null}
                                 <Divider>PRIMER BENEFICIARIO</Divider>
                                 <Grid2 container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                     <Grid2 size={6}>

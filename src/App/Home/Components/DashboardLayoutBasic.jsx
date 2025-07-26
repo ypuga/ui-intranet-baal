@@ -13,11 +13,12 @@ import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import UserInfo from './UserInfo';
 import SavingsIcon from '@mui/icons-material/Savings';
 import { useNavigate, useLocation } from 'react-router-dom'; // Importar useLocation
-import { AccountBalanceWallet, ChecklistRtl, CreditCard, ExitToApp, History, LocalMall, Money, ShoppingBasket } from '@mui/icons-material';
-import { Avatar, Button } from '@mui/material';
+import { AccountBalanceWallet, AddCard, ChecklistRtl, CreditCard, ExitToApp, History, LocalMall, Money, ShoppingBasket } from '@mui/icons-material';
+import { Avatar, Button, Card } from '@mui/material';
 import LogOutComponent from './LogOutComponent';
 import { useDispatch, useSelector } from 'react-redux';
 import { logOutApp } from '../../../Store/Authetication/Thunks';
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 
 const NAVIGATION = [
   {
@@ -69,9 +70,21 @@ const NAVIGATION = [
     ],
   },
   {
-    segment: 'clientes/ofertas',
-    title: 'Ofertas',
-    icon: <LocalOfferIcon />,
+    segment: 'finalizar',
+    title: 'Finalizar tramites',
+    icon: <AssignmentTurnedInIcon />,
+    children: [
+      {
+        segment: 'tdc',
+        title: 'Tarjeta de Credito',
+        icon: <AddCard />,
+      },
+      {
+        segment: 'crm',
+        title: 'Credito Moto',
+        icon: <TwoWheelerIcon />,
+      },
+    ]
   },
   {
     kind: 'divider',

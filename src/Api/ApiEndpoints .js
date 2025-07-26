@@ -19,7 +19,8 @@ export class ApiEndpoints  {
         SAVE_REFERENCIAS: this.BASE_URL+'/prospecto/referencias/save/',
         ALTA_SOLICITUD_CREDITO: this.BASE_URL+'/prospecto/solicitud/envio/solicitudCredito/',
         DELETE_SOLICITUD: this.BASE_URL+'/prospecto/solicitud/',
-        RETOMAR_SOLICITUD: this.BASE_URL+'/busquedas/prospectos/retomar/'
+        RETOMAR_SOLICITUD: this.BASE_URL+'/busquedas/prospectos/retomar/',
+        OBTENER_SOLICITUD: this.BASE_URL+'/prospecto/solicitud/'
     }   
 
     static CLIENTES = {
@@ -29,7 +30,11 @@ export class ApiEndpoints  {
         ASIGNAR_TDC: this.BASE_URL+'/cliente/tarjeta/asignar/credito/',
         OBTENER_CLIENTE: this.BASE_URL+'/busquedas/clientes/',
         OBTENER_CARTERA: this.BASE_URL+'/cliente/cliente/cartera/',
-        ALTA_CREDITO: this.BASE_URL+'/cliente/creditos/alta/'
+        ALTA_CREDITO: this.BASE_URL+'/cliente/creditos/alta/',
+        OBTENER_CUENTAS_CLIENTE: this.BASE_URL+'/cliente/cuentas/cliente/',
+        OBTENER_CREDITOS_CLIENTE: this.BASE_URL+'/cliente/creditos/cliente/',
+        OBTENER_BENEFICIARIOS_CLIENTE: this.BASE_URL+'/prospecto/beneficiarios/cu/',
+        CERTIFICACION_PHONE: this.BASE_URL+'/cliente/cliente/contacto/certificar/telefono/'
     }
 
     static FRONT = {

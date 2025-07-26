@@ -6,96 +6,96 @@ import { startAlataCuenta, startAltaCliente, startAsignarTarjetaDebito } from '.
 
 
 const AltaCliente = ({ onNext }) => {
+    const dispatch = useDispatch();
+    const { showToast } = useToast();
+    const { personalData, solicitud } = useSelector(state => state.prospectos);
+    const { cliente, cuenta } = useSelector(state => state.clientes);
 
     const [show, setShow] = useState(true);
     const [tdd, setTdd] = useState(false);
     const [asingTdd, setAsingTdd] = useState(false);
-    const [showCircular, setshowCircular] = useState(false);
-    const [altaCuenta, setaltaCuenta] = useState(true);
-    const { showToast } = useToast();
-    const { personalData, solicitud } = useSelector(state => state.prospectos);
-    const { cliente, cuenta } = useSelector(state => state.clientes);
-    const [noTdd, setnoTdd] = useState();
-    const dispatch = useDispatch();
+    const [showCircular, setShowCircular] = useState(false);
+    const [altaCuenta, setAltaCuenta] = useState(true);
+    const [noTdd, setNoTdd] = useState();
 
     useEffect(() => {
         if (personalData.producto === 'CLIENTE UNICO') {
-            setaltaCuenta(false);
+            setAltaCuenta(false);
         }
 
         const timer = setTimeout(async () => {
             setShow(false);
 
-            const cliente = await altaCliente();
-
-            if (cliente.status == 200 || resp.status == 'OK') {
-                await altaCuentaCliente(cliente?.data?.idClienteUnico);
+            const clienteResp = await altaCliente();
+            if (clienteResp?.status === 200 || clienteResp?.status === 'OK') {
+                if (personalData.producto !== 'CLIENTE UNICO') {
+                    await altaCuentaCliente(clienteResp?.data?.idClienteUnico);
+                }
             }
         }, 10000);
 
-        return () => {
-            clearTimeout(timer);
-        };
+        return () => clearTimeout(timer);
     }, []);
-
 
     const altaCliente = async () => {
         const resp = await dispatch(startAltaCliente());
-        if (resp.status == 'OK', resp.status == 200) {
+
+        if (resp?.status === 200 || resp?.status === 'OK') {
             showToast('El cliente ha sido dado de alta correctamente.', 'success', 'top-center');
             return resp;
-        } else if (resp.status == 500) {
+        }
+
+        if (resp?.status === 500) {
             showToast('Error general', 'error', 'top-center');
         } else {
-            showToast(resp.message, 'error', 'top-center');
-            return resp;
+            showToast(resp?.message || 'Error desconocido', 'error', 'top-center');
         }
-    }
+
+        return resp;
+    };
 
     const altaCuentaCliente = async (idClienteUnico) => {
-        const resp = await dispatch(startAlataCuenta(idClienteUnico));
-    }
-
-    const handleTdd = async () => {
-        setAsingTdd(true);
-        setshowCircular(true);
-        const timer = setTimeout(async () => {
-            await altaDeTarjeta();
-            setshowCircular(false);
-        }, 10000);
-        return () => {
-            clearTimeout(timer);
-        };
-    }
+        await dispatch(startAlataCuenta(idClienteUnico));
+    };
 
     const altaDeTarjeta = async () => {
         const resp = await dispatch(startAsignarTarjetaDebito());
-        if (resp.status == 'OK', resp.status == 200) {
-            console.log(resp);
-            showToast('La tarjeta se asigno a la cuenta correctamente', 'success', 'top-center');
+
+        if (resp?.status === 200 || resp?.status === 'OK') {
+            showToast('La tarjeta se asignó a la cuenta correctamente.', 'success', 'top-center');
             setAsingTdd(true);
             setTdd(true);
-            setnoTdd(resp.data);
-        } else if (resp.status == 500) {
-            showToast('No es posible dar de alta una tarjeta de debito. Comuniquese a atencion a empleados', 'error', 'top-center');
+            setNoTdd(resp.data);
+        } else if (resp?.status === 500) {
+            showToast('No es posible dar de alta una tarjeta de débito. Comuníquese a atención a empleados.', 'error', 'top-center');
             setAsingTdd(false);
-            setTdd(false);        
+            setTdd(false);
         } else {
-            showToast(resp.message, 'error', 'top-center');
+            showToast(resp?.message || 'Error desconocido', 'error', 'top-center');
             setAsingTdd(false);
             setTdd(false);
         }
-    }
+    };
 
-    const handleSubmit = (values) => {
+    const handleTdd = () => {
+        setAsingTdd(true);
+        setShowCircular(true);
+
+        const timer = setTimeout(async () => {
+            await altaDeTarjeta();
+            setShowCircular(false);
+        }, 10000);
+
+        return () => clearTimeout(timer);
+    };
+
+    const handleSubmit = () => {
         if (altaCuenta) {
             onNext();
         } else {
             window.location.reload();
         }
     };
-
-
     return (
         <Box
             p={4}
@@ -177,7 +177,7 @@ const AltaCliente = ({ onNext }) => {
                                                     }
                                                     {!asingTdd ?
                                                         <Box width={"50%"} display={"flex"} alignContent={"flex-end"} justifyContent={"flex-end"}>
-                                                            <Button onClick={()=>handleTdd()}>Asignar</Button>
+                                                            <Button onClick={() => handleTdd()}>Asignar</Button>
                                                         </Box>
                                                         : null
                                                     }

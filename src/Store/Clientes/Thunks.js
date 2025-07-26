@@ -1,5 +1,5 @@
 import ClientesApi from "../../Api/ClientesApi";
-import { setBp, setCliente, setCuenta } from "./Clientes";
+import { setBeneficiariosCliente, setBp, setCliente, setCreditosCliente, setCuenta, setCuentasCliente } from "./Clientes";
 
 export const startAltaCliente = () => {
     return async (dispatch, getState) => {
@@ -88,7 +88,7 @@ export const startAltaCredito = () => {
     return async (dispatch, getState) => {
         try {
             const resp = await ClientesApi.altaCredito(
-                getState().prospectos?.solicitud?.idSolicitud, 
+                getState().prospectos?.solicitud?.idSolicitud,
                 getState().clientes?.cliente?.idClienteUnico)
             if (resp.status == 200 || resp.status == 'OK') {
                 await dispatch(setCuenta(resp.data));
@@ -118,5 +118,66 @@ export const startAsignarTarjetaCredito = () => {
         } catch (error) {
             throw error;
         }
+    }
+}
+
+export const startObtenerCuentasYCreditosDelCliente = (idClienteUnico) => {
+    return async (dispatch, getState) => {
+        const resp = await ClientesApi.obtenerCuentasCliente(idClienteUnico);
+        try {
+            if (resp.status == 200 || resp.status == 'OK') {
+                await dispatch(setCuentasCliente(resp.data));
+            } else {
+                return resp;
+            }
+            const respDos = await ClientesApi.obtenerCreditosCliente(idClienteUnico);
+            if (respDos.status == 200 || respDos.status == 'OK') {
+                await dispatch(setCreditosCliente(respDos.data));
+                return resp;
+            } else {
+                return resp;
+            }
+
+        } catch (error) {
+            throw error;
+        }
+    }
+}
+
+export const startObtenerBeneficiariosCliente = (idClienteUnico) => {
+    return async (dispatch, getState) => {
+        const resp = await ClientesApi.obtenerBeneficiariosCliente(idClienteUnico);
+        try {
+            if (resp.status == 200 || resp.status == 'OK') {
+                await dispatch(setBeneficiariosCliente(resp.data));
+                return resp;
+            } else {
+                return resp;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+}
+
+export const startCertificarTelefonoCliente = (idClienteUnico, phone) => {
+    return async (dispatch, getState) => {
+        const resp = await ClientesApi.certificarCorreoCliente(idClienteUnico, phone);
+        try {
+            if (resp.status == 200 || resp.status == 'OK') {
+                await dispatch(setBeneficiariosCliente(resp.data));
+                return resp;
+            } else {
+                return resp;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+}
+
+export const startPutCliente = (idClienteUnico) => {
+    return async (dispatch, getState) => {
+        dispatch(setCliente({idClienteUnico}))
     }
 }

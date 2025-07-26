@@ -11,13 +11,17 @@ import { CertificacionContactoModal } from '../../Clientes/Components/Certificac
 import { useDispatch } from 'react-redux';
 import { startObtenerBpCliente, startObtenerClienteInfo } from '../../../Store/Clientes/Thunks';
 import useToast from '../../../Hooks/useToast';
+import ActualizarMediosDeContactoView from '../../Clientes/Views/ActualizarMediosDeContactoView';
 
 const BusquedaCliente = ({ onNext, handleStep }) => {
 
-    const {isLoading, startLoading, stopLoading} = useLoading();
+    const { isLoading, startLoading, stopLoading } = useLoading();
     const [open, setOpen] = useState(false);
     const [retomarSolicitud, setretomarSolicitud] = useState(false)
     const [certificarContacto, setcertificarContacto] = useState(false);
+    const [nombreCliente, setnombreCliente] = useState('');
+    const [idClienteUnico, setidClienteUnico] = useState('');
+    const [globalValues, setglobalValues] = useState();
     const dispatch = useDispatch();
     const { showToast } = useToast();
 
@@ -32,6 +36,17 @@ const BusquedaCliente = ({ onNext, handleStep }) => {
     });
 
     const handleSubmit = async (values) => {
+        const check = await checkCertificacionTelefono(values)
+        if (!check) {
+            setcertificarContacto(true);
+            setglobalValues(values);
+            return
+        } else {
+            await busquedaCliente(values);
+        }
+    };
+
+    const busquedaCliente = async (values) => {
         startLoading();
         const resp = await dispatch(startObtenerClienteInfo(
             values.criterioBusqueda == 'ID Cliente Unico' ? 'ID_CLIENTE_UNICO' : 'CURP',
@@ -40,32 +55,57 @@ const BusquedaCliente = ({ onNext, handleStep }) => {
         ));
         if (resp.status == 200 || resp.status == 'OK') {
             await dispatch(startObtenerBpCliente(
-            values.criterioBusqueda == 'ID Cliente Unico' ? 'ID_CLIENTE_UNICO' : 'CURP',
-            values.busqueda,
-            'BP'
-        ));
+                values.criterioBusqueda == 'ID Cliente Unico' ? 'ID_CLIENTE_UNICO' : 'CURP',
+                values.busqueda,
+                'BP'
+            ));
             setOpen(true);
         } else {
             showToast(resp.message, 'error', 'top-center');
         }
         stopLoading();
-    };
+    }
 
     const handleClose = () => {
         setOpen(false);
         onNext();
     };
 
-    const handleCloseRetomar = () => { 
+    const handleCloseRetomar = () => {
         setretomarSolicitud(false);
     }
 
-    const handleCloseCertificar = () => { 
+    const handleCloseCertificar = () => {
         setcertificarContacto(false);
     }
 
     const handleContinue = () => {
         onNext();
+    }
+
+    const checkCertificacionTelefono = async (values) => {
+        const resp = await dispatch(startObtenerClienteInfo(
+            values.criterioBusqueda == 'ID Cliente Unico' ? 'ID_CLIENTE_UNICO' : 'CURP',
+            values.busqueda,
+            'CONTACTO'
+        ));
+        if (resp?.status == 'OK' || resp?.status == 200) {
+            if (resp?.data?.noTelefono == null) {
+                setidClienteUnico(resp?.data?.idClienteUnico);
+                return false;
+            }
+        } else {
+            showToast('No se encontro un cliente con la referencia ingresada', 'error', 'top-center');
+            return true;
+        }
+        return true;
+    }
+
+    const handleContinueVerify = async (verify) => {
+        if (verify) { 
+            showToast('Se han acutilizado los medios de contacto del cliente.', 'sucess', 'top-center');
+            await busquedaCliente(globalValues)
+        }
     }
 
     return (
@@ -76,9 +116,9 @@ const BusquedaCliente = ({ onNext, handleStep }) => {
             flexDirection="column"
             sx={{ '& .MuiTextField-root': { m: 1 } }}
         >
-            <RetomarSolicitudModal open={retomarSolicitud} handleClose={handleCloseRetomar} handleStepOne={handleStep}/>
-            <ResultadosBusquedaModal open={open} handleClose={handleClose} handleContinue={()=>handleContinue}/>
-            <CertificacionContactoModal open={certificarContacto} handleClose={handleCloseCertificar} handleContinue={()=>handleContinue}/>
+            <ActualizarMediosDeContactoView open={certificarContacto} handleClose={handleCloseCertificar} handleContinueVerify={(verify) => handleContinueVerify(verify)} idClienteUnico={idClienteUnico} />
+            <RetomarSolicitudModal open={retomarSolicitud} handleClose={handleCloseRetomar} handleStepOne={handleStep} />
+            <ResultadosBusquedaModal open={open} handleClose={handleClose} handleContinue={() => handleContinue} />
             <Typography variant="h5" gutterBottom>
                 BUSQUEDA DE CLIENTE
             </Typography>

@@ -21,3 +21,7 @@ export const altaCRMDocumentos = [
 export const pagareCRM = [
     { scan: true, print: true, docToPrint: '', title: 'PAGARE DE CREDITO MOTO F. 3882933' },
 ]
+
+export const altaTDC = [
+    { scan: true, print: true, docToPrint: '', title: 'CONTRATO GLOBAL DE TDC' },
+]

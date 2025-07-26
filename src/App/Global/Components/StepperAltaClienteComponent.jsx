@@ -15,7 +15,7 @@ const StepperComponent = ({ activeStep, steps }) => {
     >
       <Box sx={{
         overflowY: 'auto',
-        maxHeight: '100%',
+        minHeight: '50vh',
       }}>
         <Stepper
           activeStep={activeStep}
