@@ -8,7 +8,6 @@ export const tdcSteps = [
     { label: 'REFERENCIAS PERSONALES', description: 'Referencias del Cliente' },
     { label: 'DOCUMENTACION DEL CLIENTE', description: 'Impresión y digitalización de los documentos del cliente' },
     { label: 'Envio de solicitud', description: 'Envio de la solicitud del cliente' },
-    { label: 'Alta Tarjeta', description: 'Alta de tarjeta de credito del cliente' },
 ]
 
 export const altaClienteSteps = [
@@ -81,6 +80,7 @@ export const cuentaClientesSteps = [
 export const finishTramite = [
     { label: 'Busqueda', description: 'Busqueda de solicitud' },
     { label: 'Biometria', description: 'Captura de biometria del cliente' },
+    { label: 'DOCUMENTACION', description: 'Impresión y digitalización de los documentos del cliente' },
     { label: 'Alta Credito', description: 'Alta de producto' },
 ];
 
@@ -89,4 +89,14 @@ export const finishTramiteCrm = [
     { label: 'Biometria', description: 'Captura de biometria del cliente' },
     { label: 'Firma de Pagare', description: 'Descarga y firma de pagare del cliente' },
     { label: 'Finalizar', description: 'Finalizacion de credito moto' },
+];
+
+export const portabilidadNomina = [
+    { label: 'Busqueda', description: 'Busqueda de solicitud' },
+    { label: 'Biometria', description: 'Captura de biometria del cliente' },
+    { label: 'Seleccion de cuenta', description: 'Selecciona la cuenta a realizar la portabilidad' },
+    { label: 'Banquero Personal', description: 'Información del banquero' },
+    { label: 'Cuenta Origen', description: 'Datos de la cuenta origen' },
+    { label: 'DOCUMENTACION', description: 'Impresión y digitalización de los documentos del cliente' },
+    { label: 'Finalizar', description: 'Finalización de tramite' },
 ];

@@ -10,7 +10,7 @@ import AltaBuroCredito from '../../Global/Views/AltaBuroCredito'
 import SeleccionTDC from '../Views/SeleccionTDC'
 import KycTdcView from '../Views/KycTdcView'
 import DocumentsProgress from '../../Global/Views/AltaDocumentacion'
-import { altaTDC, altaTDCDocumentos } from '../../../Data/MocksDocumentos'
+import {altaTDCDocumentos } from '../../../Data/MocksDocumentos'
 import EnvioSolicitudCredito from '../Views/EnvioSolicitudCredito'
 import AltaTdc from '../Views/AltaTdc'
 import AltaReferenciasCliente from '../../Global/Views/AltaReferenciasCliente'
@@ -75,12 +75,6 @@ const AltaTDCPage = () => {
           )}
           {activeStep === 8 && (
             <EnvioSolicitudCredito onNext={handleNext} />
-          )}
-          {activeStep === 9 && (
-            <DocumentsProgress onNext={handleNext} documents={altaTDC} />
-          )}
-          {activeStep === 10 && (
-            <AltaTdc />
           )}
         </Box>
       </Box>

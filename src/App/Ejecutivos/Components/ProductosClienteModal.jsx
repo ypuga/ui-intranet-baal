@@ -52,9 +52,9 @@ const ProductosClienteModal = ({ open, handleClose }) => {
                 <TableCell>{cuenta?.fechaAlta}</TableCell>
                 <TableCell>{cuenta?.status}</TableCell>
                 <TableCell>
-                  {cuenta?.noTarjeta != null
+                  {cuenta?.noTarjeta == null
                     ? <Button size="small">Asignar</Button>
-                    : <Typography variant="body2" color="text.secondary">Sin Asignar</Typography>}
+                    : <Typography variant="body2" color="text.secondary">{cuenta?.noTarjeta}</Typography>}
                 </TableCell>
                 <TableCell>
                   {cuenta?.isCancelable
@@ -99,9 +99,9 @@ const ProductosClienteModal = ({ open, handleClose }) => {
                 <TableCell>{credito?.fechaApertura}</TableCell>
                 <TableCell>$ {credito?.lineaCredito}</TableCell>
                 <TableCell>
-                  {credito?.noTarjeta != null
+                  {credito?.noTarjeta == null
                     ? <Button size="small">Asignar</Button>
-                    : <Typography variant="body2" color="text.secondary">Sin Asignar</Typography>}
+                    : <Typography variant="body2" color="text.secondary">{credito?.noTarjeta}</Typography>}
                 </TableCell>
                 <TableCell>
                   {credito?.isCancelable

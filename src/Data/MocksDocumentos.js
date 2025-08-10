@@ -10,6 +10,7 @@ export const altaCuentaDocumentos = [
 export const altaTDCDocumentos = [
     { scan: true, print: true, docToPrint: '', title: 'SOLICITUD TDC BANCO ALAMEDA' },
     { scan: true, print: true, docToPrint: '', title: 'FORMATO DE CONSULTA DE BURO DE CREDITO' },
+    { scan: true, print: true, docToPrint: '', title: 'CONTRATO GLOBAL DE TDC' },
 ]
 
 export const altaCRMDocumentos = [
@@ -24,4 +25,9 @@ export const pagareCRM = [
 
 export const altaTDC = [
     { scan: true, print: true, docToPrint: '', title: 'CONTRATO GLOBAL DE TDC' },
+]
+
+export const altaPortabilidadDocumentos = [
+    { scan: true, print: true, docToPrint: '', title: 'AVISO DE PRIVACIDAD PORTABILIDAD DE NOMINA' },
+    { scan: true, print: true, docToPrint: '', title: 'SOLICITUD DE PORTABILIDAD DE NOMINA' }
 ]

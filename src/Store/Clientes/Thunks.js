@@ -121,6 +121,25 @@ export const startAsignarTarjetaCredito = () => {
     }
 }
 
+export const startAsignarTarjetaCreditoIdCredito = (idCredito) => {
+    return async (dispatch, getState) => {
+        try {
+            const resp = await ClientesApi.asignarTarjetaCredito(
+                idCredito,
+                getState().sistema.user,
+                getState().sistema.sucursal
+            );
+            if (resp.status == 200 || resp.status == 'OK') {
+                return resp;
+            } else {
+                return resp;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+}
+
 export const startObtenerCuentasYCreditosDelCliente = (idClienteUnico) => {
     return async (dispatch, getState) => {
         const resp = await ClientesApi.obtenerCuentasCliente(idClienteUnico);
@@ -138,6 +157,36 @@ export const startObtenerCuentasYCreditosDelCliente = (idClienteUnico) => {
                 return resp;
             }
 
+        } catch (error) {
+            throw error;
+        }
+    }
+}
+
+export const strartObtenerCuentasCliente = (idClienteUnico) => {
+    return async (dispatch, getState) => {
+        const resp = await ClientesApi.obtenerCreditosCliente(idClienteUnico);
+        try {
+            if (resp.status == 200 || resp.status == 'OK') {
+                return resp;
+            } else {
+                return resp;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+}
+
+export const startObtenerCreditosCliente = (idClienteUnico) => {
+    return async (dispatch, getState) => {
+        const resp = await ClientesApi.obtenerCreditosCliente(idClienteUnico);
+        try {
+            if (resp.status == 200 || resp.status == 'OK') {
+                return resp;
+            } else {
+                return resp;
+            }
         } catch (error) {
             throw error;
         }
@@ -179,5 +228,11 @@ export const startCertificarTelefonoCliente = (idClienteUnico, phone) => {
 export const startPutCliente = (idClienteUnico) => {
     return async (dispatch, getState) => {
         dispatch(setCliente({idClienteUnico}))
+    }
+}
+
+export const startPutCuentaCliente = (cuenta) => {
+    return async (dispatch, getState) => {
+        dispatch(setCuentasCliente({cuenta}));
     }
 }

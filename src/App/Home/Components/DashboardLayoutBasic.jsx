@@ -14,6 +14,7 @@ import UserInfo from './UserInfo';
 import SavingsIcon from '@mui/icons-material/Savings';
 import { useNavigate, useLocation } from 'react-router-dom'; // Importar useLocation
 import { AccountBalanceWallet, AddCard, ChecklistRtl, CreditCard, ExitToApp, History, LocalMall, Money, ShoppingBasket } from '@mui/icons-material';
+import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import { Avatar, Button, Card } from '@mui/material';
 import LogOutComponent from './LogOutComponent';
 import { useDispatch, useSelector } from 'react-redux';
@@ -66,6 +67,11 @@ const NAVIGATION = [
         segment: 'crm',
         title: 'Credito Moto',
         icon: <TwoWheelerIcon />,
+      },
+      {
+        segment: 'portabilidad-nomina',
+        title: 'Portabilidad de Nomina',
+        icon: <RequestQuoteIcon />,
       },
     ],
   },
