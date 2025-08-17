@@ -52,6 +52,25 @@ export const startAsignarTarjetaDebito = () => {
     }
 }
 
+export const startAsignarTarjetaDebitoUnico = (idCuenta) => {
+    return async (dispatch, getState) => {
+        try {
+            const resp = await ClientesApi.asignarTarjetaDebito(
+                idCuenta,
+                getState().sistema.user,
+                getState().sistema.sucursal
+            );
+            if (resp.status == 200 || resp.status == 'OK') {
+                return resp;
+            } else {
+                return resp;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+}
+
 export const startObtenerClienteInfo = (parametro, reference, segmento) => {
     return async (dispatch, getState) => {
         try {
