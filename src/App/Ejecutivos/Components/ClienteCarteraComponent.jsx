@@ -2,7 +2,7 @@ import { Email, Phone } from '@mui/icons-material';
 import { Button, Card, CardActions, CardContent, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import React from 'react';
 
-const ClienteCarteraComponent = ({ cliente, handleOpen }) => {
+const ClienteCarteraComponent = ({ cliente, handleOpen, handleOpenOfertas }) => {
     const hasOfertas = cliente?.ofertasFlag;
 
     return (
@@ -54,6 +54,7 @@ const ClienteCarteraComponent = ({ cliente, handleOpen }) => {
                     variant="contained"
                     fullWidth
                     disabled={!hasOfertas}
+                    onClick={()=>handleOpenOfertas(cliente?.idClienteUnico)}
                     sx={{
                         bgcolor: 'green',
                         color: 'white',

@@ -8,7 +8,8 @@ import useToast from '../../../Hooks/useToast'
 import { useLoading } from '../../../Hooks/LoadingContext'
 import FilterCarteraComponents from '../Components/FilterCarteraComponents'
 import ProductosClienteModal from '../Components/ProductosClienteModal'
-import { startObtenerCuentasYCreditosDelCliente } from '../../../Store/Clientes/Thunks'
+import { startObtenerClienteInfo, startObtenerCuentasYCreditosDelCliente, startObtenerOfertasClientes } from '../../../Store/Clientes/Thunks'
+import ClienteOfertasModal from '../Components/ClienteOfertasModal'
 
 const CarteraPage = () => {
     const dispatch = useDispatch();
@@ -17,6 +18,9 @@ const CarteraPage = () => {
     const { isLoading, startLoading, stopLoading } = useLoading();
     const [filtros, setFiltros] = useState({ tipo: 'nombre', valor: '' });
     const [open, setOpen] = useState(false);
+    const [openOfertas, setOpenOfertas] = useState(false);
+    const [ofertasData, setofertasData] = useState([]);
+    const [informacionContacto, setinformacionContacto] = useState();
 
 
     useEffect(() => {
@@ -60,6 +64,10 @@ const CarteraPage = () => {
         setOpen(false);
     };
 
+    const handleCloseCliente = () => {
+        setOpenOfertas(false);
+    };
+
     const handleOpen = async (idClienteUnico) => {
         startLoading();
         const resp = await dispatch(startObtenerCuentasYCreditosDelCliente(idClienteUnico));
@@ -71,12 +79,35 @@ const CarteraPage = () => {
         stopLoading();
     };
 
+    const handleOpenOfertas = async (idClienteUnico) => {
+        startLoading();
+        const resp = await dispatch(startObtenerOfertasClientes(idClienteUnico));
+        if (resp?.status == 'OK' || resp.status == 200) {
+            const contacto = await dispatch(startObtenerClienteInfo('ID_CLIENTE_UNICO', idClienteUnico, 'CONTACTO'));
+            if (contacto?.status == 'OK' || contacto?.status == 200) {
+                setinformacionContacto(contacto?.data);
+                setofertasData(resp?.data);
+                setOpenOfertas(true);
+            }
+        } else {
+            showToast(resp?.message, 'error', 'top-center');
+        }
+        stopLoading();
+    };
+
+
 
     return (
         <AppLayout>
             <ProductosClienteModal
                 open={open}
                 handleClose={() => handleClose()}
+            />
+            <ClienteOfertasModal
+                open={openOfertas}
+                handleClose={() => handleCloseCliente()}
+                ofertasData={ofertasData}
+                informacionContacto={informacionContacto}
             />
             <Typography component='h1' sx={{ fontSize: 'xx-large' }}>Cartera del ejecutivo</Typography>
             <Divider />
@@ -94,7 +125,7 @@ const CarteraPage = () => {
                                 md={4}
                                 lg={2.4}
                             >
-                                <ClienteCarteraComponent cliente={cliente} handleOpen={(idClienteUnico) => handleOpen(idClienteUnico)} />
+                                <ClienteCarteraComponent cliente={cliente} handleOpen={(idClienteUnico) => handleOpen(idClienteUnico)} handleOpenOfertas={(idClienteUnico) => handleOpenOfertas(idClienteUnico)} />
                             </Grid2>
                         ))}
                     </Grid2>

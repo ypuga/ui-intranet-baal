@@ -17,23 +17,27 @@ import {
   Paper,
   CircularProgress
 } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import useToast from '../../../Hooks/useToast'
-import { startAsignarTarjetaDebitoUnico } from '../../../Store/Clientes/Thunks'
+import { startAsignarTarjetaCreditoUnico, startAsignarTarjetaDebitoUnico } from '../../../Store/Clientes/Thunks'
+import { useNavigate } from 'react-router-dom'
 
 const ProductosClienteModal = ({ open, handleClose }) => {
   const { cuentasCliente, creditosCliente } = useSelector(state => state.clientes);
+  const [cuentaSeleccionada, setCuentaSeleccionada] = useState(null);
+  const cuentaMemo = useMemo(() => cuentaSeleccionada, [cuentaSeleccionada]);
   const [isLoading, setisLoading] = useState('asignar');
   const [card, setcard] = useState('');
   const { showToast } = useToast();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setcard('');
     setisLoading('asignar')
   }, [])
-  
+
 
   const renderTablaCuentas = (cuentas) => {
     if (!Array.isArray(cuentas)) {
@@ -44,16 +48,20 @@ const ProductosClienteModal = ({ open, handleClose }) => {
       );
     }
 
-    const asignarTarjetaCredito = async (idCuenta) => {
+    const asignarTarjetaDebito = async (idCuenta) => {
       setisLoading('loading');
       const resp = await dispatch(startAsignarTarjetaDebitoUnico(idCuenta));
       if (resp?.status == 'OK' || resp?.status == 200) {
         setcard(resp?.data?.noTarjeta),
-        setisLoading('showCard');
+          setisLoading('showCard');
       } else {
         showToast(resp.message, 'error', 'top-center');
         setisLoading('asignar');
       }
+    }
+
+    const handleCancelarCuenta = (cuenta, idClienteUnico) => {
+      navigate(`/clientes/cancelacion/cuenta-cliente?cuenta=${cuenta}&cliente=${idClienteUnico}`);
     }
 
     return (
@@ -81,7 +89,7 @@ const ProductosClienteModal = ({ open, handleClose }) => {
                     isLoading === "asignar" ? (
                       <Button
                         size="small"
-                        onClick={() => asignarTarjetaCredito(cuenta?.idCuenta)}
+                        onClick={() => asignarTarjetaDebito(cuenta?.idCuenta)}
                       >
                         Asignar
                       </Button>
@@ -101,7 +109,8 @@ const ProductosClienteModal = ({ open, handleClose }) => {
                 </TableCell>
                 <TableCell>
                   {cuenta?.isCancelable
-                    ? <Button color="error" size="small">Cancelar</Button>
+                    ? <Button color="error" size="small"
+                      onClick={() => handleCancelarCuenta(cuenta.idCuenta, cuenta.clienteUnico)}>Cancelar</Button>
                     : <Typography variant="body2" color="text.secondary"></Typography>}
                 </TableCell>
               </TableRow>
@@ -120,6 +129,17 @@ const ProductosClienteModal = ({ open, handleClose }) => {
           No hay cuentas disponibles.
         </Typography>
       );
+    }
+    const asignarTarjetaCredito = async (idCuenta) => {
+      setisLoading('loading');
+      const resp = await dispatch(startAsignarTarjetaCreditoUnico(idCuenta));
+      if (resp?.status == 'OK' || resp?.status == 200) {
+        setcard(resp?.data?.noTarjeta),
+          setisLoading('showCard');
+      } else {
+        showToast(resp.message, 'error', 'top-center');
+        setisLoading('asignar');
+      }
     }
     return (
       <TableContainer component={Paper} elevation={0} sx={{ border: '1px solid #e0e0e0', borderRadius: '12px', mt: 2 }}>

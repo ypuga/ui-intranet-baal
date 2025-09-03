@@ -71,6 +71,25 @@ export const startAsignarTarjetaDebitoUnico = (idCuenta) => {
     }
 }
 
+export const startAsignarTarjetaCreditoUnico = (idCuenta) => {
+    return async (dispatch, getState) => {
+        try {
+            const resp = await ClientesApi.asignarTarjetaCredito(
+                idCuenta,
+                getState().sistema.user,
+                getState().sistema.sucursal
+            );
+            if (resp.status == 200 || resp.status == 'OK') {
+                return resp;
+            } else {
+                return resp;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+}
+
 export const startObtenerClienteInfo = (parametro, reference, segmento) => {
     return async (dispatch, getState) => {
         try {
@@ -184,7 +203,7 @@ export const startObtenerCuentasYCreditosDelCliente = (idClienteUnico) => {
 
 export const strartObtenerCuentasCliente = (idClienteUnico) => {
     return async (dispatch, getState) => {
-        const resp = await ClientesApi.obtenerCreditosCliente(idClienteUnico);
+        const resp = await ClientesApi.obtenerCuentasCliente(idClienteUnico);
         try {
             if (resp.status == 200 || resp.status == 'OK') {
                 return resp;
@@ -228,12 +247,42 @@ export const startObtenerBeneficiariosCliente = (idClienteUnico) => {
     }
 }
 
+export const startObtenerOfertasClientes = (idClienteUnico) => {
+    return async (dispatch, getState) => {
+        const resp = await ClientesApi.obtenerOfertasCliente(idClienteUnico);
+        try {
+            if (resp.status == 200 || resp.status == 'OK') {
+                return resp;
+            } else {
+                return resp;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+}
+
 export const startCertificarTelefonoCliente = (idClienteUnico, phone) => {
     return async (dispatch, getState) => {
         const resp = await ClientesApi.certificarCorreoCliente(idClienteUnico, phone);
         try {
             if (resp.status == 200 || resp.status == 'OK') {
                 await dispatch(setBeneficiariosCliente(resp.data));
+                return resp;
+            } else {
+                return resp;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+}
+
+export const startCancelarCuentaClientes = (idCuenta) => {
+    return async (dispatch, getState) => {
+        const resp = await ClientesApi.cancelarCuentaCliente(idCuenta, getState().sistema.user);
+        try {
+            if (resp.status == 200 || resp.status == 'OK') {
                 return resp;
             } else {
                 return resp;

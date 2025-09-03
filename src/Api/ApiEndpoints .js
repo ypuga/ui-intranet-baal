@@ -34,7 +34,9 @@ export class ApiEndpoints  {
         OBTENER_CUENTAS_CLIENTE: this.BASE_URL+'/cliente/cuentas/cliente/',
         OBTENER_CREDITOS_CLIENTE: this.BASE_URL+'/cliente/creditos/cliente/',
         OBTENER_BENEFICIARIOS_CLIENTE: this.BASE_URL+'/prospecto/beneficiarios/cu/',
-        CERTIFICACION_PHONE: this.BASE_URL+'/cliente/cliente/contacto/certificar/telefono/'
+        CERTIFICACION_PHONE: this.BASE_URL+'/cliente/cliente/contacto/certificar/telefono/',
+        OBTENER_OFERTAS_CLIENTE: this.BASE_URL+'/cliente/cliente/ofertas/',
+        CANCELAR_CUENTA_CLIENTE: this.BASE_URL+'/cliente/cuentas/cliente/cancelar/'
     }
 
     static FRONT = {

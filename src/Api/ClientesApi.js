@@ -200,7 +200,43 @@ const certificarCorreoCliente = async (idClienteUnico, telefono) => {
     }
 }
 
+const obtenerOfertasCliente = async (idClienteUnico) => {
+    try {
+        const resp = await axios.get(`${ApiEndpoints.CLIENTES.OBTENER_OFERTAS_CLIENTE}${idClienteUnico}`);
+        return {
+            status: resp.status,
+            message: resp.message,
+            data: resp.data.response
+        };
+    } catch (error) {
+        const status = error.response?.status || 500;
+        const message = error.response?.data?.message || error.message || 'Error';
+        return {
+            status,
+            message
+        };
+    }
+}
+
+const cancelarCuentaCliente = async (idClienteUnico, idEmpleado) => {
+    try {
+        const resp = await axios.put(`${ApiEndpoints.CLIENTES.CANCELAR_CUENTA_CLIENTE}${idClienteUnico}?idEmpleado=${idEmpleado}`);
+        return {
+            status: resp.status,
+            message: resp.message,
+            data: resp.data.response
+        };
+    } catch (error) {
+        const status = error.response?.status || 500;
+        const message = error.response?.data?.message || error.message || 'Error';
+        return {
+            status,
+            message
+        };
+    }
+}
+
 export default { altaClienteUnico, altaCuentaCliente, asignarTarjetaDebito, obtenerInformacionCliente
     ,obtenerCarteraClientes, asignarTarjetaCredito, altaCredito, obtenerCuentasCliente, obtenerCreditosCliente,
-    obtenerBeneficiariosCliente, certificarCorreoCliente
+    obtenerBeneficiariosCliente, certificarCorreoCliente, obtenerOfertasCliente, cancelarCuentaCliente
  }

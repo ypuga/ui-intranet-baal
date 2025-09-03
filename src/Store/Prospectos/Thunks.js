@@ -1,6 +1,6 @@
 import SolicitudesApi from "../../Api/SolicitudesApi";
 import IDProductosUtil from "../../Utils/IDProductosUtil";
-import { deleteSolicitud, setPersonalData, setSameIne, setSolicitud } from "./Prospectos";
+import { deleteSolicitud, resetAuthState, setPersonalData, setSameIne, setSolicitud } from "./Prospectos";
 
 export const startSaveProspectoPersonalData = (data) => {
     return async (dispatch, getState) => {
@@ -173,6 +173,7 @@ export const startCreateNewSolicitud = (producto) => {
         }
         try {
             const resp = await SolicitudesApi.createNewSolicitud(createSolicitudRequest);
+            dispatch(resetAuthState());
             dispatch(setSolicitud(resp?.data));
         } catch (error) {
             console.error(error);

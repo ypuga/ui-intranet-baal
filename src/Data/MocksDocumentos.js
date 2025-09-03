@@ -31,3 +31,7 @@ export const altaPortabilidadDocumentos = [
     { scan: true, print: true, docToPrint: '', title: 'AVISO DE PRIVACIDAD PORTABILIDAD DE NOMINA' },
     { scan: true, print: true, docToPrint: '', title: 'SOLICITUD DE PORTABILIDAD DE NOMINA' }
 ]
+
+export const cancelacionCuentaDocumentos = [
+    { scan: true, print: true, docToPrint: '', title: 'SOLICITUD DE CANCELACION DE CUENTA' },
+]

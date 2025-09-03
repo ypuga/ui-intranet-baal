@@ -100,3 +100,10 @@ export const portabilidadNomina = [
     { label: 'DOCUMENTACION', description: 'Impresión y digitalización de los documentos del cliente' },
     { label: 'Finalizar', description: 'Finalización de tramite' },
 ];
+
+export const cancelacionCuenta = [
+    { label: 'Confirmacion', description: 'Confirmar la cancelacion de la cuente' },
+    { label: 'Biometria', description: 'Captura de biometria del cliente' },
+    { label: 'DOCUMENTACION', description: 'Impresión y digitalización de los documentos del cliente' },
+    { label: 'Cancelacion', description: 'Finalización de tramite' },
+];
