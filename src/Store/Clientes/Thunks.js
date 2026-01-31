@@ -1,5 +1,5 @@
 import ClientesApi from "../../Api/ClientesApi";
-import { setBeneficiariosCliente, setBp, setCliente, setCreditosCliente, setCuenta, setCuentasCliente } from "./Clientes";
+import { resetAuthState, setBeneficiariosCliente, setBp, setCliente, setCreditosCliente, setCuenta, setCuentasCliente } from "./Clientes";
 
 export const startAltaCliente = () => {
     return async (dispatch, getState) => {
@@ -302,5 +302,11 @@ export const startPutCliente = (idClienteUnico) => {
 export const startPutCuentaCliente = (cuenta) => {
     return async (dispatch, getState) => {
         dispatch(setCuentasCliente({cuenta}));
+    }
+}
+
+export const startResetAuthState = () => {
+    return async (dispatch, getState) => {
+        dispatch(resetAuthState());
     }
 }

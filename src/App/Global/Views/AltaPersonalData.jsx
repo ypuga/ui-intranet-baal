@@ -13,6 +13,7 @@ import { startGetCurpInfo } from '../../../Store/Datos/Thunks';
 import { startCreateNewSolicitud, startNextStep, startRetomarSolicitud, startSaveProspectoPersonalData } from '../../../Store/Prospectos/Thunks';
 import SingleSelect from '../Components/MultipleSelect';
 import IDProductosUtil from '../../../Utils/IDProductosUtil';
+import { startResetAuthState } from '../../../Store/Clientes/Thunks';
 
 const AltaPersonalData = ({ onNext, actualStep }) => {
     const { isLoading, startLoading, stopLoading } = useLoading();
@@ -41,6 +42,7 @@ const AltaPersonalData = ({ onNext, actualStep }) => {
         await dispatch(startCreateNewSolicitud(values.producto));
         const resp = await dispatch(startSaveProspectoPersonalData(values));
         if (resp.status == 200) {
+            dispatch(startResetAuthState());
             onNext();
         } else {
             showToast(resp.message, 'error', 'top-center')

@@ -20,6 +20,7 @@ import LogOutComponent from './LogOutComponent';
 import { useDispatch, useSelector } from 'react-redux';
 import { logOutApp } from '../../../Store/Authetication/Thunks';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 
 const NAVIGATION = [
   {
@@ -103,6 +104,11 @@ const NAVIGATION = [
     segment: 'ejecutivo/cartera',
     title: 'Cartera de Clientes',
     icon: <AccountBalanceWallet />,
+  },
+  {
+    segment: 'ejecutivo/clientes',
+    title: 'Buscador de Clientes',
+    icon: <PersonSearchIcon />,
   },
 ];
 
