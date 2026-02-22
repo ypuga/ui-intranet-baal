@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useLoading } from '../../../Hooks/LoadingContext';
 import useToast from '../../../Hooks/useToast';
 import { useDispatch, useSelector } from 'react-redux';
-import { startEnviarSolicitudCredito } from '../../../Store/Prospectos/Thunks';
+import { startEnviarSolicitudCredito, startNextStep } from '../../../Store/Prospectos/Thunks';
 import { startAsignarTarjetaCreditoIdCredito, startObtenerCreditosCliente, strartObtenerCuentasCliente } from '../../../Store/Clientes/Thunks';
 
 const EnvioSolicitudCredito = ({ onNext }) => {
@@ -45,6 +45,7 @@ const EnvioSolicitudCredito = ({ onNext }) => {
                     const creditoHoy = lista.find(c => c.fechaApertura === hoy);
                     setcreditoCliente(creditoHoy || null);
                     const tarjeta = await dispatch(startAsignarTarjetaCreditoIdCredito(creditoHoy?.idCredito));
+                    await dispatch(startNextStep())
                     settarjeta(tarjeta?.data);
                 }
             } else {

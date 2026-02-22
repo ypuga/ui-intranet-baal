@@ -14,6 +14,7 @@ import { startCreateNewSolicitud, startNextStep, startRetomarSolicitud, startSav
 import SingleSelect from '../Components/MultipleSelect';
 import IDProductosUtil from '../../../Utils/IDProductosUtil';
 import { startResetAuthState } from '../../../Store/Clientes/Thunks';
+import { setSolicitud } from '../../../Store/Prospectos/Prospectos';
 
 const AltaPersonalData = ({ onNext, actualStep }) => {
     const { isLoading, startLoading, stopLoading } = useLoading();
@@ -44,6 +45,10 @@ const AltaPersonalData = ({ onNext, actualStep }) => {
         if (resp.status == 200) {
             dispatch(startResetAuthState());
             onNext();
+        } else if (resp.status == 409) {
+            setOpen(true);
+            dispatch(setSolicitud(resp?.data?.response[0]));
+            setsolicitudExistente(resp?.data?.response[0])
         } else {
             showToast(resp.message, 'error', 'top-center')
         }
@@ -55,6 +60,7 @@ const AltaPersonalData = ({ onNext, actualStep }) => {
         apellidoPaterno: Yup.string().required('Requerido'),
         fechaNacimiento: Yup.date().required('Requerido'),
         rfc: Yup.string().required('Requerido'),
+        estadoNacimiento: Yup.string().required('Requerido'),
     });
 
     const handleClose = () => {
@@ -71,10 +77,10 @@ const AltaPersonalData = ({ onNext, actualStep }) => {
             setsolicitudExistente(respRetomar?.data);
             setOpen(true);
             setValues((prev) => ({
-            ...prev,
-            curp: '',
-            producto: ''
-        }));
+                ...prev,
+                curp: '',
+                producto: ''
+            }));
             return;
         }
         startLoading();
@@ -111,13 +117,13 @@ const AltaPersonalData = ({ onNext, actualStep }) => {
             flexDirection="column"
             sx={{ '& .MuiTextField-root': { m: 1 } }}
         >
-            <CuentaModal 
-                open={open} 
-                handleClose={handleClose} 
-                setisCurpValidate={setisCurpValidate} 
-                solicitudExistente={solicitudExistente} 
-                actualStep={(step)=>actualStep(step)}
-                />
+            <CuentaModal
+                open={open}
+                handleClose={handleClose}
+                setisCurpValidate={setisCurpValidate}
+                solicitudExistente={solicitudExistente}
+                actualStep={(step) => actualStep(step)}
+            />
             <Typography variant="h5" gutterBottom>
                 INFORMACION PERSONAL DEL CLIENTE
             </Typography>
@@ -273,10 +279,12 @@ const AltaPersonalData = ({ onNext, actualStep }) => {
                                         <Grid2 container rowSpacing={1} mt={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                             <Grid2 size={6}>
                                                 <SingleSelect
-                                                    disabled={values.estadoNacimiento != '' ? true : false}
+                                                    disabled={values.estadoNacimiento !== ''}
                                                     value={personalInfoCurp.isValid ? values.estadoNacimiento : ''}
                                                     values={estadosMexico}
-                                                    placeholder="Estado de Nacimiento" />
+                                                    placeholder="Estado de Nacimiento"
+                                                    onChange={handleChange('estadoNacimiento')}
+                                                />
                                             </Grid2>
                                             <Grid2 size={6}>
                                                 <TextField
