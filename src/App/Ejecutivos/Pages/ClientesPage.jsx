@@ -1,5 +1,14 @@
-import { Box, Divider, TextField, Typography, InputAdornment, IconButton, Grid2 } from '@mui/material'
+import {
+    Box,
+    TextField,
+    Typography,
+    InputAdornment,
+    IconButton,
+    Paper,
+    Grid
+} from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
+import BackspaceIcon from '@mui/icons-material/Backspace'
 import AppLayout from '../../Layout/AppLayout'
 import RowRadioButtonsGroup from '../Components/RowRadioButtonsGroup'
 import { useLoading } from '../../../Hooks/LoadingContext'
@@ -13,56 +22,73 @@ import CardContactoComponent from '../Components/CardContactoComponent'
 import CardBanqueroPersonalComponente from '../Components/CardBanqueroPersonalComponente'
 
 const ClientesPage = () => {
-    const [showInput, setShowInput] = useState(false)
     const [criterio, setCriterio] = useState('')
     const [referencia, setReferencia] = useState('')
-    const { startLoading, stopLoading } = useLoading()
+    const [showInput, setShowInput] = useState(false)
     const [showClient, setShowClient] = useState(false)
     const [disabledInput, setDisabledInput] = useState(false)
-    const [generalInfo, setGeneralInfo] = useState(null);
-    const [datosContacto, setdatosContacto] = useState();
-    const [personalData, setpersonalData] = useState();
-    const [bpData, setbpData] = useState();
+
+    const [generalInfo, setGeneralInfo] = useState(null)
+    const [datosContacto, setdatosContacto] = useState(null)
+    const [personalData, setpersonalData] = useState(null)
+    const [bpData, setbpData] = useState(null)
+
     const dispatch = useDispatch()
+    const { startLoading, stopLoading } = useLoading()
     const { showToast } = useToast()
 
     const handleCriterioChange = (value) => {
         setCriterio(value)
         setReferencia('')
         setShowInput(true)
+        setShowClient(false)
+    }
+
+    const resetSearch = () => {
+        setDisabledInput(false)
+        setShowClient(false)
+        setReferencia('')
     }
 
     const searchClient = async () => {
         try {
-            startLoading();
-            const respGeneral = await dispatch(startObtenerClienteInfo(criterio, referencia, 'GENERAL'))
-            if (respGeneral?.status === 200 || respGeneral?.status === 'OK') {
-                setShowClient(true);
-                setDisabledInput(true);
-                setGeneralInfo(respGeneral?.data);
-                const respDP = await dispatch(startObtenerClienteInfo(criterio, referencia, 'PERSONAL_DATA'));
-                if (respDP?.status == 200 || respDP?.status == 'OK') {
-                    setpersonalData(respDP?.data);
-                    const respContacto = await dispatch(startObtenerClienteInfo(criterio, referencia, 'CONTACTO'));
-                    if (respContacto?.status == 'OK' || respContacto?.status == 200) {
-                        setdatosContacto(respContacto?.data);
-                        const respBp = await dispatch(startObtenerClienteInfo(criterio, referencia, 'BP')) 
-                        if (respBp?.status) {
-                            setbpData(respBp?.data);
-                        } else {
-                            showToast('Error al encontrar la informacion de banquero personal', 'warning', 'top-center');
-                        }
-                    } else {
-                        showToast('Error al encontrar la informacion de contacto', 'warning', 'top-center');
-                    }
-                } else {
-                    showToast('Error al encontrar la informacion personal del cliente', 'warning', 'top-center');
-                }
+            startLoading()
+
+            const respGeneral = await dispatch(
+                startObtenerClienteInfo(criterio, referencia, 'GENERAL')
+            )
+
+            if (respGeneral?.status !== 200 && respGeneral?.status !== 'OK') {
+                showToast('Cliente no encontrado', 'warning', 'top-center')
+                return
             }
+
+            setGeneralInfo(respGeneral?.data)
+            setShowClient(true)
+            setDisabledInput(true)
+
+            const [respDP, respContacto, respBp] = await Promise.all([
+                dispatch(startObtenerClienteInfo(criterio, referencia, 'PERSONAL_DATA')),
+                dispatch(startObtenerClienteInfo(criterio, referencia, 'CONTACTO')),
+                dispatch(startObtenerClienteInfo(criterio, referencia, 'BP'))
+            ])
+
+            if (respDP?.status === 200 || respDP?.status === 'OK') {
+                setpersonalData(respDP?.data)
+            }
+
+            if (respContacto?.status === 200 || respContacto?.status === 'OK') {
+                setdatosContacto(respContacto?.data)
+            }
+
+            if (respBp?.status === 200 || respBp?.status === 'OK') {
+                setbpData(respBp?.data)
+            }
+
         } catch (err) {
             showToast('Error inesperado al buscar cliente', 'error', 'top-center')
         } finally {
-            stopLoading();
+            stopLoading()
         }
     }
 
@@ -76,68 +102,94 @@ const ClientesPage = () => {
 
     return (
         <AppLayout>
-            <Typography component="h1" sx={{ fontSize: 'xx-large' }}>
-                Buscador de Clientes
-            </Typography>
+            <Box
+                sx={{
+                    maxWidth: 1200,
+                    mx: 'auto',
+                    px: 3,
+                    py: 4,
+                    backgroundColor: '#f7f9fc',
+                    minHeight: '100vh'
+                }}
+            >
+                {/* HEADER */}
+                <Typography variant="h4" fontWeight={700} mb={4}>
+                    Buscador de Clientes
+                </Typography>
 
-            <Divider />
+                {/* BUSCADOR CARD */}
+                <Paper
+                    elevation={0}
+                    sx={{
+                        p: 4,
+                        borderRadius: 4,
+                        border: '1px solid',
+                        borderColor: 'divider',
+                        mb: 5,
+                        backgroundColor: '#fff'
+                    }}
+                >
+                    <Typography variant="h6" mb={2} fontWeight={600}>
+                        Criterio de búsqueda
+                    </Typography>
 
-            <Box>
-                <RowRadioButtonsGroup handleCriterioChange={handleCriterioChange} />
-            </Box>
+                    <RowRadioButtonsGroup handleCriterioChange={handleCriterioChange} />
 
-            <Divider />
+                    {showInput && (
+                        <Box mt={3} maxWidth={400}>
+                            <TextField
+                                label={labels[criterio] || 'Referencia'}
+                                fullWidth
+                                disabled={disabledInput}
+                                value={referencia}
+                                onChange={(e) =>
+                                    setReferencia(e.target.value.toUpperCase())
+                                }
+                                size="medium"
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            {!disabledInput ? (
+                                                <IconButton onClick={searchClient}>
+                                                    <SearchIcon />
+                                                </IconButton>
+                                            ) : (
+                                                <IconButton onClick={resetSearch}>
+                                                    <BackspaceIcon />
+                                                </IconButton>
+                                            )}
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                        </Box>
+                    )}
+                </Paper>
 
-            {showInput && (
-                <Box sx={{ width: '100%' }} mt={2}>
-                    <TextField
-                        label={labels[criterio] || 'Referencia'}
-                        placeholder="Referencia"
-                        fullWidth
-                        disabled={disabledInput}
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton onClick={searchClient} sx={{ marginRight: '-10px' }}>
-                                        <SearchIcon />
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                        }}
-                        inputProps={{
-                            maxLength: criterio?.maxLength || 50,
-                            style: { textTransform: 'uppercase' },
-                        }}
-                        sx={{ maxWidth: 400 }}
-                        value={referencia}
-                        onChange={(e) => setReferencia(e.target.value.toUpperCase())}
-                        size="small"
-                    />
-                </Box>
-            )}
-
-            {showClient && generalInfo && (
-                <Box mt={4}>
-                    <Grid2 container spacing={2}>
-                        <Grid2 xs={6} p={0} m={0}>
+                {/* RESULTADOS */}
+                {showClient && (
+                    <Grid container spacing={4}>
+                        {/* GENERAL + CONTACTO */}
+                        <Grid item xs={12} md={6}>
                             <CardGeneralComponent data={generalInfo} />
-                        </Grid2>
-                        <Grid2>
+                        </Grid>
+
+                        <Grid item xs={12} md={6}>
                             <CardContactoComponent data={datosContacto} />
-                        </Grid2>
-                    </Grid2>
-                    <Grid2 container spacing={1} mt={2} sx={{ width: '100%' }}>
-                        <Grid2 xs={12} p={0} m={0}>
+                        </Grid>
+
+                        {/* DATOS PERSONALES */}
+                        <Grid item xs={12}>
                             <CardPersonalDataComponent data={personalData} />
-                        </Grid2>
-                    </Grid2>
-                    <Grid2 container spacing={1} mt={2} sx={{ width: '100%' }}>
-                        <Grid2 xs={12} p={0} m={0}>
+                        </Grid>
+
+                        {/* BANQUERO */}
+                        <Grid item xs={12}>
                             <CardBanqueroPersonalComponente data={bpData} />
-                        </Grid2>
-                    </Grid2>
-                </Box>
-            )}
+                        </Grid>
+                    </Grid>
+                )}
+            </Box>
         </AppLayout>
     )
 }

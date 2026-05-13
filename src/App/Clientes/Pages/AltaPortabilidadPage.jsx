@@ -10,6 +10,7 @@ import SeleccionCuentasClienteView from '../Views/SeleccionCuentasClienteView'
 import AltaBanqueroPersonal from '../../Global/Views/AltaBanqueroPersonal'
 import AltaCuentaOrigenPortabilidad from '../Views/AltaCuentaOrigenPortabilidad'
 import { altaPortabilidadDocumentos } from '../../../Data/MocksDocumentos'
+import AltaPortabilidadNominaView from "../Views/AltaPortabilidadNominaView.jsx";
 
 const AltaPortabilidadPage = () => {
 
@@ -64,7 +65,7 @@ const AltaPortabilidadPage = () => {
                         <DocumentsProgress onNext={handleNext} documents={altaPortabilidadDocumentos} />
                     )}
                     {activeStep === 6 && (
-                        <AltaBanqueroPersonal onNext={handleNext} handleStep={handleStep} />
+                        <AltaPortabilidadNominaView onNext={handleNext}/>
                     )}
                 </Box>
             </Box>

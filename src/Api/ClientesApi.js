@@ -236,7 +236,26 @@ const cancelarCuentaCliente = async (idClienteUnico, idEmpleado) => {
     }
 }
 
+const solicitudPortabilidadNomina = async (data) => {
+    try {
+        const resp = await axios.post(`${ApiEndpoints.CLIENTES.SOLICITUD_PORTABILIDAD_NOMINA}`, data);
+        console.log(resp);
+        return {
+            status: resp.status,
+            message: resp.data.message,
+            data: resp.data.response
+        };
+    } catch (error) {
+        const status = error.response?.status || 500;
+        const message = error.response?.data?.message || error.message || 'Error';
+        return {
+            status,
+            message
+        };
+    }
+}
+
 export default { altaClienteUnico, altaCuentaCliente, asignarTarjetaDebito, obtenerInformacionCliente
     ,obtenerCarteraClientes, asignarTarjetaCredito, altaCredito, obtenerCuentasCliente, obtenerCreditosCliente,
-    obtenerBeneficiariosCliente, certificarCorreoCliente, obtenerOfertasCliente, cancelarCuentaCliente
+    obtenerBeneficiariosCliente, certificarCorreoCliente, obtenerOfertasCliente, cancelarCuentaCliente, solicitudPortabilidadNomina
  }

@@ -196,8 +196,7 @@ const ProductosClienteModal = ({ open, handleClose }) => {
       <Divider />
       <DialogContent>
         <Typography variant='h6' sx={{ mt: 1, mb: 1 }}><strong>Cuentas del cliente</strong></Typography>
-        {renderTablaCuentas(cuentasCliente)}
-
+        {renderTablaCuentas(cuentasCliente.length > 0 ? cuentasCliente.filter(f => f.producto !== 'CLIENTE UNICO') : null )}
         <Typography variant='h6' sx={{ mt: 4, mb: 1 }}><strong>Créditos del cliente</strong></Typography>
         {renderTablaCreditos(creditosCliente)}
       </DialogContent>

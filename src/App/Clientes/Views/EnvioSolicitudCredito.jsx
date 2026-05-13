@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useLoading } from '../../../Hooks/LoadingContext';
 import useToast from '../../../Hooks/useToast';
 import { useDispatch, useSelector } from 'react-redux';
-import { startEnviarSolicitudCredito, startNextStep } from '../../../Store/Prospectos/Thunks';
+import {startEnviarSolicitudCredito, startNextStep, startUpdateStatusSolicitud} from '../../../Store/Prospectos/Thunks';
 import { startAsignarTarjetaCreditoIdCredito, startObtenerCreditosCliente, strartObtenerCuentasCliente } from '../../../Store/Clientes/Thunks';
 
 const EnvioSolicitudCredito = ({ onNext }) => {
@@ -34,18 +34,17 @@ const EnvioSolicitudCredito = ({ onNext }) => {
 
     const sendSolicitudCredito = async () => {
         const resp = await dispatch(startEnviarSolicitudCredito());
-        if (resp?.status == 'OK' || resp?.status == 200) {
+        if (resp?.status === 'OK' || resp?.status === 200) {
             showToast('La solicitud de tarjeta ha sido enviada correctamente.', 'success', 'top-center');
             setstatusSolicitud({ status: resp?.data?.status, folio: resp?.data?.id });
-            if (resp?.data?.status == 'AUTORIZADO') {
+            if (resp?.data?.status === 'FINALIZADO') {
                 const creditosCliente = await dispatch(startObtenerCreditosCliente(resp?.data?.idClienteUnico));
-                if (creditosCliente?.status == 'OK' || creditosCliente?.status == 200) {
+                if (creditosCliente?.status === 'OK' || creditosCliente?.status === 200) {
                     const lista = creditosCliente?.data || [];
                     const hoy = new Date().toISOString().split('T')[0];
                     const creditoHoy = lista.find(c => c.fechaApertura === hoy);
                     setcreditoCliente(creditoHoy || null);
                     const tarjeta = await dispatch(startAsignarTarjetaCreditoIdCredito(creditoHoy?.idCredito));
-                    await dispatch(startNextStep())
                     settarjeta(tarjeta?.data);
                 }
             } else {
@@ -82,7 +81,7 @@ const EnvioSolicitudCredito = ({ onNext }) => {
                     </Box>
                     :
                     <Box>
-                        {(statusSolicitud?.status == 'EN_TRAMITE') ?
+                        {(statusSolicitud?.status === 'EN_TRAMITE') ?
                             <Box>
                                 <Alert severity="info" variant="filled">
                                     <AlertTitle>
@@ -91,7 +90,7 @@ const EnvioSolicitudCredito = ({ onNext }) => {
                                     </AlertTitle>
                                 </Alert>
                             </Box>
-                            : (statusSolicitud?.status == 'RECHAZADO') ?
+                            : (statusSolicitud?.status === 'RECHAZADO') ?
                                 <Box>
                                     <Alert severity="warning" variant="filled">
                                         <AlertTitle>
@@ -100,7 +99,7 @@ const EnvioSolicitudCredito = ({ onNext }) => {
                                         </AlertTitle>
                                     </Alert>
                                 </Box>
-                                : (statusSolicitud?.status == 'AUTORIZADO') ?
+                                : (statusSolicitud?.status === 'AUTORIZADO'  || statusSolicitud?.status === 'FINALIZADO' ) ?
                                     <Box>
                                         <Alert severity="success" variant="filled" sx={{ width: '100%' }}>
                                             <AlertTitle>

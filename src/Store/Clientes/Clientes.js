@@ -6,7 +6,8 @@ const initialState = {
     banqueroPersonal: {},
     cuentasCliente: {},
     creditosCliente: {},
-    beneficiariosCliente: {}
+    beneficiariosCliente: {},
+    folioPortabilidad: ''
 };
 
 export const clientesSlice = createSlice({
@@ -31,12 +32,15 @@ export const clientesSlice = createSlice({
         setBeneficiariosCliente: (state, action) => {
             state.beneficiariosCliente = action.payload;
         },
+        setfolioPortabilidadCliente: (state, action) => {
+            state.folioPortabilidad = action.payload;
+        },
         resetAuthState: () => initialState
     }
 });
 
 export const {setCliente, setCuenta, setBp, resetAuthState, 
-    setCreditosCliente, setCuentasCliente, setBeneficiariosCliente
+    setCreditosCliente, setCuentasCliente, setBeneficiariosCliente, setfolioPortabilidadCliente
 } = clientesSlice.actions;
 
 export default clientesSlice.reducer;

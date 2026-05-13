@@ -291,6 +291,42 @@ export const startObtenerSolicitud = (idSolicitud) => {
     }   
 }
 
+export const startUpdateStatusSolicitud = (idSolicitud, status) => {
+    return async (dispatch, getState) => {
+        try {
+            const resp = await SolicitudesApi.updateEstatuSolicitud(idSolicitud, status);
+            if (resp.status == 'OK') {
+                return resp;
+            } else {
+                return resp;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+}
+
+export const startGetPersonalDataProspecto = (curp) => {
+    return async (dispatch, getState) => {
+        try {
+            const resp = await SolicitudesApi.getPersonalDataProspecto(curp);
+            if (resp.status === 200) {
+                const item = resp.data[0];
+                const combined = {
+                    ...item.solicitud,
+                    ...item.personalData
+                };
+                await dispatch(setPersonalData(combined));
+                return resp;
+            } else {
+                return resp;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+}
+
 export const startPutSolicitud = (solicitud) => {
     return async (dispatch, getState) => {
         const newSolicitudData = {                 

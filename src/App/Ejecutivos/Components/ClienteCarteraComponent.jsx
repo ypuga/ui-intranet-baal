@@ -8,7 +8,7 @@ const ClienteCarteraComponent = ({ cliente, handleOpen, handleOpenOfertas }) => 
     return (
         <Card
             sx={{
-                width: 360,
+                width: 325,
                 borderRadius: 3,
                 p: 2,
                 bgcolor: '#e0f7fa',

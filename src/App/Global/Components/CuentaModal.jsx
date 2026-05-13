@@ -13,7 +13,12 @@ import Typography from '@mui/material/Typography';
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { DeleteOutline } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
-import { startDeleteSolicitud, startRetomarSolicitud } from '../../../Store/Prospectos/Thunks';
+import {
+  startDeleteSolicitud,
+  startGetPersonalDataProspecto,
+  startRetomarSolicitud
+} from '../../../Store/Prospectos/Thunks';
+import useToast from "../../../Hooks/useToast.js";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -24,13 +29,19 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-export default function CuentaModal({ open, handleClose, setisCurpValidate, solicitudExistente, actualStep }) {
+export default function CuentaModal({ open, handleClose, setisCurpValidate, solicitudExistente, actualStep, curp }) {
 
   const dispatch = useDispatch();
+  const { showToast } = useToast();
 
-  const handleContinueSolicitud = () => {
+  const handleContinueSolicitud = async () => {
     handleClose();
-    actualStep(solicitudExistente?.lastStep);
+    const resp = await dispatch(startGetPersonalDataProspecto(curp));
+    if (resp?.status === 200) {
+      actualStep(solicitudExistente?.lastStep);
+    } else {
+      showToast(resp?.message, 'error', 'top-center');
+    }
   }
 
   const handleDeleteSolicitud = async () => {

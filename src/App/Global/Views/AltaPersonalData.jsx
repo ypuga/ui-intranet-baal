@@ -21,6 +21,7 @@ const AltaPersonalData = ({ onNext, actualStep }) => {
     const [open, setOpen] = useState(false);
     const [isCurpValidate, setisCurpValidate] = useState(false);
     const [personalInfoCurp, setpersonalInfoCurp] = useState({});
+    const [curpGlobal, setCurpGlobal] = useState();
     const [solicitudExistente, setsolicitudExistente] = useState();
 
     const { showToast } = useToast();
@@ -42,10 +43,10 @@ const AltaPersonalData = ({ onNext, actualStep }) => {
     const handleSubmit = async (values) => {
         await dispatch(startCreateNewSolicitud(values.producto));
         const resp = await dispatch(startSaveProspectoPersonalData(values));
-        if (resp.status == 200) {
+        if (resp.status === 200) {
             dispatch(startResetAuthState());
             onNext();
-        } else if (resp.status == 409) {
+        } else if (resp.status === 409 && resp.response != null) {
             setOpen(true);
             dispatch(setSolicitud(resp?.data?.response[0]));
             setsolicitudExistente(resp?.data?.response[0])
@@ -75,6 +76,7 @@ const AltaPersonalData = ({ onNext, actualStep }) => {
         const respRetomar = await dispatch(startRetomarSolicitud(values?.curp, IDProductosUtil.getIdByName(values?.producto)));
         if (respRetomar?.data != null) {
             setsolicitudExistente(respRetomar?.data);
+            setCurpGlobal(values?.curp);
             setOpen(true);
             setValues((prev) => ({
                 ...prev,
@@ -123,6 +125,7 @@ const AltaPersonalData = ({ onNext, actualStep }) => {
                 setisCurpValidate={setisCurpValidate}
                 solicitudExistente={solicitudExistente}
                 actualStep={(step) => actualStep(step)}
+                curp={curpGlobal}
             />
             <Typography variant="h5" gutterBottom>
                 INFORMACION PERSONAL DEL CLIENTE

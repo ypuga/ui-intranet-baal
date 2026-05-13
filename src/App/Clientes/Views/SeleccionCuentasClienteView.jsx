@@ -5,6 +5,7 @@ import { startPutCuentaCliente, strartObtenerCuentasCliente } from '../../../Sto
 import useToast from '../../../Hooks/useToast'
 import { useLoading } from '../../../Hooks/LoadingContext'
 import AccountCard from '../Components/AccountCard'
+import {startCreateNewSolicitud} from "../../../Store/Prospectos/Thunks.js";
 
 const SeleccionCuentasClienteView = ({onNext}) => {
     const { cliente } = useSelector(state => state.clientes)
@@ -37,8 +38,9 @@ const SeleccionCuentasClienteView = ({onNext}) => {
         stopLoading()
     }
 
-    const seleccion = (account) => {
+    const seleccion = async (account) => {
         dispatch(startPutCuentaCliente(account));
+        await dispatch(startCreateNewSolicitud("PORTABILIDAD NOMINA"));
         onNext();
     }
 
@@ -65,7 +67,7 @@ const SeleccionCuentasClienteView = ({onNext}) => {
                         <Grid2 container spacing={2}>
                             {cuentasCliente.map((cuenta, index) => (
                                 <Grid2 item xs={12} sm={6} md={4} key={index}>
-                                    {cuenta?.producto == 'PERFIS N4 INVERSION' ?
+                                    {cuenta?.producto === 'PERFIS N4 INVERSION' ?
                                         null
                                         : <AccountCard data={cuenta} seleccion={(data)=>seleccion(data)}/>
                                     }
@@ -74,7 +76,7 @@ const SeleccionCuentasClienteView = ({onNext}) => {
                         </Grid2>
                     )
                 )}
-                {cuentasCliente?.length == 0 && !isLoading ?
+                {cuentasCliente?.length === 0 && !isLoading ?
                 <Alert severity='warning' color="warning">El cliente no cuenta con cuentas disponibles para realizar portabilidad de nomina.</Alert>
                 :null
                 }

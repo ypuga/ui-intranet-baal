@@ -1,5 +1,8 @@
 import ClientesApi from "../../Api/ClientesApi";
-import { resetAuthState, setBeneficiariosCliente, setBp, setCliente, setCreditosCliente, setCuenta, setCuentasCliente } from "./Clientes";
+import {
+    resetAuthState, setBeneficiariosCliente, setBp, setCliente, setCreditosCliente, setCuenta, setCuentasCliente,
+    setfolioPortabilidadCliente
+} from "./Clientes";
 
 export const startAltaCliente = () => {
     return async (dispatch, getState) => {
@@ -308,5 +311,29 @@ export const startPutCuentaCliente = (cuenta) => {
 export const startResetAuthState = () => {
     return async (dispatch, getState) => {
         dispatch(resetAuthState());
+    }
+}
+
+export const startToPortabilidadNomina = (data) => {
+    return async (dispatch, getState) => {
+        try {
+            const payload = {
+                "noTarjetaOrigen": data?.cuentaDestino,
+                "bancoOrigen": data?.bancoOrigen,
+                "bp": getState().clientes?.banqueroPersonal?.bpOrigen,
+                "cuentaDestino": data?.cuenta,
+                "sucursal": getState().clientes?.banqueroPersonal?.sucOrigen
+            }
+            const resp = await ClientesApi.solicitudPortabilidadNomina(payload);
+            if (resp.status === 200 || resp.status === 'OK') {
+                console.log(resp)
+                dispatch(setfolioPortabilidadCliente(resp.message));
+                return resp;
+            } else {
+                return resp;
+            }
+        } catch (error) {
+            throw error;
+        }
     }
 }

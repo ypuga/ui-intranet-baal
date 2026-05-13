@@ -19,7 +19,7 @@ const AltaCliente = ({ onNext }) => {
     const [noTdd, setNoTdd] = useState();
 
     useEffect(() => {
-        if (personalData.producto === 'CLIENTE UNICO') {
+        if (personalData.producto === 'CLIENTE UNICO' || personalData?.nombreProducto === 'CLIENTE UNICO') {
             setAltaCuenta(false);
         }
 
@@ -28,7 +28,7 @@ const AltaCliente = ({ onNext }) => {
 
             const clienteResp = await altaCliente();
             if (clienteResp?.status === 200 || clienteResp?.status === 'OK') {
-                if (personalData.producto !== 'CLIENTE UNICO') {
+                if (personalData.producto !== 'CLIENTE UNICO' || personalData?.nombreProducto !== 'CLIENTE UNICO') {
                     await altaCuentaCliente(clienteResp?.data?.idClienteUnico);
                 }
             }

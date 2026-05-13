@@ -327,11 +327,48 @@ const obtenerSolicitud = async (idSolicitud) => {
     }
 }
 
+const updateEstatuSolicitud = async (idSolicitud, status) => {
+    try {
+        const resp = await axios.get(`${ApiEndpoints.SOLICITUDES.UPDATE_ESTATUS}${idSolicitud}?status=${status}`);
+        return {
+            status: resp.status,
+            message: resp.message,
+            data: resp.data.response
+        };
+    } catch (error) {
+        console.log("error", error);
+        const status = error.response?.status || 500;
+        const message = error.response?.data?.message || error.message || 'Error desconocido al crear la solicitud';
+        return {
+            status,
+            message
+        };
+    }
+}
+
+const getPersonalDataProspecto = async (curp) => {
+    try {
+        const resp = await axios.get(`${ApiEndpoints.SOLICITUDES.PERSONAL_DATA}?curp=${curp}`);
+        return {
+            status: resp.status,
+            message: resp.message,
+            data: resp.data.response
+        };
+    } catch (error) {
+        console.log("error", error);
+        const status = error.response?.status || 500;
+        const message = error.response?.data?.message || error.message || 'Error desconocido al crear la solicitud';
+        return {
+            status,
+            message
+        };
+    }
+}
 
 
 export default {
     createNewSolicitud, next, savePersonalData, savePersonalBanking, saveContactInfo,
     certificaContacto, saveDomicilio, altaKyc, saveFiscalData, saveBeneficiarios, getDocumentacion,
     saveBuroCredito, saveReferencias, altaSolicitudCredito, delteSolicitud, retomarSolicitud,
-    obtenerSolicitud
+    obtenerSolicitud, updateEstatuSolicitud, getPersonalDataProspecto
 };

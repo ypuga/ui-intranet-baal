@@ -7,7 +7,7 @@ import SingleSelect from '../../Global/Components/MultipleSelect';
 import { bancosMexicanos, tiposCuenta } from '../../../Data/TipoCuentaData';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { startObtenerClienteInfo } from '../../../Store/Clientes/Thunks';
+import {startObtenerClienteInfo, startToPortabilidadNomina} from '../../../Store/Clientes/Thunks';
 
 const AltaCuentaOrigenPortabilidad = ({ onNext }) => {
     const { isLoading, startLoading, stopLoading } = useLoading();
@@ -51,10 +51,14 @@ const AltaCuentaOrigenPortabilidad = ({ onNext }) => {
         referencia: Yup.string().required('Requerido'),
     });
 
-    const handleSubmit = async () => {
-        onNext();
+    const handleSubmit = async (data) => {
+        const resp = await dispatch(startToPortabilidadNomina(data));
+        if (resp?.status === 'OK' || resp?.status === 200) {
+            onNext();
+        } else if (resp) {
+            showToast(resp?.message, 'error', 'top-center');
+        }
     };
-
 
     return (
         <Formik
@@ -154,7 +158,7 @@ const AltaCuentaOrigenPortabilidad = ({ onNext }) => {
                             </Box>
                         </Box>
                         <Box display="flex" justifyContent="flex-end" gap={2}>
-                            <Button type="submit" disabled={!dirty || !isValid} variant="contained" size="large" onClick={handleSubmit}>
+                            <Button type="submit" disabled={!dirty || !isValid} variant="contained" size="large">
                                 Siguiente
                             </Button>
                         </Box>
